@@ -1,6 +1,7 @@
 # 2020-2-OSSP1-CampusMeeting-8
 
 ## Campus Meeting  
+--------------  
 webRTC 기술을 활용한 원격 수업 플랫폼 '캠퍼스미팅'  
   
   
@@ -27,15 +28,15 @@ webRTC 기술을 활용한 원격 수업 플랫폼 '캠퍼스미팅'
   
 ## 실행 방법
 --------------  
-```
 > 우선적으로 Node.js를 설치해 주세요  
+```
 $ git clone https://github.com/CSID-DGU/2020-2-OSSP1-CampusMeeting-8.git  
 $ cd 2020-2-OSSP1-CampusMeeting-8  
 $ npm install  
 ```
   
-```
 > Kurento 서버 설치(docker)  
+```
 $ docker pull kurento/kurento-media-server:latest  
 $ docker run -d -p 8888:8888 kurento/kurento-media-server:latest  
 ```
