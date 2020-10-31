@@ -301,7 +301,7 @@ function getKurentoClient(callback) {
         return callback(null, kurentoClient);
     }
 
-    kurento(argv.ws_uri, function (error, _kurentoClient) {
+    kurento(argv.ws_uri, (error, _kurentoClient) => {
         if (error) {
             console.log("Could not find media server at address " + argv.ws_uri);
             return callback("Could not find media server at address" + argv.ws_uri
@@ -313,6 +313,6 @@ function getKurentoClient(callback) {
     });
 }
 
-http.listen(8443, function () {
+http.listen(8443, () => {
     console.log('Example app listening on port 8443!');
 });
