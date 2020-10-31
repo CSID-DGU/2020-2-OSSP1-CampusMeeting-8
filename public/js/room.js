@@ -1,83 +1,100 @@
-const videoGrid = document.getElementById('video-grid');
+// getting dom elements
+const divMeetingRoom = document.getElementById('video-grid');
+// variables
+const userName = USER_ID;
+const participants = {};
+
+// Let's do this
+const socket = io();
 
 const constraints = {
     audio: true,
-    video: {
-        width: 640,
-        framerate: 15
-    }
+    video :  {
+        mandatory : {
+            maxWidth : 480,
+            maxFrameRate : 15,
+            minFrameRate : 15
+        }
+    } 
 };
-
-let localStream;
-let myVideo = document.createElement('video');
-let participants = {};
-
-const socket = io();
 
 socket.emit('message', {
     event: 'join',
-    username: USER_ID,
-    roomid: ROOM_ID
-}, console.log('send join message to server'));
+    username: userName,
+    roomid: ROOM_ID,
+});
 
+// messages handlers
 socket.on('message', message => {
-    console.log('Message:', message.event);
+    console.log('Message received: ' + message.event);
 
     switch (message.event) {
         case 'newParticipant':
             receiveVideo(message.userid, message.username);
             break;
         case 'existingParticipants':
-            existingParticipants(message.userid, message.existingUsers);
+            onExistingParticipants(message.userid, message.existingUsers);
             break;
-        case 'receiveAnswer':
-            receiveAnswer(message.calleeid, message.sdpAnswer);
+        case 'receiveVideoAnswer':
+            onReceiveVideoAnswer(message.senderid, message.sdpAnswer);
             break;
         case 'candidate':
             addIceCandidate(message.userid, message.candidate);
             break;
-
+        case 'userDisconnected':
+            console.log(message.event, message.userid);
+            userDisconnected(message.userid);
+            break;
     }
 });
 
+function userDisconnected(userid) {
+    if (participants[userid]) {
+        const video = document.getElementById(userid);
+        video.remove();
+        delete participants[userid];
+    }
+}
+
+// handlers functions
 function receiveVideo(userid, username) {
     const video = document.createElement('video');
     video.id = userid;
-    videoGrid.append(video);
     video.autoplay = true;
+    divMeetingRoom.appendChild(video);
 
     const user = {
         id: userid,
-        name: username,
+        username: username,
         video: video,
         rtcPeer: null
     }
 
-    participants[userid] = user;
+    participants[user.id] = user;
 
-    const option = {
+    const options = {
         remoteVideo: video,
         onicecandidate: onIceCandidate
     }
 
-    user.rtcPeer = kurentoUtils.WebRtcPeer.WebRtcPeerRecvonly(option,
+    user.rtcPeer = kurentoUtils.WebRtcPeer.WebRtcPeerRecvonly(options,
         function (err) {
             if (err) {
-                return console.log(err);
+                return console.error(err);
             }
             this.generateOffer(onOffer);
-        });
+        }
+    );
 
     const onOffer = function (err, offer, wp) {
         console.log('sending offer');
         const message = {
-            event: 'receiveVideo',
+            event: 'receiveVideoFrom',
             userid: user.id,
             roomid: ROOM_ID,
             sdpOffer: offer
         }
-        console.log('sending ' + message.event + ' message to server');
-        socket.emit('message', message);
+        sendMessage(message);
     }
 
     function onIceCandidate(candidate, wp) {
@@ -85,57 +102,56 @@ function receiveVideo(userid, username) {
         const message = {
             event: 'candidate',
             userid: user.id,
-            roomName: ROOM_ID,
+            roomid: ROOM_ID,
             candidate: candidate
         }
-        console.log('sending ' + message.event + ' message to server');
-        socket.emit('message', message);
+        sendMessage(message);
     }
 }
 
-function existingParticipants(userid, existingUsers) {
+function onExistingParticipants(userid, existingUsers) {
     const video = document.createElement('video');
     video.id = userid;
-    videoGrid.append(video);
     video.autoplay = true;
+    divMeetingRoom.appendChild(video);
 
     const user = {
         id: userid,
-        name: userid,
+        username: userName,
         video: video,
         rtcPeer: null
     }
 
-    participants[userid] = user;
+    participants[user.id] = user;
 
-    const option = {
+    const options = {
         localVideo: video,
         mediaConstraints: constraints,
         onicecandidate: onIceCandidate
     }
 
-    user.rtcPeer = kurentoUtils.WebRtcPeer.WebRtcPeerRecvonly(option,
+    user.rtcPeer = kurentoUtils.WebRtcPeer.WebRtcPeerSendonly(options,
         function (err) {
             if (err) {
-                return console.log(err);
+                return console.error(err);
             }
-            this.generateOffer(onOffer);
-        });
+            this.generateOffer(onOffer)
+        }
+    );
 
-    existingUsers.forEach(element => {
+    existingUsers.forEach(function (element) {
         receiveVideo(element.id, element.name);
     });
 
-    const onOffer = (err, offer, wp) => {
+    const onOffer = function (err, offer, wp) {
         console.log('sending offer');
         const message = {
-            event: 'receiveVideo',
+            event: 'receiveVideoFrom',
             userid: user.id,
             roomid: ROOM_ID,
             sdpOffer: offer
         }
-        console.log('sending ' + message.event + ' message to server');
-        socket.emit('message', message);
+        sendMessage(message);
     }
 
     function onIceCandidate(candidate, wp) {
@@ -146,15 +162,20 @@ function existingParticipants(userid, existingUsers) {
             roomid: ROOM_ID,
             candidate: candidate
         }
-        console.log('sending ' + message.event + ' message to server');
-        socket.emit('message', message);
+        sendMessage(message);
     }
 }
 
-function receiveAnswer(senderid, sdpAnswer) {
+function onReceiveVideoAnswer(senderid, sdpAnswer) {
     participants[senderid].rtcPeer.processAnswer(sdpAnswer);
 }
 
 function addIceCandidate(userid, candidate) {
     participants[userid].rtcPeer.addIceCandidate(candidate);
+}
+
+// utilities
+function sendMessage(message) {
+    console.log('sending ' + message.event + ' message to server');
+    socket.emit('message', message);
 }
