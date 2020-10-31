@@ -44,6 +44,7 @@ function receiveVideo(userid, username) {
     const video = document.createElement('video');
     video.id = userid;
     videoGrid.append(video);
+    video.autoplay = true;
 
     const user = {
         id: userid,
@@ -96,6 +97,7 @@ function existingParticipants(userid, existingUsers) {
     const video = document.createElement('video');
     video.id = userid;
     videoGrid.append(video);
+    video.autoplay = true;
 
     const user = {
         id: userid,
