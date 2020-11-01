@@ -1,0 +1,230 @@
+﻿<!doctype html>
+
+<html lang="en">
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css" integrity="sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2" crossorigin="anonymous">
+
+    <title>WEB RTC 화상회의 채팅방</title>
+
+
+
+
+    <style>
+
+
+        #container {
+            position: absolute;
+            left: 1100px;
+            right 0px;
+            width: 400px;
+            height: 480px;
+            margin-top: 10px;
+            border: 2px solid black;
+            background: white;
+        }
+
+        #chatView {
+            height: 100%;
+            overflow-y: scroll;
+        }
+
+        #chatForm {
+            margin-top: 10px;
+            height: 10%;
+            border-top: 1px solid black;
+            text-align: center;
+            background: white;
+        }
+
+        #msg {
+            width: 80%;
+            height: 32px;
+            border-radius: 8px;
+        }
+
+        #send {
+            width: 16%;
+            height: 34px;
+            border-radius: 50px;
+            background: black;
+            color: white;
+        }
+    </style>
+    <style>
+        .msgLine {
+            margin: 15px;
+        }
+
+        .msgBox {
+            border: 1px solid black;
+            background: skyblue;
+            padding: 2px 5px;
+            border-radius: 10px;
+        }
+    </style>
+    <style>
+        #microphone {
+            margin-right: 100px;
+            margin-left: 250px;
+            margin-top: 1px;
+            margin-bottom: 10px;
+        }
+
+        #cam {
+            margin-right: 100px;
+            margin-top: 1px;
+            margin-bottom: 10px;
+        }
+
+        #display {
+            margin-right: 100px;
+            margin-top: 1px;
+            margin-bottom: 10px;
+        }
+
+        #wide {
+            margin-left: 150px;
+            margin-top: 1px;
+            margin-bottom: 10px;
+        }
+
+        #recording {
+            margin-left: 30px;
+            margin-top: 1px;
+            margin-bottom: 10px;
+        }
+
+
+        #btn_group button {
+            border: 1px black;
+            background-color: dimgrey;
+            color: white;
+            padding: 5px;
+        }
+
+        #upvideo_group {
+            margin-top: 50px;
+            margin-bottom: 0px;
+            margin-left: 40px;
+            height: 150px;
+        }
+
+        #downvideo {
+            margin-left: 10px;
+        }
+
+        #leftbutton {
+            border: none;
+            margin-top: 50px;
+            margin-left: 20px;
+            background-color: red;
+        }
+
+        #rightbutton {
+            border: none;
+            margin-left: 40px;
+            margin-bottom: 20px;
+        }
+    </style>
+
+
+
+</head>
+<body style="background-color:white">
+
+    <nav class="navbar navbar-dark bg-dark">
+        <a class="navbar-brand" href="#">WEB RTC 화상회의</a>
+    </nav>
+    <br />
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ho+j7jyWK8fNQe+A12Hb8AhRq26LrZ/JpcUGGOn+Y7RsweNrtN/tE3MoK7ZeZDyx" crossorigin="anonymous"></script>
+
+
+
+
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+        var socket = io();
+        var chatView = document.getElementById('chatView');
+        var chatForm = document.getElementById('chatForm');
+
+        chatForm.addEventListener('submit', function () {
+            var msg = $('#msg');
+
+            if (msg.val() == '') {
+                return;
+
+            } else {
+                socket.emit('SEND', msg.val());
+
+                var msgLine = $('<div class="msgLine">');
+                var msgBox = $('<div class="me">');
+
+                msgBox.append(msg.val());
+                msgBox.css('display', 'inline-block');
+                msgLine.css('text-align', 'right');
+                msgLine.append(msgBox);
+
+                $('#chatView').append(msgLine);
+            }
+        });
+
+
+
+    </script>
+
+
+
+
+
+    <button type="button" id="leftbutton"> <img src="C:\Users\이동건\Desktop\bootstrap-4.5.3-dist\bootstrap-4.5.3-dist\left.png"></button>
+
+    <span id="upvideo_group">
+        <video playsinline id="up_cam1" controls preload="metadata" autoplay></video>
+        <video playsinline id="up_cam2" controls preload="metadata" autoplay></video>
+        <video playsinline id="up_cam3" controls preload="metadata" autoplay></video>
+        <video playsinline id="up_cam4" controls preload="metadata" autoplay></video>
+    </span>
+
+    <button type="button" id="rightbutton"> <img src="C:\Users\이동건\Desktop\bootstrap-4.5.3-dist\bootstrap-4.5.3-dist\right.png"></button>
+
+
+    <br>
+
+    <div>
+        <span id="downvideo">
+            <video playsinline id="down_cam" controls preload="metadata" autoplay height="520" width="1080" controls></video>
+        </span>
+
+        <span id="container">
+            <div id="chatView">
+            </div>
+            <form id="chatForm" onsubmit="return false">
+                <input type="text" id="msg">
+                <input type="submit" id="send" value="전송">
+            </form>
+        </span>
+    </div>
+    <div id="btn_group">
+        <button id="microphone" button type="button" class="btn btn-primary btn-lg">마이크</button>
+
+        <button id="cam" button type="button" class="btn btn-primary btn-lg"> 카메라</button>
+        <button id="display" button type="button" class="btn btn-primary btn-lg"> 화 면 </button>
+        <button id="wide" button type="button" class="btn btn-primary btn-lg"> 전체화면 </button>
+        <button id="recording" button type="button" class="btn btn-primary btn-lg"> 녹화 </button>
+
+
+    </div>
+
+
+
+</body>
+</html>
