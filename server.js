@@ -120,6 +120,7 @@ function join(socket, username, roomid, callback) {
                 });
             });
 
+            // room에 새 user가 접속했다는 메시지를 송신
             socket.to(roomid).emit('message', {
                 event: 'newParticipant', 
                 userid: user.id,
@@ -137,6 +138,7 @@ function join(socket, username, roomid, callback) {
                 }
             }
 
+            // 현재 사용자에게 기존 참가자 목록을 묶어서 전송
             socket.emit('message', {
                 event: 'existingParticipants', 
                 existingUsers: existingUsers,
@@ -149,7 +151,7 @@ function join(socket, username, roomid, callback) {
     });
 }
 
-// sdpOffer를 받아서 video를 받아옴
+// sdpOffer를 받아서 endpoint를 얻고 sdpAnswer를 생성하여 클라이언트에 전송
 function receiveVideoFrom(socket, userid, roomid, sdpOffer, callback) {
     // getUserEndpoint를 호출해서 endpoint를 반환받음 
     getUserEndpoint(socket, roomid, userid, (err, endpoint) => {
