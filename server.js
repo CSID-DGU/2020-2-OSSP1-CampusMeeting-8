@@ -316,7 +316,7 @@ function getKurentoClient(callback) {
     });
 }
 
-// disconnected 이벤트가 발생했을 때 해당 소켓의 정보를 받아서 클라이언트에 전송하고 room의 참여자 명단에서 제거
+// disconnect 이벤트가 발생했을 때 해당 소켓의 정보를 받아서 클라이언트에 전송하고 room의 참여자 명단에서 제거
 function handleDisconnect(socket, roomid) {
     io.emit('message', {
         event: 'userDisconnected',
