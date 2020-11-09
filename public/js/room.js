@@ -7,7 +7,7 @@ const socket = io();
 
 const constraints = {
     audio: true,
-    video :  true /* {
+    video: true /* {
         mandatory : {
             maxWidth : 480,
             maxFrameRate : 15,
@@ -190,3 +190,28 @@ function sendMessage(message) {
     console.log('sending ' + message.event + ' message to server');
     socket.emit('message', message);
 }
+
+
+//button
+
+let cameraBtn = document.querySelector('#camera');
+
+cameraBtn.addEventListener('click', () => {
+    let mypc = participants[socket.id].rtcPeer;
+
+    console.log(mypc);
+
+    if (cameraBtn.dataset.on == 'true') {
+        console.log('camera off');
+        cameraBtn.dataset.on = 'false';
+        mypc.getLocalStream().getVideoTracks()[0].enabled = false;
+        console.log(mypc.getLocalStream().getVideoTracks()[0])
+
+    } else {
+        console.log('camera on');
+
+        cameraBtn.dataset.on = 'true';
+        mypc.getLocalStream().getVideoTracks()[0].enabled = true;
+        console.log(mypc.getLocalStream().getVideoTracks()[0])
+    }
+})
