@@ -8,6 +8,7 @@ const { v4: uuidV4 } = require('uuid');
 
 let kurentoClient = null;
 let iceCandidateQueues = {};
+let socketRoom = {};
 
 const argv = minimist(process.argv.slice(2), {
     default: {
@@ -72,10 +73,8 @@ io.on('connection', socket => {
     // socket 연결이 끊어졌을 때 (브라우저가 종료됐을 때)
     socket.on('disconnect', () => {
         console.log(`socket ${socket.id} disconnected`);
-        io.emit('message', {
-            event: 'userDisconnected',
-            userid: socket.id
-        });
+        const roomid = socketRoom[socket.id];
+        handleDisconnect(socket, roomid);
     });
 });
 
@@ -221,6 +220,7 @@ function getRoom(socket, roomid, callback) {
         // 해당 room이 비어있으면 새 room 생성
         socket.join(roomid, () => {
             myRoom = io.sockets.adapter.rooms[roomid];
+            socketRoom[socket.id] = roomid;
             getKurentoClient((error, kurento) => {
                 // MediaPipeline을 생성
                 kurento.create('MediaPipeline', (err, pipeline) => {
@@ -236,6 +236,7 @@ function getRoom(socket, roomid, callback) {
         });
     } else { // room이 이미 존재하면 새 room을 만들 필요 없이 room에 user를 추가
         socket.join(roomid);
+        socketRoom[socket.id] = roomid;
         callback(null, myRoom);
     }
 }
@@ -313,6 +314,18 @@ function getKurentoClient(callback) {
         kurentoClient = _kurentoClient;
         callback(null, kurentoClient);
     });
+}
+
+// disconnected 이벤트가 발생했을 때 해당 소켓의 정보를 받아서 클라이언트에 전송하고 room의 참여자 명단에서 제거
+function handleDisconnect(socket, roomid) {
+    io.emit('message', {
+        event: 'userDisconnected',
+        userid: socket.id
+    });
+    const myRoom = io.sockets.adapter.rooms[roomid] || {length: 0};
+    if (myRoom.length === 0) return;
+    delete myRoom.participants[socket.id];
+    delete socketRoom[socket.id];
 }
 
 http.listen(8443, () => {
