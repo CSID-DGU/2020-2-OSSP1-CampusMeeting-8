@@ -7,7 +7,7 @@ const socket = io();
 
 const constraints = {
     audio: true,
-    video :  true /* {
+    video: true /* {
         mandatory : {
             maxWidth : 480,
             maxFrameRate : 15,
@@ -190,3 +190,5 @@ function sendMessage(message) {
     console.log('sending ' + message.event + ' message to server');
     socket.emit('message', message);
 }
+
+

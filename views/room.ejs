@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,12 +9,18 @@
     <script defer src="/js/kurento-utils.js"></script>
     <script defer src="/socket.io/socket.io.js"></script>
     <script defer src="/js/room.js"></script>
+    <script defer src="/js/util.js"></script>
     <script>
         const ROOM_ID = '<%= roomID %>';
         const USER_ID = '<%= userID %>';
     </script>
 </head>
+
 <body>
     <div id="video-grid"></div>
+    <button id="camera" data-on='true'>camera</button>
+    <button id="screen" data-on='false'>screen</button>
+
 </body>
+
 </html>
