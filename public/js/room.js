@@ -5,6 +5,8 @@ const participants = {};
 
 const socket = io();
 
+import makeVideoContainer from './util/videoContainer.js';
+
 const constraints = {
     audio: true,
     video: true /* {
@@ -59,10 +61,11 @@ function userDisconnected(userid) {
 // 원격 연결로부터 비디오 수신
 function receiveVideo(userid, username) {
     // 페이지에 비디오 생성
-    const video = document.createElement('video');
+
+    const videoContainer = makeVideoContainer();
+    videoGrid.appendChild(videoContainer);
+    const video = videoContainer.querySelector('video');
     video.id = userid;
-    video.autoplay = true;
-    videoGrid.appendChild(video);
 
     // 인자로 받아온 user정보를 가지고 user 생성
     const user = {
@@ -118,10 +121,14 @@ function receiveVideo(userid, username) {
 // existingParticipants 이벤트를 수신했을 때 호출
 // 새 참여자가 참여할 때마다 room의 참여자 목록을 받아서 각각의 user에 대해 receiveVideo 호출
 function onExistingParticipants(userid, existingUsers) {
-    const video = document.createElement('video');
+    const videoContainer = makeVideoContainer();
+    videoGrid.appendChild(videoContainer);
+    const video = videoContainer.querySelector('video');
     video.id = userid;
-    video.autoplay = true;
-    videoGrid.appendChild(video);
+
+
+
+
 
     const user = {
         id: userid,
