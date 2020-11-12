@@ -1,9 +1,10 @@
-#video{
-    width: 200px;
-    height: 200px;
+.camera-container{
+    width: 400px;
+    height: 300px;
     background-color: white;
     position: relative;
 }
+
 .camera-over{
     width: 400px;
     height: 300px;
@@ -11,16 +12,24 @@
     z-index: -1;
     position: absolute;
     top:0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
 }
 
-.camera-container{
-    width: 400px;
-    height: 300px;
+.over-userName{
+    width: 200px;
+    height: 100px;
+    color: white;
+}
+
+.over-button-box button{
+    width: 70px;
+    height: 30px;
     background-color: white;
-    position: relative;
-
+    border-radius: 12px;
 }
-
 .camera-video{
     width: 400px;
     height: 300px;

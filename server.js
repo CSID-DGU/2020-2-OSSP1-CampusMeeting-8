@@ -67,7 +67,7 @@ io.on('connection', socket => {
                     }
                 });
                 break;
-            }
+        }
     });
 
     // socket 연결이 끊어졌을 때 (브라우저가 종료됐을 때)
@@ -76,6 +76,13 @@ io.on('connection', socket => {
         const roomid = socketRoom[socket.id];
         handleDisconnect(socket, roomid);
     });
+
+    //경고 버튼
+    socket.on('warn', (message) => {
+        console.log('warn recieved');
+        io.to(message.userid).emit('warn', message.warnMessage)
+
+    })
 });
 
 function join(socket, username, roomid, callback) {
@@ -121,7 +128,7 @@ function join(socket, username, roomid, callback) {
 
             // room에 새 user가 접속했다는 메시지를 송신
             socket.to(roomid).emit('message', {
-                event: 'newParticipant', 
+                event: 'newParticipant',
                 userid: user.id,
                 username: user.name
             });
@@ -139,10 +146,11 @@ function join(socket, username, roomid, callback) {
 
             // 현재 사용자에게 기존 참가자 목록을 묶어서 전송
             socket.emit('message', {
-                event: 'existingParticipants', 
+                event: 'existingParticipants',
                 existingUsers: existingUsers,
                 userid: user.id
             });
+            console.log(socket.id);
 
             // myRoom의 participants에 현재 user를 추가
             myRoom.participants[user.id] = user;
@@ -169,7 +177,7 @@ function receiveVideoFrom(socket, userid, roomid, sdpOffer, callback) {
                 senderid: userid,
                 sdpAnswer: sdpAnswer
             });
-            
+
             // gatherCandidates(callback) : ice 후보자 수집
             // SdpEndpoint::generateOffer나 SdpEndpoint::processOffer가 실행된 이후 호출되어야 함
             endpoint.gatherCandidates(err => {
@@ -191,7 +199,7 @@ function addIceCandidate(socket, senderid, roomid, iceCandidate, callback) {
             if (user.outgoingMedia) {
                 user.outgoingMedia.addIceCandidate(candidate);
             } else {
-                iceCandidateQueues[user.id].push({candidate: candidate});
+                iceCandidateQueues[user.id].push({ candidate: candidate });
             }
         } else {
             if (user.incomingMedia[senderid]) {
@@ -200,8 +208,8 @@ function addIceCandidate(socket, senderid, roomid, iceCandidate, callback) {
                 if (!iceCandidateQueues[senderid]) {
                     iceCandidateQueues[senderid] = [];
                 }
-                iceCandidateQueues[senderid].push({candidate: candidate});
-            }   
+                iceCandidateQueues[senderid].push({ candidate: candidate });
+            }
         }
         callback(null);
     } else {
@@ -322,7 +330,7 @@ function handleDisconnect(socket, roomid) {
         event: 'userDisconnected',
         userid: socket.id
     });
-    const myRoom = io.sockets.adapter.rooms[roomid] || {length: 0};
+    const myRoom = io.sockets.adapter.rooms[roomid] || { length: 0 };
     if (myRoom.length === 0) return;
     delete myRoom.participants[socket.id];
     delete socketRoom[socket.id];

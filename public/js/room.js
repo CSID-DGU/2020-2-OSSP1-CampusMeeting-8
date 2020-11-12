@@ -49,6 +49,12 @@ socket.on('message', message => {
     }
 });
 
+socket.on('warn', (message) => {
+    console.log('got warn from server');
+    alert(message);
+})
+
+
 // 유저 연결이 끊어졌을 경우 비디오 처리를 하는 메소드
 function userDisconnected(userid) {
     if (participants[userid]) {
@@ -62,10 +68,11 @@ function userDisconnected(userid) {
 function receiveVideo(userid, username) {
     // 페이지에 비디오 생성
 
-    const videoContainer = makeVideoContainer();
+    const videoContainer = makeVideoContainer(userid);
     videoGrid.appendChild(videoContainer);
     const video = videoContainer.querySelector('video');
-    video.id = userid;
+    addCameraEvent(videoContainer, userid);
+
 
     // 인자로 받아온 user정보를 가지고 user 생성
     const user = {
@@ -121,12 +128,12 @@ function receiveVideo(userid, username) {
 // existingParticipants 이벤트를 수신했을 때 호출
 // 새 참여자가 참여할 때마다 room의 참여자 목록을 받아서 각각의 user에 대해 receiveVideo 호출
 function onExistingParticipants(userid, existingUsers) {
-    const videoContainer = makeVideoContainer();
+    const videoContainer = makeVideoContainer(userid);
+
     videoGrid.appendChild(videoContainer);
     const video = videoContainer.querySelector('video');
-    video.id = userid;
 
-
+    addCameraEvent(videoContainer, userid);
 
 
 
@@ -199,3 +206,14 @@ function sendMessage(message) {
 }
 
 
+function addCameraEvent(videoContainer, userid) {
+    console.log(userid);
+    const warn = videoContainer.querySelector('.warn-button');
+    warn.addEventListener('click', (e) => {
+        socket.emit('warn', {
+            warnMessage: 'warning',
+            userid: userid
+        })
+    })
+
+}
