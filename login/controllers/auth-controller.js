@@ -4,7 +4,7 @@ cryptr = new Cryptr('myTotalySecretKey');
 var connection = require('./../config');
 module.exports.auth=function(req,res){
     var id=req.body.id;
-    var password=req.body.password;
+    var pw=req.body.pw;
 
 
     connection.query('SELECT * FROM users WHERE id = ?',[id], function (error, results, fields) {
@@ -16,8 +16,8 @@ module.exports.auth=function(req,res){
       }else{
 
         if(results.length >0){
-  decryptedString = cryptr.decrypt(results[0].password);
-            if(password==decryptedString){
+  decryptedString = cryptr.decrypt(results[0].pw);
+            if(pw==decryptedString){
                 res.json({
                     status:true,
                     message:'successfully authenticated'
