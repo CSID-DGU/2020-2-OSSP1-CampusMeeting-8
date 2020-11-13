@@ -3,18 +3,15 @@ var express=require("express");
 var connection = require('./../config');
 
 module.exports.register=function(req,res){
-    var today = new Date();
-    var encryptedString = cryptr.encrypt(req.body.password);
+    var encryptedString = cryptr.encrypt(req.body.pw);
     var users={
         "id":req.body.id,
-        "password":encryptedString,
+        "pw":encryptedString,
         "name":req.body.name,
-        "email":req.body.email,
-        "created":today
+        "email":req.body.email
     }
-    var sql = "INSERT INTO users (id,pw,name,email,created) VALUES(?,?,?,?,?)";
-    var param = [req.body.id, req.body.password, req.body.name, req.body.eamil,req.body.created];
-    connection.query(sql, param, function (error, results, fields) {
+    var sql = 'INSERT INTO users SET ?';
+   connection.query(sql, users, function (error, results, fields) {
       if (error) {
         res.json({
             status:false,
@@ -28,4 +25,5 @@ module.exports.register=function(req,res){
         })
       }
     });
+    connection.end();
 }
