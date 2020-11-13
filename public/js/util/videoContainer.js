@@ -19,9 +19,9 @@ function makeVideoContainer(userid) {
     const video = container.querySelector('.camera-video');
     const warn = container.querySelector('.warn-button');
 
-    navigator.mediaDevices.getUserMedia({ video: true }).then((stream) => {
-        video.srcObject = stream;
-    })
+    // navigator.mediaDevices.getUserMedia({ video: true }).then((stream) => {
+    //     video.srcObject = stream;
+    // })
     video.id = userid;
     overUserName.innerHTML = userid;
 
