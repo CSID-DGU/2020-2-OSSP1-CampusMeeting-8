@@ -5,14 +5,15 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Demo</title>
-    <link rel="stylesheet" href="/js/util/videoContainer.css">
+    <link rel="stylesheet" href="/js/style/videoContainer.css">
 
     <script defer src="/js/adapter.js"></script>
     <script defer src="/js/kurento-utils.js"></script>
     <script defer src="/socket.io/socket.io.js"></script>
-    <script type="module" defer src="/js/room.js"></script>
+    <script defer src="/js/util/videoContainer.js"></script>
+
+    <script defer src="/js/room.js"></script>
     <script defer src="/js/util/util.js"></script>
-    <script type="module" src="/js/util/videoContainer.js"></script>
     <script>
         const ROOM_ID = '<%= roomID %>';
         const USER_ID = '<%= userID %>';

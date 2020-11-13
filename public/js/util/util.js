@@ -24,6 +24,7 @@ let screenConstraint = {
 
 
 cameraBtn.addEventListener('click', () => {
+    console.log(socket.id);
     let localStream = participants[socket.id].rtcPeer.getLocalStream();
     switch (nowVideoMode) {
         case videoMode.cameraOn:

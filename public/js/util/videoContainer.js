@@ -44,4 +44,3 @@ function makeVideoContainer(userid) {
 
     return container;
 }
-export default makeVideoContainer;

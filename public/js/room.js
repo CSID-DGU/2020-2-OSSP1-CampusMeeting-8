@@ -5,7 +5,6 @@ const participants = {};
 
 const socket = io();
 
-import makeVideoContainer from './util/videoContainer.js';
 
 const constraints = {
     audio: true,
