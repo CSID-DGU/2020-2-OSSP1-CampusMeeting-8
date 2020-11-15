@@ -34,3 +34,14 @@ $ npm install
 $ docker pull kurento/kurento-media-server:latest  
 $ docker run -d -p 8888:8888 kurento/kurento-media-server:latest  
 ```
+  
+> 서버 실행
+```
+$ node server.js
+nodemon을 통한 실행도 가능합니다.
+```
+  
+> localhost 접속
+```
+http://localhost:8843/으로 접속
+```
