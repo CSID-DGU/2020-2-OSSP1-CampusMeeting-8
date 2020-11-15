@@ -1,11 +1,13 @@
+
 {
   "name": "2020-2-ossp1-campusmeeting-8",
   "version": "1.0.0",
   "description": "webRTC를 활용한 원격 수업 플랫폼",
-  "main": "server.js",
+  "main": "app.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node server.js"
+    "start" : "app.js",
+    "devStart" : "nodemon app.js"
   },
   "repository": {
     "type": "git",
