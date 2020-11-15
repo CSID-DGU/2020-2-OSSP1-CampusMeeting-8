@@ -59,6 +59,7 @@
     margin-left: 30px;
     margin-right: 30px;
 }
+
 #main-cam1 {
     position: fixed;
     right: 10px;
@@ -85,15 +86,17 @@
     border: 1px solid black;
     background: ivory;
 }
-#mic_by_student{
-    position:fixed;
-    left:350px;
 
+#mic_by_student {
+    position: fixed;
+    left: 350px;
 }
+
 #absent {
     position: fixed;
     left: 400px;
 }
+
 #cam_by_student {
     position: fixed;
     left: 530px;
@@ -105,22 +108,27 @@
     position: fixed;
     left: 320px;
 }
+
 #mic_professor {
     position: fixed;
     left: 370px;
 }
+
 #cam_professor {
     position: fixed;
     left: 420px;
 }
+
 #rec {
     position: fixed;
     left: 470px;
 }
+
 #whiteboard {
     position: fixed;
     left: 530px;
 }
+
 #nochat {
     position: fixed;
     left: 580px;
