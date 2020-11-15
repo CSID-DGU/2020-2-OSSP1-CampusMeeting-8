@@ -18,7 +18,7 @@ const argv = minimist(process.argv.slice(2), {
 });
 
 // static 설정
-app.use(express.static('public'));
+app.use(express.static(__dirname + '/public'));
 
 // view 엔진 설정
 app.set('views', __dirname + '/views');
@@ -27,7 +27,7 @@ app.engine('html', require('ejs').renderFile);
 
 // 라우터
 app.get('/', (req, res) => {
-    res.redirect('/room');
+    res.render('HtmlPage');
 });
 app.get('/room', (req, res) => {
     res.redirect(`/room/${uuidV4()}`);
