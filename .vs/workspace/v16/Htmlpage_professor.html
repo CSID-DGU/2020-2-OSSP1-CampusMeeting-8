@@ -1,0 +1,100 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+   
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css" integrity="sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2" crossorigin="anonymous">
+    <title>htmlpage_professor</title>
+    <link rel="stylesheet" type="text/css" media="screen" href="main.css">
+    <script src="https://use.fontawesome.com/releases/v5.2.0/js/all.js"></script>
+
+</head>
+<body>
+    <nav class="navbar navbar-dark bg-dark">
+        <a class="navbar-brand" href="#">WEB RTC 화상회의</a>
+    </nav>
+
+
+
+    <span id="upcam_1line">
+        <video playsinline id="up_cam1" controls preload="metadata" autoplay></video>
+        <video playsinline id="up_cam2" controls preload="metadata" autoplay></video>
+        <video playsinline id="up_cam3" controls preload="metadata" autoplay></video>
+
+    </span>
+    <span>
+        <video playsinline id="main-cam1" controls preload="metadata" autoplay></video>
+    </span>
+
+    <div id="upcam_2line">
+        <video playsinline id="up_cam4" controls preload="metadata" autoplay></video>
+        <video playsinline id="up_cam5" controls preload="metadata" autoplay></video>
+        <video playsinline id="up_cam6" controls preload="metadata" autoplay></video>
+    </div>
+    <div id="upcam_3line">
+        <video playsinline id="up_cam7" controls preload="metadata" autoplay></video>
+        <video playsinline id="up_cam8" controls preload="metadata" autoplay></video>
+        <video playsinline id="up_cam9" controls preload="metadata" autoplay></video>
+    </div>
+    <div id="upcam_4line">
+        <video playsinline id="up_cam10" controls preload="metadata" autoplay></video>
+        <video playsinline id="up_cam11" controls preload="metadata" autoplay></video>
+        <video playsinline id="up_cam12" controls preload="metadata" autoplay></video>
+    </div>
+
+    <div id="container1">
+        <div id="chatView">
+
+        </div>
+        <form id="chatForm" onsubmit="return false">
+            <input type="text" id="msg">
+            <input type="submit" id="send" value="전송">
+        </form>
+    </div>
+
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="/socket.io/socket.io.js"></script>
+
+    <script>
+        var socket = io();
+
+        var chatView = document.getElementById('chatView');
+        var chatForm = document.getElementById('chatForm');
+
+        chatForm.addEventListener('submit', function () {
+            var msg = $('#msg');
+
+            if (msg.val() == '') {
+                return;
+
+            } else {
+                socket.emit('SEND', msg.val());
+
+                var msgLine = $('<div class="msgLine">');
+                var msgBox = $('<div class="me">');
+
+                msgBox.append(msg.val());
+                msgBox.css('display', 'inline-block');
+                msgLine.css('text-align', 'right');
+                msgLine.append(msgBox);
+
+                $('#chatView').append(msgLine);
+            }
+        });
+    </script>
+    <div id="btn_professor">
+        <button id="mic_student" button type="button" i class="fas fa-microphone fa-2x" title="학생마이크 on/off"></button><!-- 학생마이크 음소거 -->
+        <button id="mic_professor" button type="button" i class="fas fa-microphone-alt fa-2x" title="교수마이크 on/off"></button><!-- 교수마이크 음소거 -->
+        <button id="cam_professor" button type="button" i class="fas fa-camera fa-2x" title="교수카메라 on/off"></button><!-- 교수 카메라  -->
+        <button id="rec" button type="button" i class="fas fa-video fa-2x"  title="녹화기능"></button><!-- 녹화 -->
+        <button id="whiteboard" button type="button" i class="far fa-clipboard fa-2x " title="화이트보드"></button><!-- 화이트보드 -->
+        <button id="nochat" button type="button" i class="fas fa-comment-slash fa-2x" title="채팅금지"></button><!-- 채팅금지 -->
+    </div>
+    <i class=""></i>
+
+
+</body>
+</html>
