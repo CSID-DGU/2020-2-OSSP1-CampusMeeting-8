@@ -133,3 +133,7 @@
     position: fixed;
     left: 580px;
 }
+
+video {
+    width: 240px;
+}

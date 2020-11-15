@@ -27,13 +27,19 @@ app.engine('html', require('ejs').renderFile);
 
 // 라우터
 app.get('/', (req, res) => {
-    res.render('HtmlPage');
+    res.render('index');
+});
+app.get('/room/create', (req, res) => {
+    res.redirect(`/room/${uuidV4()}/host`);
 });
 app.get('/room', (req, res) => {
     res.redirect(`/room/${uuidV4()}`);
 });
+app.get('/room/:room/host', (req, res) => {
+    res.render('professor', { roomID: req.params.room, userID: `${uuidV4()}` });
+});
 app.get('/room/:room', (req, res) => {
-    res.render('room', { roomID: req.params.room, userID: `${uuidV4()}` });
+    res.render('student', { roomID: req.params.room, userID: `${uuidV4()}` });
 });
 
 // signaling
@@ -45,7 +51,7 @@ io.on('connection', socket => {
 
         switch (message.event) {
             case 'join':
-                join(socket, message.userName, message.roomid, err => {
+                join(socket, message.userName, message.roomid, message.isHost, err => {
                     if (err) {
                         console.log(err);
                     }
@@ -85,11 +91,15 @@ io.on('connection', socket => {
     })
 });
 
-function join(socket, username, roomid, callback) {
+function join(socket, username, roomid, isHost, callback) {
     getRoom(socket, roomid, (err, myRoom) => {
         // getRoom에서 받아온 err와 myRoom
         if (err) {
             return callback(err);
+        }
+
+        if(isHost) {
+            myRoom.host = socket.id;
         }
 
         // myRoom의 pipeline에 WebRtcEndpoint를 추가
@@ -130,7 +140,8 @@ function join(socket, username, roomid, callback) {
             socket.to(roomid).emit('message', {
                 event: 'newParticipant',
                 userid: user.id,
-                username: user.name
+                username: user.name,
+                host: myRoom.host
             });
 
             let existingUsers = [];
@@ -148,7 +159,8 @@ function join(socket, username, roomid, callback) {
             socket.emit('message', {
                 event: 'existingParticipants',
                 existingUsers: existingUsers,
-                userid: user.id
+                userid: user.id,
+                host: myRoom.host
             });
             console.log(socket.id);
 

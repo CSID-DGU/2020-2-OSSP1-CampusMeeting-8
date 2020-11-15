@@ -1,10 +1,9 @@
-const videoGrid = document.getElementById('video-grid');
-// variables
-const userName = USER_ID;
+const userName = 'student';
 const participants = {};
-
+const hostVideo = document.getElementById('main-cam2');
+const myVideo = document.getElementById('sub-cam1');
 const socket = io();
-
+let host;
 
 const constraints = {
     audio: true,
@@ -30,10 +29,10 @@ socket.on('message', message => {
 
     switch (message.event) {
         case 'newParticipant':
-            receiveVideo(message.userid, message.username);
+            receiveVideo(message.userid, message.username, message.host);
             break;
         case 'existingParticipants':
-            onExistingParticipants(message.userid, message.existingUsers);
+            onExistingParticipants(message.userid, message.existingUsers, message.host);
             break;
         case 'receiveVideoAnswer':
             onReceiveVideoAnswer(message.senderid, message.sdpAnswer);
@@ -64,89 +63,89 @@ function userDisconnected(userid) {
 }
 
 // 원격 연결로부터 비디오 수신
-function receiveVideo(userid, username) {
+function receiveVideo(userid, username, host) {
     // 페이지에 비디오 생성
 
-    const videoContainer = makeVideoContainer(userid);
-    videoGrid.appendChild(videoContainer);
-    const video = videoContainer.querySelector('video');
-    addCameraEvent(videoContainer, userid);
+    if (host === userid) {
+        /* const videoContainer = makeVideoContainer(userid);
+        videoGrid.appendChild(videoContainer);
+        const video = videoContainer.querySelector('video');
+        addCameraEvent(videoContainer, userid); */
 
 
-    // 인자로 받아온 user정보를 가지고 user 생성
-    const user = {
-        id: userid,
-        username: username,
-        video: video,
-        rtcPeer: null
-    }
+        // 인자로 받아온 user정보를 가지고 user 생성
+        const user = {
+            id: userid,
+            username: username,
+            video: hostVideo,
+            rtcPeer: null
+        }
 
-    // 참여자 리스트에 유저 추가
-    participants[user.id] = user;
+        // 참여자 리스트에 유저 추가
+        participants[user.id] = user;
 
-    const options = {
-        remoteVideo: video,
-        onicecandidate: onIceCandidate
-    }
+        const options = {
+            remoteVideo: hostVideo,
+            onicecandidate: onIceCandidate
+        }
 
-    // user의 rtcPeer를 생성.
-    // receiveVideo는 비디오를 받아오는 역할이므로 Receive only로 생성
-    user.rtcPeer = kurentoUtils.WebRtcPeer.WebRtcPeerRecvonly(options,
-        function (err) {
-            if (err) {
-                return console.error(err);
+        // user의 rtcPeer를 생성.
+        // receiveVideo는 비디오를 받아오는 역할이므로 Receive only로 생성
+        user.rtcPeer = kurentoUtils.WebRtcPeer.WebRtcPeerRecvonly(options,
+            function (err) {
+                if (err) {
+                    return console.error(err);
+                }
+                this.generateOffer(onOffer);
+            } // offer를 생성
+        );
+
+        const onOffer = function (err, offer, wp) {
+            console.log('sending offer');
+            // offer를 넣은 receiveVideoFrom 메시지를 소켓을 통해 전달
+            const message = {
+                event: 'receiveVideoFrom',
+                userid: user.id,
+                roomid: ROOM_ID,
+                sdpOffer: offer
             }
-            this.generateOffer(onOffer);
-        } // offer를 생성
-    );
-
-    const onOffer = function (err, offer, wp) {
-        console.log('sending offer');
-        // offer를 넣은 receiveVideoFrom 메시지를 소켓을 통해 전달
-        const message = {
-            event: 'receiveVideoFrom',
-            userid: user.id,
-            roomid: ROOM_ID,
-            sdpOffer: offer
+            sendMessage(message);
         }
-        sendMessage(message);
-    }
 
-    function onIceCandidate(candidate, wp) {
-        console.log('sending ice candidates');
-        const message = {
-            event: 'candidate',
-            userid: user.id,
-            roomid: ROOM_ID,
-            candidate: candidate
+        function onIceCandidate(candidate, wp) {
+            console.log('sending ice candidates');
+            const message = {
+                event: 'candidate',
+                userid: user.id,
+                roomid: ROOM_ID,
+                candidate: candidate
+            }
+            sendMessage(message);
         }
-        sendMessage(message);
     }
 }
 
 // existingParticipants 이벤트를 수신했을 때 호출
 // 새 참여자가 참여할 때마다 room의 참여자 목록을 받아서 각각의 user에 대해 receiveVideo 호출
-function onExistingParticipants(userid, existingUsers) {
+function onExistingParticipants(userid, existingUsers, host) {/* 
     const videoContainer = makeVideoContainer(userid);
 
     videoGrid.appendChild(videoContainer);
     const video = videoContainer.querySelector('video');
 
-    addCameraEvent(videoContainer, userid);
-
-
+    addCameraEvent(videoContainer, userid); */
 
     const user = {
         id: userid,
         username: userName,
-        video: video,
+        video: myVideo,
         rtcPeer: null
     }
 
     participants[user.id] = user;
 
     const options = {
-        localVideo: video,
+        localVideo: myVideo,
         mediaConstraints: constraints,
         onicecandidate: onIceCandidate
     }
@@ -163,7 +162,7 @@ function onExistingParticipants(userid, existingUsers) {
 
     // exisitingUsers 목록의 모든 user들을 대상으로 receiveVideo 호출
     existingUsers.forEach(function (element) {
-        receiveVideo(element.id, element.name);
+        receiveVideo(element.id, element.name, host);
     });
 
     const onOffer = function (err, offer, wp) {

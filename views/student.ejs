@@ -16,8 +16,11 @@
     <script defer src="/js/kurento-utils.js"></script>
     <script defer src="/socket.io/socket.io.js"></script>
     <script defer src="/js/util/videoContainer.js"></script>
-    <script defer src="/js/room.js"></script>
+    <script defer src="/js/student.js"></script>
     <script defer src="/js/util/util.js"></script>
+    <script>
+        const ROOM_ID = '<%= roomID %>';
+    </script>
     
 </head>
 <body>
@@ -25,8 +28,8 @@
         <a class="navbar-brand" href="#">WEB RTC 화상회의</a>
     </nav>
     <div>
-        <video playsinline id="main-cam2" controls preload="metadata" autoplay></video>
-        <video playsinline id="sub-cam1" controls preload="metadata" autoplay></video>
+        <video playsinline id="main-cam2" preload="metadata" autoplay></video>
+        <video playsinline id="sub-cam1" preload="metadata" autoplay></video>
     </div>
 
 
@@ -41,7 +44,6 @@
     </div>
 
     <script>
-        var socket = io();
 
         var chatView = document.getElementById('chatView');
         var chatForm = document.getElementById('chatForm');

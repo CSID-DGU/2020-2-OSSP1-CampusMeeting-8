@@ -15,41 +15,44 @@
     <script defer src="/js/kurento-utils.js"></script>
     <script defer src="/socket.io/socket.io.js"></script>
     <script defer src="/js/util/videoContainer.js"></script>
-    <script defer src="/js/room.js"></script>
+    <script defer src="/js/professor.js"></script>
     <script defer src="/js/util/util.js"></script>
-
+    <script>
+        const ROOM_ID = '<%= roomID %>';
+    </script>
 </head>
 <body>
     <nav class="navbar navbar-dark bg-dark">
         <a class="navbar-brand" href="#">WEB RTC 화상회의</a>
     </nav>
 
+    <div id="video-grid"></div>
 
 
     <span id="upcam_1line">
-        <video playsinline id="up_cam1" controls preload="metadata" autoplay></video>
-        <video playsinline id="up_cam2" controls preload="metadata" autoplay></video>
-        <video playsinline id="up_cam3" controls preload="metadata" autoplay></video>
+        <video playsinline id="up_cam1" preload="metadata" autoplay></video>
+        <video playsinline id="up_cam2" preload="metadata" autoplay></video>
+        <video playsinline id="up_cam3" preload="metadata" autoplay></video>
 
     </span>
     <span>
-        <video playsinline id="main-cam1" controls preload="metadata" autoplay></video>
+        <video playsinline id="main-cam1" preload="metadata" autoplay></video>
     </span>
 
     <div id="upcam_2line">
-        <video playsinline id="up_cam4" controls preload="metadata" autoplay></video>
-        <video playsinline id="up_cam5" controls preload="metadata" autoplay></video>
-        <video playsinline id="up_cam6" controls preload="metadata" autoplay></video>
+        <video playsinline id="up_cam4" preload="metadata" autoplay></video>
+        <video playsinline id="up_cam5" preload="metadata" autoplay></video>
+        <video playsinline id="up_cam6" preload="metadata" autoplay></video>
     </div>
     <div id="upcam_3line">
-        <video playsinline id="up_cam7" controls preload="metadata" autoplay></video>
-        <video playsinline id="up_cam8" controls preload="metadata" autoplay></video>
-        <video playsinline id="up_cam9" controls preload="metadata" autoplay></video>
+        <video playsinline id="up_cam7" preload="metadata" autoplay></video>
+        <video playsinline id="up_cam8" preload="metadata" autoplay></video>
+        <video playsinline id="up_cam9" preload="metadata" autoplay></video>
     </div>
     <div id="upcam_4line">
-        <video playsinline id="up_cam10" controls preload="metadata" autoplay></video>
-        <video playsinline id="up_cam11" controls preload="metadata" autoplay></video>
-        <video playsinline id="up_cam12" controls preload="metadata" autoplay></video>
+        <video playsinline id="up_cam10" preload="metadata" autoplay></video>
+        <video playsinline id="up_cam11" preload="metadata" autoplay></video>
+        <video playsinline id="up_cam12" preload="metadata" autoplay></video>
     </div>
 
     <div id="container1">
@@ -64,10 +67,8 @@
 
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-    <script src="/socket.io/socket.io.js"></script>
 
     <script>
-        var socket = io();
 
         var chatView = document.getElementById('chatView');
         var chatForm = document.getElementById('chatForm');
@@ -96,7 +97,7 @@
     <div id="btn_professor">
         <button id="mic_student" button type="button" i class="fas fa-microphone fa-2x" title="학생마이크 on/off"></button><!-- 학생마이크 음소거 -->
         <button id="mic_professor" button type="button" i class="fas fa-microphone-alt fa-2x" title="교수마이크 on/off"></button><!-- 교수마이크 음소거 -->
-        <button id="cam_professor" button type="button" i class="fas fa-camera fa-2x" title="교수카메라 on/off"></button><!-- 교수 카메라  -->
+        <button id="camera" button type="button" i class="fas fa-camera fa-2x" title="교수카메라 on/off"></button><!-- 교수 카메라  -->
         <button id="rec" button type="button" i class="fas fa-video fa-2x"  title="녹화기능"></button><!-- 녹화 -->
         <button id="whiteboard" button type="button" i class="far fa-clipboard fa-2x " title="화이트보드"></button><!-- 화이트보드 -->
         <button id="nochat" button type="button" i class="fas fa-comment-slash fa-2x" title="채팅금지"></button><!-- 채팅금지 -->
