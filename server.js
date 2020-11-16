@@ -47,11 +47,11 @@ io.on('connection', socket => {
     console.log('a user connected');
 
     socket.on('message', message => {
-        console.log('Message received: ', message.event);
+        //console.log('Message received: ', message.event);
 
         switch (message.event) {
             case 'join':
-                join(socket, message.userName, message.roomid, message.isHost, err => {
+                join(socket, message.username, message.roomid, message.isHost, err => {
                     if (err) {
                         console.log(err);
                     }
@@ -98,9 +98,17 @@ function join(socket, username, roomid, isHost, callback) {
             return callback(err);
         }
 
-        if(isHost) {
+        if (isHost) {
+            if (myRoom.host) {
+                socket.emit('message', {
+                    event: 'error',
+                    message: '이미 개설되어 있는 방'
+                });
+                return;
+            }
             myRoom.host = socket.id;
         }
+        console.log(`host: ${myRoom.host}`);
 
         // myRoom의 pipeline에 WebRtcEndpoint를 추가
         myRoom.pipeline.create('WebRtcEndpoint', (err, outgoingMedia) => {
@@ -139,8 +147,8 @@ function join(socket, username, roomid, isHost, callback) {
             // room에 새 user가 접속했다는 메시지를 송신
             socket.to(roomid).emit('message', {
                 event: 'newParticipant',
-                userid: user.id,
                 username: user.name,
+                userid: user.id,
                 host: myRoom.host
             });
 
@@ -162,7 +170,6 @@ function join(socket, username, roomid, isHost, callback) {
                 userid: user.id,
                 host: myRoom.host
             });
-            console.log(socket.id);
 
             // myRoom의 participants에 현재 user를 추가
             myRoom.participants[user.id] = user;
@@ -346,6 +353,12 @@ function handleDisconnect(socket, roomid) {
     if (myRoom.length === 0) return;
     delete myRoom.participants[socket.id];
     delete socketRoom[socket.id];
+    if (socket.id === myRoom.host) {
+        console.log(`${roomid} room host disconnected`);
+        delete myRoom.host;
+    } else {
+        console.log(`${socket.id} has disconnected`);
+    }
 }
 
 http.listen(8443, () => {
