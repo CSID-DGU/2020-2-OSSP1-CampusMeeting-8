@@ -59,7 +59,7 @@ socket.on('warn', (message) => {
 function userDisconnected(userid) {
     if (participants[userid]) {
         const video = document.getElementById(userid);
-        video.remove();
+        video.parentElement.remove();
         delete participants[userid];
     }
 }
@@ -68,15 +68,15 @@ function userDisconnected(userid) {
 function receiveVideo(userid, username) {
     // 페이지에 비디오 생성
 
-    /* const videoContainer = makeVideoContainer(userid);
+    const videoContainer = makeVideoContainer(userid);
     videoGrid.appendChild(videoContainer);
     const video = videoContainer.querySelector('video');
-    addCameraEvent(videoContainer, userid); */
+    addCameraEvent(videoContainer, userid);
 
-    const video = document.createElement('video');
-    video.id = userid;
-    video.autoplay = true;
-    videoGrid.appendChild(video);
+    // const video = document.createElement('video');
+    // video.id = userid;
+    // video.autoplay = true;
+    // videoGrid.appendChild(video);
 
     // 인자로 받아온 user정보를 가지고 user 생성
     const user = {
@@ -132,12 +132,6 @@ function receiveVideo(userid, username) {
 // existingParticipants 이벤트를 수신했을 때 호출
 // 새 참여자가 참여할 때마다 room의 참여자 목록을 받아서 각각의 user에 대해 receiveVideo 호출
 function onExistingParticipants(userid, existingUsers) {
-    /* const videoContainer = makeVideoContainer(userid);
-
-    videoGrid.appendChild(videoContainer);
-    const video = videoContainer.querySelector('video');
-
-    addCameraEvent(videoContainer, userid); */
 
     const user = {
         id: userid,
@@ -218,5 +212,5 @@ function addCameraEvent(videoContainer, userid) {
             userid: userid
         })
     })
-
 }
+
