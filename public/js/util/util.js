@@ -1,4 +1,4 @@
-//camera button
+/* //camera button
 let cameraBtn = document.querySelector('#camera');
 let screenBtn = document.querySelector('#screen');
 const videoMode = {
@@ -83,6 +83,7 @@ function getScreenTrack(constraint) {
     })
 }
 
+
 function changeTrack(track, localStream, senders) {
     let oldTrack = localStream.getVideoTracks()[0];
     oldTrack.stop();
@@ -95,3 +96,4 @@ function changeTrack(track, localStream, senders) {
     })
     sender.replaceTrack(track);
 }
+

@@ -29,6 +29,7 @@ socket.on('message', message => {
 
     switch (message.event) {
         case 'newParticipant':
+            newUserAlert(message);
             receiveVideo(message.userid, message.username, message.host);
             break;
         case 'existingParticipants':

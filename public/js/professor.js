@@ -31,6 +31,7 @@ socket.on('message', message => {
 
     switch (message.event) {
         case 'newParticipant':
+            newUserAlert(message);
             receiveVideo(message.userid, message.username);
             break;
         case 'existingParticipants':
@@ -45,6 +46,11 @@ socket.on('message', message => {
         case 'userDisconnected':
             console.log(message.event, message.userid);
             userDisconnected(message.userid);
+            break;
+        case 'error':
+            console.log(message.message);
+            alert(message.message);
+            location.href = '/';
             break;
     }
 });

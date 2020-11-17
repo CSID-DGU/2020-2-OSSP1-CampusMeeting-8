@@ -20,6 +20,7 @@
     <script defer src="/js/util/videoContainer.js"></script>
     <script defer src="/js/student.js"></script>
     <script defer src="/js/util/util.js"></script>
+    <script defer src="/js/util/chat.js"></script>
     <script>
         const ROOM_ID = '<%= roomID %>';
     </script>
@@ -37,8 +38,7 @@
 
 
     <div id="container">
-        <div id="chatView">
-
+        <div id="chatView" style="overflow: auto;">
         </div>
         <form id="chatForm" onsubmit="return false">
             <input type="text" id="msg">
@@ -47,7 +47,7 @@
     </div>
 
     <script>
-
+/* 
         var chatView = document.getElementById('chatView');
         var chatForm = document.getElementById('chatForm');
 
@@ -70,7 +70,7 @@
 
                 $('#chatView').append(msgLine);
             }
-        });
+        }); */
     </script>
     <div id="btn_student">
         <button id="mic_by_student" button type="button" i class="fas fa-microphone fa-3x"

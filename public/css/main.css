@@ -137,3 +137,7 @@
 video {
     width: 240px;
 }
+
+.chatlog {
+    font: 15px sans-serif, arial;
+}
