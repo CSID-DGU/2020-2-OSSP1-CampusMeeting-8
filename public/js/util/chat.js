@@ -1,20 +1,14 @@
 const chatView = document.getElementById('chatView');
 const chatForm = document.getElementById('chatForm');
 const msgInput = document.getElementById('msg');
-const chatSend = document.getElementById('send');
+const chatSendBtn = document.getElementById('send');
 
-chatSend.addEventListener('click', send);
+chatSendBtn.addEventListener('click', chatSend);
 chatView.scrollTop = chatView.scrollHeight;
 
-function newUserAlert(message) {
-    const msg = document.createElement('div');
-    const node = document.createTextNode(`${message.username}님이 입장하셨습니다.`);
-    console.log(message);
-    msg.append(node);
-    chatView.append(msg);
-}
 
-function send() {
+
+function chatSend() {
     const message = msgInput.value;
 
     msgInput.value = '';
@@ -25,9 +19,17 @@ function send() {
     msg.append(node);
     chatView.append(msg);
 
-    socket.emit('message', { 
-        event: 'chat',
+    socket.emit('newChat', {
         message: message,
-        name: userName
+        name: userName,
+        roomid: ROOM_ID
     });
 }
+
+socket.on('newChat', (message) => {
+    console.log('got message ', message.message);
+    const msg = document.createElement('div');
+    const node = document.createTextNode(message.message);
+    msg.append(node);
+    chatView.append(msg);
+})

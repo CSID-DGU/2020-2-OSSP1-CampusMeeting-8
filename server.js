@@ -89,6 +89,12 @@ io.on('connection', socket => {
         io.to(message.userid).emit('warn', message.warnMessage)
 
     })
+
+    socket.on('newChat', (message) => {
+        message.name = socket.name;
+        socket.to(message.roomid).emit('newChat', message);
+    })
+
 });
 
 function join(socket, username, roomid, isHost, callback) {
