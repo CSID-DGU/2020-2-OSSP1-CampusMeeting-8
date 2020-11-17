@@ -56,11 +56,16 @@ socket.on('warn', (message) => {
 
 // 유저 연결이 끊어졌을 경우 비디오 처리를 하는 메소드
 function userDisconnected(userid) {
-    if (participants[userid]) {
-        const video = document.getElementById(userid);
-        video.remove();
-        delete participants[userid];
-    }
+    // if (participants[userid]) {
+    //     const video = document.getElementById(userid);
+    //     video.remove();
+    //     delete participants[userid];
+    // }
+    const msg = document.createElement('div');
+    const node = document.createTextNode(`${userid}님이 퇴장하셨습니다.`);
+    msg.append(node);
+    chatView.append(msg);
+
 }
 
 // 원격 연결로부터 비디오 수신
@@ -68,10 +73,6 @@ function receiveVideo(userid, username, host) {
     // 페이지에 비디오 생성
 
     if (host === userid) {
-        /* const videoContainer = makeVideoContainer(userid);
-        videoGrid.appendChild(videoContainer);
-        const video = videoContainer.querySelector('video');
-        addCameraEvent(videoContainer, userid); */
 
 
         // 인자로 받아온 user정보를 가지고 user 생성
@@ -128,13 +129,7 @@ function receiveVideo(userid, username, host) {
 
 // existingParticipants 이벤트를 수신했을 때 호출
 // 새 참여자가 참여할 때마다 room의 참여자 목록을 받아서 각각의 user에 대해 receiveVideo 호출
-function onExistingParticipants(userid, existingUsers, host) {/* 
-    const videoContainer = makeVideoContainer(userid);
-
-    videoGrid.appendChild(videoContainer);
-    const video = videoContainer.querySelector('video');
-
-    addCameraEvent(videoContainer, userid); */
+function onExistingParticipants(userid, existingUsers, host) {
 
     const user = {
         id: userid,
@@ -215,4 +210,11 @@ function addCameraEvent(videoContainer, userid) {
         })
     })
 
+}
+
+function newUserAlert(message) {
+    const msg = document.createElement('div');
+    const node = document.createTextNode(`${message.username}님이 입장하셨습니다.`);
+    msg.append(node);
+    chatView.append(msg);
 }

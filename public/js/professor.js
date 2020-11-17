@@ -55,10 +55,10 @@ socket.on('message', message => {
     }
 });
 
-socket.on('warn', (message) => {
-    console.log('got warn from server');
-    alert(message);
-})
+// socket.on('warn', (message) => {
+//     console.log('got warn from server');
+//     alert(message);
+// })
 
 
 // 유저 연결이 끊어졌을 경우 비디오 처리를 하는 메소드
@@ -68,6 +68,10 @@ function userDisconnected(userid) {
         video.parentElement.remove();
         delete participants[userid];
     }
+    const msg = document.createElement('div');
+    const node = document.createTextNode(`${userid}님이 퇴장하셨습니다.`);
+    msg.append(node);
+    chatView.append(msg);
 }
 
 // 원격 연결로부터 비디오 수신
@@ -220,3 +224,10 @@ function addCameraEvent(videoContainer, userid) {
     })
 }
 
+function newUserAlert(message) {
+    const msg = document.createElement('div');
+    const node = document.createTextNode(`${message.username}님이 입장하셨습니다.`);
+    console.log(message);
+    msg.append(node);
+    chatView.append(msg);
+}

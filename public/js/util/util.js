@@ -1,4 +1,4 @@
-/* //camera button
+//camera button
 let cameraBtn = document.querySelector('#camera');
 let screenBtn = document.querySelector('#screen');
 const videoMode = {
