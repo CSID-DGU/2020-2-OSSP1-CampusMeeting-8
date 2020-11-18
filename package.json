@@ -1,4 +1,3 @@
-
 {
   "name": "2020-2-ossp1-campusmeeting-8",
   "version": "1.0.0",
@@ -6,8 +5,8 @@
   "main": "server.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start" : "server.js",
-    "devStart" : "nodemon server.js"
+    "start": "server.js",
+    "devStart": "nodemon server.js"
   },
   "repository": {
     "type": "git",
