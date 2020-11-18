@@ -18,7 +18,7 @@ const argv = minimist(process.argv.slice(2), {
 });
 
 // static 설정
-app.use(express.static('public'));
+app.use(express.static(__dirname + '/public'));
 
 // view 엔진 설정
 app.set('views', __dirname + '/views');
@@ -27,13 +27,19 @@ app.engine('html', require('ejs').renderFile);
 
 // 라우터
 app.get('/', (req, res) => {
-    res.redirect('/room');
+    res.render('index');
+});
+app.get('/room/create', (req, res) => {
+    res.redirect(`/room/${uuidV4()}/host`);
 });
 app.get('/room', (req, res) => {
     res.redirect(`/room/${uuidV4()}`);
 });
+app.get('/room/:room/host', (req, res) => {
+    res.render('professor', { roomID: req.params.room, userID: `${uuidV4()}` });
+});
 app.get('/room/:room', (req, res) => {
-    res.render('room', { roomID: req.params.room, userID: `${uuidV4()}` });
+    res.render('student', { roomID: req.params.room, userID: `${uuidV4()}` });
 });
 
 // signaling
@@ -41,11 +47,11 @@ io.on('connection', socket => {
     console.log('a user connected');
 
     socket.on('message', message => {
-        console.log('Message received: ', message.event);
+        //console.log('Message received: ', message.event);
 
         switch (message.event) {
             case 'join':
-                join(socket, message.userName, message.roomid, err => {
+                join(socket, message.username, message.roomid, message.isHost, err => {
                     if (err) {
                         console.log(err);
                     }
@@ -67,7 +73,7 @@ io.on('connection', socket => {
                     }
                 });
                 break;
-            }
+        }
     });
 
     // socket 연결이 끊어졌을 때 (브라우저가 종료됐을 때)
@@ -76,14 +82,39 @@ io.on('connection', socket => {
         const roomid = socketRoom[socket.id];
         handleDisconnect(socket, roomid);
     });
+
+    //경고 버튼
+    socket.on('warn', (message) => {
+        console.log('warn recieved');
+        io.to(message.userid).emit('warn', message.warnMessage)
+
+    })
+
+    socket.on('newChat', (message) => {
+        message.name = socket.name;
+        socket.to(message.roomid).emit('newChat', message);
+    })
+
 });
 
-function join(socket, username, roomid, callback) {
+function join(socket, username, roomid, isHost, callback) {
     getRoom(socket, roomid, (err, myRoom) => {
         // getRoom에서 받아온 err와 myRoom
         if (err) {
             return callback(err);
         }
+
+        if (isHost) {
+            if (myRoom.host) {
+                socket.emit('message', {
+                    event: 'error',
+                    message: '이미 개설되어 있는 방'
+                });
+                return;
+            }
+            myRoom.host = socket.id;
+        }
+        console.log(`host: ${myRoom.host}`);
 
         // myRoom의 pipeline에 WebRtcEndpoint를 추가
         myRoom.pipeline.create('WebRtcEndpoint', (err, outgoingMedia) => {
@@ -121,9 +152,10 @@ function join(socket, username, roomid, callback) {
 
             // room에 새 user가 접속했다는 메시지를 송신
             socket.to(roomid).emit('message', {
-                event: 'newParticipant', 
+                event: 'newParticipant',
+                username: user.name,
                 userid: user.id,
-                username: user.name
+                host: myRoom.host
             });
 
             let existingUsers = [];
@@ -139,9 +171,10 @@ function join(socket, username, roomid, callback) {
 
             // 현재 사용자에게 기존 참가자 목록을 묶어서 전송
             socket.emit('message', {
-                event: 'existingParticipants', 
+                event: 'existingParticipants',
                 existingUsers: existingUsers,
-                userid: user.id
+                userid: user.id,
+                host: myRoom.host
             });
 
             // myRoom의 participants에 현재 user를 추가
@@ -169,7 +202,7 @@ function receiveVideoFrom(socket, userid, roomid, sdpOffer, callback) {
                 senderid: userid,
                 sdpAnswer: sdpAnswer
             });
-            
+
             // gatherCandidates(callback) : ice 후보자 수집
             // SdpEndpoint::generateOffer나 SdpEndpoint::processOffer가 실행된 이후 호출되어야 함
             endpoint.gatherCandidates(err => {
@@ -191,7 +224,7 @@ function addIceCandidate(socket, senderid, roomid, iceCandidate, callback) {
             if (user.outgoingMedia) {
                 user.outgoingMedia.addIceCandidate(candidate);
             } else {
-                iceCandidateQueues[user.id].push({candidate: candidate});
+                iceCandidateQueues[user.id].push({ candidate: candidate });
             }
         } else {
             if (user.incomingMedia[senderid]) {
@@ -200,8 +233,8 @@ function addIceCandidate(socket, senderid, roomid, iceCandidate, callback) {
                 if (!iceCandidateQueues[senderid]) {
                     iceCandidateQueues[senderid] = [];
                 }
-                iceCandidateQueues[senderid].push({candidate: candidate});
-            }   
+                iceCandidateQueues[senderid].push({ candidate: candidate });
+            }
         }
         callback(null);
     } else {
@@ -322,10 +355,16 @@ function handleDisconnect(socket, roomid) {
         event: 'userDisconnected',
         userid: socket.id
     });
-    const myRoom = io.sockets.adapter.rooms[roomid] || {length: 0};
+    const myRoom = io.sockets.adapter.rooms[roomid] || { length: 0 };
     if (myRoom.length === 0) return;
     delete myRoom.participants[socket.id];
     delete socketRoom[socket.id];
+    if (socket.id === myRoom.host) {
+        console.log(`${roomid} room host disconnected`);
+        delete myRoom.host;
+    } else {
+        console.log(`${socket.id} has disconnected`);
+    }
 }
 
 http.listen(8443, () => {

@@ -1,13 +1,14 @@
-const videoGrid = document.getElementById('video-grid');
-// variables
-const userName = USER_ID;
+const myVideo = document.getElementById('main-cam1');
+const userName = 'Professor';
 const participants = {};
+const videoGrid = document.getElementById('video-grid');
 
 const socket = io();
 
+
 const constraints = {
     audio: true,
-    video :  true /* {
+    video: true /* {
         mandatory : {
             maxWidth : 480,
             maxFrameRate : 15,
@@ -19,6 +20,7 @@ const constraints = {
 // 소켓 연결이 완료되면 서버로 join 메시지를 보내서 처리
 socket.emit('message', {
     event: 'join',
+    isHost: true,
     username: userName,
     roomid: ROOM_ID,
 });
@@ -29,6 +31,7 @@ socket.on('message', message => {
 
     switch (message.event) {
         case 'newParticipant':
+            newUserAlert(message);
             receiveVideo(message.userid, message.username);
             break;
         case 'existingParticipants':
@@ -44,25 +47,46 @@ socket.on('message', message => {
             console.log(message.event, message.userid);
             userDisconnected(message.userid);
             break;
+        case 'error':
+            console.log(message.message);
+            alert(message.message);
+            location.href = '/';
+            break;
     }
 });
+
+// socket.on('warn', (message) => {
+//     console.log('got warn from server');
+//     alert(message);
+// })
+
 
 // 유저 연결이 끊어졌을 경우 비디오 처리를 하는 메소드
 function userDisconnected(userid) {
     if (participants[userid]) {
         const video = document.getElementById(userid);
-        video.remove();
+        video.parentElement.remove();
         delete participants[userid];
     }
+    const msg = document.createElement('div');
+    const node = document.createTextNode(`${userid}님이 퇴장하셨습니다.`);
+    msg.append(node);
+    chatView.append(msg);
 }
 
 // 원격 연결로부터 비디오 수신
 function receiveVideo(userid, username) {
     // 페이지에 비디오 생성
-    const video = document.createElement('video');
-    video.id = userid;
-    video.autoplay = true;
-    videoGrid.appendChild(video);
+
+    const videoContainer = makeVideoContainer(userid);
+    videoGrid.appendChild(videoContainer);
+    const video = videoContainer.querySelector('video');
+    addCameraEvent(videoContainer, userid);
+
+    // const video = document.createElement('video');
+    // video.id = userid;
+    // video.autoplay = true;
+    // videoGrid.appendChild(video);
 
     // 인자로 받아온 user정보를 가지고 user 생성
     const user = {
@@ -118,22 +142,18 @@ function receiveVideo(userid, username) {
 // existingParticipants 이벤트를 수신했을 때 호출
 // 새 참여자가 참여할 때마다 room의 참여자 목록을 받아서 각각의 user에 대해 receiveVideo 호출
 function onExistingParticipants(userid, existingUsers) {
-    const video = document.createElement('video');
-    video.id = userid;
-    video.autoplay = true;
-    videoGrid.appendChild(video);
 
     const user = {
         id: userid,
         username: userName,
-        video: video,
+        video: myVideo,
         rtcPeer: null
     }
 
     participants[user.id] = user;
 
     const options = {
-        localVideo: video,
+        localVideo: myVideo,
         mediaConstraints: constraints,
         onicecandidate: onIceCandidate
     }
@@ -144,7 +164,7 @@ function onExistingParticipants(userid, existingUsers) {
             if (err) {
                 return console.error(err);
             }
-            this.generateOffer(onOffer)
+            this.generateOffer(onOffer);
         }
     );
 
@@ -159,6 +179,7 @@ function onExistingParticipants(userid, existingUsers) {
             event: 'receiveVideoFrom',
             userid: user.id,
             roomid: ROOM_ID,
+            isHost: true,
             sdpOffer: offer
         }
         sendMessage(message);
@@ -189,4 +210,24 @@ function addIceCandidate(userid, candidate) {
 function sendMessage(message) {
     console.log('sending ' + message.event + ' message to server');
     socket.emit('message', message);
+}
+
+
+function addCameraEvent(videoContainer, userid) {
+    console.log(userid);
+    const warn = videoContainer.querySelector('.warn-button');
+    warn.addEventListener('click', (e) => {
+        socket.emit('warn', {
+            warnMessage: 'warning',
+            userid: userid
+        })
+    })
+}
+
+function newUserAlert(message) {
+    const msg = document.createElement('div');
+    const node = document.createTextNode(`${message.username}님이 입장하셨습니다.`);
+    console.log(message);
+    msg.append(node);
+    chatView.append(msg);
 }

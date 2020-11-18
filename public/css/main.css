@@ -1,0 +1,143 @@
+﻿#main-cam2 {
+    position: fixed;
+    top: 60px;
+    left: 10px;
+    width: 1000px;
+    height: 600px;
+}
+
+#sub-cam1 {
+    position: fixed;
+    top: 60px;
+    right: 10px;
+    height: 280px;
+    width: 500px;
+}
+
+#container {
+    position: fixed;
+    right: 10px;
+    top: 350px;
+    width: 500px;
+    height: 400px;
+    border: 1px solid black;
+    background: ivory;
+}
+
+#chatView {
+    height: 90%;
+    overflow-y: scroll;
+}
+
+#chatForm {
+    height: 10%;
+    border-top: 1px solid black;
+    text-align: center;
+}
+
+#msg {
+    width: 80%;
+    height: 32px;
+    border-radius: 8px;
+}
+
+#send {
+    width: 16%;
+    height: 34px;
+    border-radius: 50px;
+    background: black;
+    color: white;
+}
+
+#btn_student {
+    position: fixed;
+    top: 680px;
+    left: 100px;
+}
+
+#absent {
+    margin-left: 30px;
+    margin-right: 30px;
+}
+
+#main-cam1 {
+    position: fixed;
+    right: 10px;
+    top: 60px;
+    height: 280px;
+    width: 600px;
+}
+
+
+#btn_professor {
+    position: fixed;
+    top: 690px;
+    margin-left: 100px;
+}
+
+
+
+#container1 {
+    position: fixed;
+    right: 10px;
+    top: 350px;
+    width: 600px;
+    height: 400px;
+    border: 1px solid black;
+    background: ivory;
+}
+
+#mic_by_student {
+    position: fixed;
+    left: 350px;
+}
+
+#absent {
+    position: fixed;
+    left: 400px;
+}
+
+#cam_by_student {
+    position: fixed;
+    left: 530px;
+}
+
+
+
+#mic_student {
+    position: fixed;
+    left: 320px;
+}
+
+#mic_professor {
+    position: fixed;
+    left: 370px;
+}
+
+#cam_professor {
+    position: fixed;
+    left: 420px;
+}
+
+#rec {
+    position: fixed;
+    left: 470px;
+}
+
+#whiteboard {
+    position: fixed;
+    left: 530px;
+}
+
+#nochat {
+    position: fixed;
+    left: 580px;
+}
+
+video {
+    width: 240px;
+}
+
+.chatlog {
+    font: 15px sans-serif, arial;
+}
