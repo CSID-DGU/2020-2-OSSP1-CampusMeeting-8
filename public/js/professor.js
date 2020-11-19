@@ -81,7 +81,7 @@ function receiveVideo(userid, username) {
     const videoContainer = makeVideoContainer(userid);
     videoGrid.appendChild(videoContainer);
     const video = videoContainer.querySelector('video');
-    addCameraEvent(videoContainer, userid);
+    addCameraContainerEvent(videoContainer, userid);
 
     // const video = document.createElement('video');
     // video.id = userid;
@@ -213,12 +213,19 @@ function sendMessage(message) {
 }
 
 
-function addCameraEvent(videoContainer, userid) {
+function addCameraContainerEvent(videoContainer, userid) {
     console.log(userid);
     const warn = videoContainer.querySelector('.warn-button');
     warn.addEventListener('click', (e) => {
         socket.emit('warn', {
             warnMessage: 'warning',
+            userid: userid
+        })
+    })
+
+    const kick = videoContainer.querySelector('.kick-button');
+    kick.addEventListener('click', (e) => {
+        socket.emit('kick', {
             userid: userid
         })
     })

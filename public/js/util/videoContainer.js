@@ -3,7 +3,7 @@ const html =
         <div class='over-userName'></div>
         <div class='over-button-box'>
             <button class="warn-button">경고</button>
-            <button class="over-button">강퇴</button>
+            <button class="kick-button">강퇴</button>
             <button class="over-button">채팅금지</button>
         </div>
     </div>
@@ -38,12 +38,10 @@ function makeVideoContainer(userid) {
             over.style.zIndex = '-1';
         }
     })
-
-
-
-
     return container;
 }
+
+
 
 socket.on('warn', (message) => {
     console.log('got warn from server');

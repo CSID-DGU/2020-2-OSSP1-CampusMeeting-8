@@ -46,11 +46,17 @@ socket.on('message', message => {
             userDisconnected(message.userid);
             break;
     }
+
+
 });
 
 socket.on('warn', (message) => {
     console.log('got warn from server');
     alert(message);
+})
+
+socket.on('kicked', () => {
+    window.location.replace("http://www.w3schools.com");//밴페이지로 변경
 })
 
 
@@ -200,7 +206,7 @@ function sendMessage(message) {
 }
 
 
-function addCameraEvent(videoContainer, userid) {
+function addCameraContainerEvent(videoContainer, userid) {
     console.log(userid);
     const warn = videoContainer.querySelector('.warn-button');
     warn.addEventListener('click', (e) => {

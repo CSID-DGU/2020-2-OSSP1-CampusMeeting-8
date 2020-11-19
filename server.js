@@ -89,7 +89,11 @@ io.on('connection', socket => {
     socket.on('warn', (message) => {
         console.log('warn recieved');
         io.to(message.userid).emit('warn', message.warnMessage)
-
+    })
+    socket.on('kick', (message) => {
+        console.log('kick recieved');
+        io.to(message.userid).emit('kicked');
+        // io.sockets.sockets[message.userid].disconnect();
     })
 
     socket.on('newChat', (message) => {
