@@ -4,7 +4,9 @@ const http = require('http').Server(app);
 const io = require('socket.io')(http);
 const kurento = require('kurento-client');
 const minimist = require('minimist');
+const { prototype } = require('stream');
 const { v4: uuidV4 } = require('uuid');
+const PORT = process.env.PORT || 8443;
 
 let kurentoClient = null;
 let iceCandidateQueues = {};
@@ -367,6 +369,6 @@ function handleDisconnect(socket, roomid) {
     }
 }
 
-http.listen(8443, () => {
-    console.log('Example app listening on port 8443!');
+http.listen(PORT, () => {
+    console.log('Application start');
 });
