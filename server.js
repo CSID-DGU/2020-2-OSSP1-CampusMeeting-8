@@ -5,8 +5,8 @@ const io = require('socket.io')(http);
 const kurento = require('kurento-client');
 const minimist = require('minimist');
 const { prototype } = require('stream');
-const { v4: uuidV4 } = require('uuid');
 const PORT = process.env.PORT || 8443;
+const router = require(__dirname + '/routes/index.js');
 
 let kurentoClient = null;
 let iceCandidateQueues = {};
@@ -19,6 +19,13 @@ const argv = minimist(process.argv.slice(2), {
     }
 });
 
+/* const argv = minimist(process.argv.slice(2), {
+    default: {
+        as_uri: 'http://localhost:8443/',
+        ws_uri: 'ws://13.125.109.60:8888/kurento'
+    }
+}); */
+
 // static 설정
 app.use(express.static(__dirname + '/public'));
 
@@ -28,21 +35,7 @@ app.set('view engine', 'ejs');
 app.engine('html', require('ejs').renderFile);
 
 // 라우터
-app.get('/', (req, res) => {
-    res.render('index');
-});
-app.get('/room/create', (req, res) => {
-    res.redirect(`/room/${uuidV4()}/host`);
-});
-app.get('/room', (req, res) => {
-    res.redirect(`/room/${uuidV4()}`);
-});
-app.get('/room/:room/host', (req, res) => {
-    res.render('professor', { roomID: req.params.room, userID: `${uuidV4()}` });
-});
-app.get('/room/:room', (req, res) => {
-    res.render('student', { roomID: req.params.room, userID: `${uuidV4()}` });
-});
+app.use('/', router);
 
 // signaling
 io.on('connection', socket => {
