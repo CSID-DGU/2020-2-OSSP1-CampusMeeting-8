@@ -5,6 +5,7 @@
 <script language="javascript">
    function validate() {
        var re = /^[a-zA-Z0-9]{4,15}$/ // 아이디와 패스워드가 적합한지 검사할 정규식
+       var re3 = /^[a-zA-Z0-9]{6,20}$/
        var re2 = /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3}$/i;
        // 이메일이 적합한지 검사할 정규식
 
@@ -19,7 +20,7 @@
            return false;
        }
 
-       if(!check(re,pw,"패스워드는 4~12자의 영문 대소문자와 숫자로만 입력")) {
+       if(!check(re3,pw,"패스워드는 6~20자의 영문 대소문자와 숫자로만 입력")) {
            return false;
        }
 
@@ -71,15 +72,15 @@
        </tr>
        <tr>
            <td><b>아이디:</b></td>
-           <td><input type="text" style="width:170px"id="id" name="id" maxlength="12" /> ※4-12자의 영문 대소문자와 숫자로만 입력</td>
+           <td><input type="text" style="width:170px"id="id" name="id" maxlength="15" /> ※4-15자의 영문 대소문자와 숫자로만 입력</td>
        </tr>
        <tr>
            <td><b>비번:</b></td>
-           <td><input type="password"  style="width:170px" id="pw" name="pw" maxlength="12"/> ※4-12자의 영문 대소문자와 숫자로만 입력</td>
+           <td><input type="password"  style="width:170px" id="pw" name="pw" maxlength="20"/> ※6-20자의 영문 대소문자와 숫자로만 입력</td>
        </tr>
        <tr>
            <td><b>비번확인:</b></td>
-           <td><input type="password" style="width:170px" id="checkpw" maxlength="12"/></td>
+           <td><input type="password" style="width:170px" id="checkpw" maxlength="20"/></td>
        </tr>
        <tr>
            <td><b>메일주소:</b></td>
