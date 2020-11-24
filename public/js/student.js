@@ -1,7 +1,7 @@
 const userName = 'student';
 const participants = {};
-const hostVideo = document.getElementById('main-cam2');
-const myVideo = document.getElementById('sub-cam1');
+const hostVideo = document.getElementById('host-cam');
+const myVideo = document.getElementById('my-cam');
 const socket = io();
 let host;
 

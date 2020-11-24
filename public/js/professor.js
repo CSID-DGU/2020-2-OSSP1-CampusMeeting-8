@@ -1,4 +1,4 @@
-const myVideo = document.getElementById('main-cam1');
+const myVideo = document.getElementById('my-cam');
 const userName = 'Professor';
 const participants = {};
 const videoGrid = document.getElementById('video-grid');
