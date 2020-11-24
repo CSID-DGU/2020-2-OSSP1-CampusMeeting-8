@@ -4,12 +4,9 @@
 <head>
     <meta charset="utf-8" />
 
-
-    <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css"
-        integrity="sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2" crossorigin="anonymous">
     <title>htmlpage_professor</title>
-    <link rel="stylesheet" type="text/css" media="screen" href="/css/main.css">
+    <link rel="stylesheet" type="text/css" media="screen" href="/css/professor.css">
+    <link rel="stylesheet" type="text/css" media="screen" href="/css/chat.css">
     <link rel="stylesheet" href="/css/videoContainer.css">
     <script src="https://use.fontawesome.com/releases/v5.2.0/js/all.js"></script>
     <script defer src="/js/adapter.js"></script>
@@ -25,68 +22,45 @@
 </head>
 
 <body>
-    <nav class="navbar navbar-dark bg-dark">
-        <a class="navbar-brand" href="#">WEB RTC 화상회의</a>
-    </nav>
+    <div id="main-container-left">
+        <nav id="navbar" class="flex-row">
+            <div id="nav-left" class="flex-row">
+                <button id="out" class="nav-button"><i class="fas fa-arrow-left fa-2x nav-icon"
+                        title="퇴장"></i></i></button>
+                <button id="full-screen" class="nav-button"><i class="fas fa-expand fa-2x nav-icon"
+                        title="전체화면"></i></button>
+            </div>
+            <div id="nav-center" class="flex-row">
+                <button id="student-mike" class="nav-button"><i class="fas fa-volume-up fa-2x nav-icon"></i></button>
+                <button id="mike" class="nav-button"><i class="fas fa-microphone fa-2x nav-icon"
+                        title="마이크"></i></button>
+                <button id="camera" class="nav-button"><i class="fas fa-camera fa-2x nav-icon"></i></button>
+                <button id="record" class="nav-button"><i class="fas fa-dot-circle fa-2x nav-icon"></i></button>
+            </div>
 
-    <div id="video-grid"></div>
+            <div id="nav-right" class="flex-row">
+                <button id="screen" class="nav-button"><i class="fas fa-chalkboard fa-2x nav-icon"></i></button>
+            </div>
 
-
-    <span id="upcam_1line">
-        <video playsinline id="up_cam1" preload="metadata" autoplay></video>
-        <video playsinline id="up_cam2" preload="metadata" autoplay></video>
-        <video playsinline id="up_cam3" preload="metadata" autoplay></video>
-
-    </span>
-    <span>
-        <video playsinline id="main-cam1" preload="metadata" autoplay></video>
-    </span>
-
-    <div id="upcam_2line">
-        <video playsinline id="up_cam4" preload="metadata" autoplay></video>
-        <video playsinline id="up_cam5" preload="metadata" autoplay></video>
-        <video playsinline id="up_cam6" preload="metadata" autoplay></video>
-    </div>
-    <div id="upcam_3line">
-        <video playsinline id="up_cam7" preload="metadata" autoplay></video>
-        <video playsinline id="up_cam8" preload="metadata" autoplay></video>
-        <video playsinline id="up_cam9" preload="metadata" autoplay></video>
-    </div>
-    <div id="upcam_4line">
-        <video playsinline id="up_cam10" preload="metadata" autoplay></video>
-        <video playsinline id="up_cam11" preload="metadata" autoplay></video>
-        <video playsinline id="up_cam12" preload="metadata" autoplay></video>
+        </nav>
+        <div id="video-grid"></div>
     </div>
 
-    <div id="container1">
-        <div id="chatView">
-            
+    <div id="main-container-right">
+        <div id="my-cam-container">
+            <video id="my-cam" preload="metadata" autoplay></video>
         </div>
-    </div>
-    <div id ="_container1">
-        <form id="chatForm" onsubmit="return false" >
-            <input type="text" id="msg" autofocus = "true" autocomplete = "false">
-            <input type="submit" id="send" value="전송" >
-        </form>
-    </div>
 
-    <div id="btn_professor">
-        <button id="mic_student" button type="button" i class="fas fa-microphone fa-2x" title="학생마이크 on/off"></button>
-        <!-- 학생마이크 음소거 -->
-        <button id="mic_professor" button type="button" i class="fas fa-microphone-alt fa-2x"
-            title="교수마이크 on/off"></button><!-- 교수마이크 음소거 -->
-        <button id="camera1" button type="button" i class="fas fa-camera fa-2x" title="교수카메라 on/off"></button>
-        <!-- 교수 카메라  -->
-        <button id="rec" button type="button" i class="fas fa-video fa-2x" title="녹화기능"></button><!-- 녹화 -->
-        <button id="whiteboard" button type="button" i class="far fa-clipboard fa-2x " title="화이트보드"></button>
-        <!-- 화이트보드 -->
-        <button id="nochat" button type="button" i class="fas fa-comment-slash fa-2x" title="채팅금지"></button>
-        <!-- 채팅금지 -->
-    </div>
-    <button id="camera">camera</button>
-    <button id="screen">screen</button>
-    <i class=""></i>
+        <div id="chat-container">
+            <div id="chatView"></div>
+            <form id="chatForm" onsubmit="return false">
+                <input type="text" id="msg" autofocus="true" autocomplete="false">
+                <input type="submit" id="send" value="전송">
+            </form>
+        </div>
 
+
+    </div>
 
 </body>
 
