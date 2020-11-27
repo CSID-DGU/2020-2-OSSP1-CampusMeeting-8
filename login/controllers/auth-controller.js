@@ -1,6 +1,6 @@
 var Cryptr = require('cryptr');
 cryptr = new Cryptr('myTotalySecretKey');
-
+var app = require('./../index.js');
 var connection = require('./../config');
 module.exports.auth=function(req,res){
     var id=req.body.id;
@@ -16,17 +16,20 @@ module.exports.auth=function(req,res){
       }else{
 
         if(results.length >0){
-  decryptedString = cryptr.decrypt(results[0].pw);
+          decryptedString = cryptr.decrypt(results[0].pw);
             if(pw==decryptedString){
-                res.json({
-                    status:true,
-                    message:'successfully authenticated'
-                })
+              console.log("login");
+              req.session.user={
+                id: id,
+                pw: pw,
+                authorized: true
+              };
+              console.log(req.session.user.id);
+                res.redirect("/main");
             }else{
-                res.json({
-                  status:false,
-                  message:"Id and password does not match"
-                 });
+
+              res.send('<script type="text/javascript">alert("아이디와 비밀번호를 확인해주세요"); document.location.href="/login"; </script>');
+
             }
 
         }
