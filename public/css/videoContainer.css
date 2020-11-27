@@ -1,0 +1,36 @@
+.camera-container{
+    width: 20%;
+    height: 20%;
+    background-color: gray;
+    position: relative;
+}
+
+.camera-over{
+    width: 100%;
+    height: 100%;
+    background-color: rgba(15, 15, 15, 0.5);
+    z-index: -1;
+    position: absolute;
+    top:0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.over-userName{
+    width: 60%;
+    height: 20%;
+    color: white;
+}
+
+.over-button-box button{
+    background-color: white;
+    border-radius: 12px;
+}
+.camera-video{
+    width: 100%;
+    height: 100%;
+   position: absolute;
+   top:0;
+}
