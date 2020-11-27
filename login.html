@@ -1,0 +1,24 @@
+<DOCTYPE HTML5>
+<html>
+  <head>
+    <link rel="stylesheet" type="text/css" href="./login.css">
+  </head>
+  <body width="100%" height="100%">
+    <form action="/controllers/auth-controller" method="post" class="loginForm">
+      <h2>Login</h2>
+      <div class="idForm">
+        <input type="text" class="id" placeholder="ID" name="id">
+      </div>
+      <div class="passForm">
+        <input type="password" class="pw" placeholder="PW" name="pw">
+      </div>
+      <button type="submit" class="btn" onclick="button()">
+        LOG IN
+      </button>
+
+      <div class="bottomText">
+        <a href="/register">회원가입</a>
+      </div>
+    </form>
+  </body>
+</html>
