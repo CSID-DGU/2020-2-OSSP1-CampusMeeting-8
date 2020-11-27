@@ -1,6 +1,6 @@
 var Cryptr = require('cryptr');
 cryptr = new Cryptr('myTotalySecretKey');
-var app = require('./../index.js');
+var app = require('../app.js');
 var connection = require('./../config');
 module.exports.auth=function(req,res){
     var id=req.body.id;

@@ -1,5 +1,5 @@
 const express = require('express');
-const app = express();
+const app = require(__dirname + '/app.js');
 const http = require('http').Server(app);
 const io = require('socket.io')(http);
 const kurento = require('kurento-client');

@@ -18,7 +18,7 @@ app.use(session({
 }));
 
 
-app.get('/', function (req, res) {
+/* app.get('/', function (req, res) {
    res.sendFile( __dirname + "/" + "index.html" );
 })
 
@@ -58,7 +58,7 @@ app.get("/logout",function(req,res){
     res.redirect('/login');
   }
 
-})
+}) */
 
 app.post('/api/register',registerController.register);
 app.post('/api/auth',authController.auth);
@@ -66,6 +66,5 @@ app.post('/api/auth',authController.auth);
 console.log(authController);
 app.post('/controllers/register-controller', registerController.register);
 app.post('/controllers/auth-controller', authController.auth);
-app.listen(3000);
 
 module.exports = app;
