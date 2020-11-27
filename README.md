@@ -17,9 +17,9 @@ webRTC 기술을 활용한 원격 수업 플랫폼 '캠퍼스미팅'
 ```
   
 ## 사용 기술 스택  
-- 프론트엔드: HTML/CSS/Javascript, Node.js  
-- 백엔드: Node.js  
-- webRTC 중계 서버: Kurento (https://www.kurento.org/)  
+- ![html/css/javscript](https://img.shields.io/badge/frontend-html/css/javascript-red)
+- ![node.js](https://img.shields.io/badge/backend-node.js-blue)
+- ![mediaserver](https://img.shields.io/badge/media_server-kurento-yellow)
   
 ## 실행 방법
 > 우선적으로 Node.js를 설치해 주세요  
