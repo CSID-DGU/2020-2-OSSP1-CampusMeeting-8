@@ -1,115 +1,15 @@
 <!DOCTYPE html>
+
 <html>
 <head>
-<title>회원가입</title>
-<script language="javascript">
-   function validate() {
-       var re = /^[a-zA-Z0-9]{4,15}$/ // 아이디와 패스워드가 적합한지 검사할 정규식
-       var re3 = /^[a-zA-Z0-9]{6,20}$/
-       var re2 = /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3}$/i;
-       // 이메일이 적합한지 검사할 정규식
-
-       var id = document.getElementById("id");
-       var pw = document.getElementById("pw");
-       var email = document.getElementById("email");
-       var phone = document.getElementById("phone");
-       var bdate = document.getElementById("bdate");
-       // ------------ 이메일 까지 -----------
-
-       if(!check(re,id,"아이디는 4~15자의 영문 대소문자와 숫자로만 입력")) {
-           return false;
-       }
-
-       if(!check(re3,pw,"패스워드는 6~20자의 영문 대소문자와 숫자로만 입력")) {
-           return false;
-       }
-
-       if(join.pw.value != join.checkpw.value) {
-           alert("비밀번호가 다릅니다. 다시 확인해 주세요.");
-           join.checkpw.value = "";
-           join.checkpw.focus();
-           return false;
-       }
-
-       if(email.value=="") {
-           alert("이메일을 입력해 주세요");
-           email.focus();
-           return false;
-       }
-
-       if(!check(re2, email, "적합하지 않은 이메일 형식입니다.")) {
-           return false;
-       }
-
-       if(join.name.value=="") {
-           alert("이름을 입력해 주세요");
-           join.name.focus();
-           return false;
-       }
-
-
-
-       alert("회원가입이 완료되었습니다.");
-   }
-
-   function check(re, what, message) {
-       if(re.test(what.value)) {
-           return true;
-       }
-       alert(message);
-       what.value = "";
-       what.focus();
-       //return false;
-   }
-</script>
+    <meta charset="utf-8" />
+    <title>시작페이지</title>
 </head>
 <body>
-<h1 align="center" style="font-size:50px;"><font color="navy"><b>SIGN UP</b></font></h1>
-<form name="join" onsubmit="return validate();" action="/controllers/register-controller" method="post">
-   <table width="600" height="400" border="1" align="center" cellspacing="0">
-       <tr height="10" align="center">
-           <td colspan="2" style="background:navy;" ><font color=white><b>회원기본정보</b></font></td>
-       </tr>
-       <tr>
-           <td><b>아이디:</b></td>
-           <td><input type="text" style="width:170px"id="id" name="id" maxlength="15" /> ※4-15자의 영문 대소문자와 숫자로만 입력</td>
-       </tr>
-       <tr>
-           <td><b>비번:</b></td>
-           <td><input type="password"  style="width:170px" id="pw" name="pw" maxlength="20"/> ※6-20자의 영문 대소문자와 숫자로만 입력</td>
-       </tr>
-       <tr>
-           <td><b>비번확인:</b></td>
-           <td><input type="password" style="width:170px" id="checkpw" maxlength="20"/></td>
-       </tr>
-       <tr>
-           <td><b>메일주소:</b></td>
-           <td><input type="text" style="width:170px" name="email" id="email" /> ex)email000@naver.com</td>
-       </tr>
-       <tr>
-           <td><b>이름:</b></td>
-           <td><input type="text" style="width:170px" name="name" maxlength="12" /></td>
-       </tr>
-       <tr>
-           <td><b>휴대폰 번호:</td>
-           <td><input type="text" name="phone" id="phone" size="10" maxlength="11">-</input>
-           	예) 010-0000-0000
-           </td>
-       </tr>
-       <tr>
-           <td><b>생년월일:</b></td>
-           <td>
-               <input type="text" style="width:80px" name="bdate" id="bdate" maxlength="6"/> ex)200101
+    <h3>시작 페이지</h3>
+    <br />
 
-           </td>
-       </tr>
-
-   </table>
-   <center>
-       <br/>
-       <input type="submit" value="회원가입" style="border-radius:5px; font-s"/>
-       <input type="reset" value="다시입력" style="border-radius:5px;" />
-   </center>
-</form>
+    <p><a href="/login"> 로그인  </a><p/>
+    <a href="/register"> 회원가입  </a>
 </body>
 </html>
