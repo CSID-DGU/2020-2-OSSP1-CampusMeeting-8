@@ -1,4 +1,4 @@
-const myVideo = document.getElementById('main-cam1');
+const myVideo = document.getElementById('my-cam');
 const userName = 'Professor';
 const participants = {};
 const videoGrid = document.getElementById('video-grid');
@@ -8,13 +8,7 @@ const socket = io();
 
 const constraints = {
     audio: true,
-    video: true /* {
-        mandatory : {
-            maxWidth : 480,
-            maxFrameRate : 15,
-            minFrameRate : 15
-        }
-    }  */
+    video: true
 };
 
 // 소켓 연결이 완료되면 서버로 join 메시지를 보내서 처리
@@ -30,15 +24,15 @@ socket.on('message', message => {
     console.log('Message received: ' + message.event);
 
     switch (message.event) {
-        case 'newParticipant':
+        case 'newUserJoined':
             newUserAlert(message);
             receiveVideo(message.userid, message.username);
             break;
-        case 'existingParticipants':
-            onExistingParticipants(message.userid, message.existingUsers);
+        case 'connected':
+            connect(message.userid, message.existingUsers);
             break;
-        case 'receiveVideoAnswer':
-            onReceiveVideoAnswer(message.senderid, message.sdpAnswer);
+        case 'sdpAnswer':
+            addSdpAnswer(message.senderid, message.sdpAnswer);
             break;
         case 'candidate':
             addIceCandidate(message.userid, message.candidate);
@@ -117,9 +111,9 @@ function receiveVideo(userid, username) {
 
     const onOffer = function (err, offer, wp) {
         console.log('sending offer');
-        // offer를 넣은 receiveVideoFrom 메시지를 소켓을 통해 전달
+        // offer를 넣은 메시지를 소켓을 통해 전달
         const message = {
-            event: 'receiveVideoFrom',
+            event: 'offer',
             userid: user.id,
             roomid: ROOM_ID,
             sdpOffer: offer
@@ -141,7 +135,7 @@ function receiveVideo(userid, username) {
 
 // existingParticipants 이벤트를 수신했을 때 호출
 // 새 참여자가 참여할 때마다 room의 참여자 목록을 받아서 각각의 user에 대해 receiveVideo 호출
-function onExistingParticipants(userid, existingUsers) {
+function connect(userid, existingUsers) {
 
     const user = {
         id: userid,
@@ -176,7 +170,7 @@ function onExistingParticipants(userid, existingUsers) {
     const onOffer = function (err, offer, wp) {
         console.log('sending offer');
         const message = {
-            event: 'receiveVideoFrom',
+            event: 'offer',
             userid: user.id,
             roomid: ROOM_ID,
             isHost: true,
@@ -198,7 +192,7 @@ function onExistingParticipants(userid, existingUsers) {
 }
 
 // 서버에서 sdpAnswer를 보냈을 때 받아서 처리
-function onReceiveVideoAnswer(senderid, sdpAnswer) {
+function addSdpAnswer(senderid, sdpAnswer) {
     participants[senderid].rtcPeer.processAnswer(sdpAnswer);
 }
 
@@ -217,7 +211,8 @@ function addCameraContainerEvent(videoContainer, userid) {
     console.log(userid);
     const warn = videoContainer.querySelector('.warn-button');
     warn.addEventListener('click', (e) => {
-        socket.emit('warn', {
+        socket.emit('message', {
+            event: 'warn',
             warnMessage: 'warning',
             userid: userid
         })
@@ -225,7 +220,8 @@ function addCameraContainerEvent(videoContainer, userid) {
 
     const kick = videoContainer.querySelector('.kick-button');
     kick.addEventListener('click', (e) => {
-        socket.emit('kick', {
+        socket.emit('message', {
+            event: 'kick',
             userid: userid
         })
     })

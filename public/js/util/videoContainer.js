@@ -40,10 +40,8 @@ function makeVideoContainer(userid) {
     })
     return container;
 }
-
-
-
+/* 
 socket.on('warn', (message) => {
     console.log('got warn from server');
     alert(message);
-})
+}) */

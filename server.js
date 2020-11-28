@@ -5,7 +5,7 @@ const io = require('socket.io')(http);
 const kurento = require('kurento-client');
 const minimist = require('minimist');
 const { prototype } = require('stream');
-const PORT = process.env.PORT || 8443;
+const PORT = process.env.PORT || 8843;
 const router = require(__dirname + '/routes/index.js');
 
 let kurentoClient = null;
@@ -14,7 +14,7 @@ let socketRoom = {};
 
 const argv = minimist(process.argv.slice(2), {
     default: {
-        as_uri: 'http://localhost:8443/',
+        as_uri: 'http://localhost:8843/',
         ws_uri: 'ws://localhost:8888/kurento'
     }
 });
@@ -53,8 +53,8 @@ io.on('connection', socket => {
                 });
                 break;
 
-            case 'receiveVideoFrom':
-                receiveVideoFrom(socket, message.userid, message.roomid, message.sdpOffer, err => {
+            case 'offer':
+                sendAnswer(socket, message.userid, message.roomid, message.sdpOffer, err => {
                     if (err) {
                         console.log(err);
                     }
@@ -68,6 +68,21 @@ io.on('connection', socket => {
                     }
                 });
                 break;
+
+            case 'warn':
+                console.log('warn recieved');
+                io.to(message.userid).emit('message', {
+                    event: 'warn',
+                    warnMessage: message.warnMessage
+                });
+                break;
+
+            case 'kick':
+                console.log('kick recieved');
+                io.to(message.userid).emit('message', {
+                    event: 'kicked'
+                });
+                break;
         }
     });
 
@@ -78,21 +93,10 @@ io.on('connection', socket => {
         handleDisconnect(socket, roomid);
     });
 
-    //경고 버튼
-    socket.on('warn', (message) => {
-        console.log('warn recieved');
-        io.to(message.userid).emit('warn', message.warnMessage)
-    })
-    socket.on('kick', (message) => {
-        console.log('kick recieved');
-        io.to(message.userid).emit('kicked');
-        // io.sockets.sockets[message.userid].disconnect();
-    })
-
-    socket.on('newChat', (message) => {
+    socket.on('newChat', message => {
         message.name = socket.name;
         socket.to(message.roomid).emit('newChat', message);
-    })
+    });
 
 });
 
@@ -134,7 +138,7 @@ function join(socket, username, roomid, isHost, callback) {
             if (iceCandidateQueue) {
                 while (iceCandidateQueue.length) {
                     let ice = iceCandidateQueue.shift();
-                    console.error(`user: ${user.name} collect candidate for outgoing media`);
+                    //console.error(`user: ${user.name} collect candidate for outgoing media`);
                     user.outgoingMedia.addIceCandidate(ice.candidate);
                 }
             }
@@ -151,29 +155,39 @@ function join(socket, username, roomid, isHost, callback) {
 
             // room에 새 user가 접속했다는 메시지를 송신
             socket.to(roomid).emit('message', {
-                event: 'newParticipant',
+                event: 'newUserJoined',
                 username: user.name,
                 userid: user.id,
-                host: myRoom.host
+                hostid: myRoom.host
             });
 
             let existingUsers = [];
-            // existingUsers에 pariticipants들을 추가
-            for (let i in myRoom.participants) {
-                if (myRoom.participants[i].id != user.id) {
+            if (isHost) {
+                // existingUsers에 pariticipants들을 추가
+                for (let i in myRoom.participants) {
+                    if (myRoom.participants[i].id != user.id) {
+                        existingUsers.push({
+                            id: myRoom.participants[i].id,
+                            name: myRoom.participants[i].name
+                        });
+                    }
+                }
+            } else {
+                const hostid = myRoom.host;
+                if (hostid) {
                     existingUsers.push({
-                        id: myRoom.participants[i].id,
-                        name: myRoom.participants[i].name
+                        id: myRoom.participants[hostid].id,
+                        name: myRoom.participants[hostid].name
                     });
                 }
             }
 
-            // 현재 사용자에게 기존 참가자 목록을 묶어서 전송
+            // 현재 사용자에게 기존 참가자 목록을 묶어서 연결 이벤트를 전송
             socket.emit('message', {
-                event: 'existingParticipants',
+                event: 'connected',
                 existingUsers: existingUsers,
                 userid: user.id,
-                host: myRoom.host
+                hostid: myRoom.host
             });
 
             // myRoom의 participants에 현재 user를 추가
@@ -183,7 +197,7 @@ function join(socket, username, roomid, isHost, callback) {
 }
 
 // sdpOffer를 받아서 endpoint를 얻고 sdpAnswer를 생성하여 클라이언트에 전송
-function receiveVideoFrom(socket, userid, roomid, sdpOffer, callback) {
+function sendAnswer(socket, userid, roomid, sdpOffer, callback) {
     // getUserEndpoint를 호출해서 endpoint를 반환받음 
     getUserEndpoint(socket, roomid, userid, (err, endpoint) => {
         if (err) {
@@ -197,7 +211,7 @@ function receiveVideoFrom(socket, userid, roomid, sdpOffer, callback) {
             }
 
             socket.emit('message', {
-                event: 'receiveVideoAnswer',
+                event: 'sdpAnswer',
                 senderid: userid,
                 sdpAnswer: sdpAnswer
             });
@@ -305,7 +319,7 @@ function getUserEndpoint(socket, roomid, senderid, callback) {
             if (iceCandidateQueue) {
                 while (iceCandidateQueue.length) {
                     let ice = iceCandidateQueue.shift();
-                    console.error(`user: ${sender.name} collect candidate for outgoing media`);
+                    //console.error(`user: ${sender.name} collect candidate for outgoing media`);
                     incoming.addIceCandidate(ice.candidate);
                 }
             }
