@@ -1,4 +1,4 @@
-let cameraBtn = document.querySelector('#camera');
+const cameraBtn = document.querySelector('#camera');
 let cameraOn = true;
 console.log(cameraBtn);
 cameraBtn.addEventListener('click', () => {
@@ -12,3 +12,13 @@ cameraBtn.addEventListener('click', () => {
         localStream.getVideoTracks()[0].enabled = true;
     }
 })
+
+const questionBtn = document.querySelector('#question');
+questionBtn.addEventListener('click', () => {
+    console.log('question clicked');
+    socket.emit('message', {
+        event: 'question',
+        roomid: ROOM_ID
+    })
+
+}) 

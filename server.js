@@ -83,6 +83,14 @@ io.on('connection', socket => {
                     event: 'kicked'
                 });
                 break;
+            case 'question':
+                console.log('question recieved');
+                let host = io.sockets.adapter.rooms[message.roomid].host;
+                io.to(host).emit('message', {
+                    event: 'question',
+                    studentid: socket.id
+                })
+                break;
         }
     });
 
