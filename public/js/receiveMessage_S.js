@@ -25,11 +25,13 @@ socket.on('message', message => {
             userDisconnected(message.userid);
             break;
         case 'warn':
-            console.log('got warn from server');
             alert(message.warnMessage);
             break;
         case 'kicked':
             window.location.replace("http://www.w3schools.com");//밴페이지로 변경
+            break;
+        case 'leave-accept':
+            leaveAccept();
             break;
     }
 });

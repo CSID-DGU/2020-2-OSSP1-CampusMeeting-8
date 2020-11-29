@@ -70,38 +70,66 @@ io.on('connection', socket => {
                 break;
 
             case 'warn':
-                console.log('warn recieved');
-                io.to(message.userid).emit('message', {
+                sendToUser(message.userid, {
                     event: 'warn',
                     warnMessage: message.warnMessage
-                });
+                })
                 break;
 
             case 'kick':
-                console.log('kick recieved');
-                io.to(message.userid).emit('message', {
+                sendToUser(message.userid, {
                     event: 'kicked'
-                });
+                })
                 break;
             case 'question':
-                {
-                    let host = io.sockets.adapter.rooms[message.roomid].host;
-                    io.to(host).emit('message', {
-                        event: 'question',
-                        studentid: socket.id
-                    })
-                }
+                sendToHost(message.roomid, {
+                    event: 'question',
+                    studentid: socket.id
+                })
                 break;
-            case 'leave': {
-                console.log('leave!!');
-                let host = io.sockets.adapter.rooms[message.roomid].host;
-                io.to(host).emit('message', {
+            case 'leave':
+                sendToHost(message.roomid, {
                     event: 'leave',
                     studentid: socket.id
                 })
-            }
                 break;
+
+            case 'question-refuse':
+                sendToUser(message.userid, {
+                    event: 'question-refuse'
+                })
+                break;
+            case 'question-accept':
+                sendToUser(message.userid, {
+                    event: 'question-accept'
+                })
+                break;
+            case 'leave-refuse':
+                sendToUser(message.userid, {
+                    event: 'leave-refuse'
+                })
+                break;
+            case 'leave-accept':
+                sendToUser(message.userid, {
+                    event: 'leave-accept'
+                })
+                break;
+            case 'leave-return':
+                sendToHost(message.roomid, {
+                    event: 'leave-return',
+                    studentid: socket.id
+                })
         }
+
+        function sendToUser(userid, message) {
+            io.to(userid).emit('message', message);
+        }
+        function sendToHost(roomid, message) {
+            let host = io.sockets.adapter.rooms[roomid].host;
+            io.to(host).emit('message', message);
+        }
+
+
     });
 
     // socket 연결이 끊어졌을 때 (브라우저가 종료됐을 때)

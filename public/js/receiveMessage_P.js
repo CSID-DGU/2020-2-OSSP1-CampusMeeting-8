@@ -26,6 +26,9 @@ socket.on('message', message => {
         case 'leave':
             recieveLeave(message.studentid);
             break;
+        case 'leave-return':
+            recieveLeaveReturn(message.studentid);
+            break;
         case 'error':
             console.log(message.message);
             alert(message.message);
