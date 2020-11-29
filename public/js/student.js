@@ -169,17 +169,17 @@ function sendMessage(message) {
 }
 
 
-function addCameraContainerEvent(videoContainer, userid) {
-    console.log(userid);
-    const warn = videoContainer.querySelector('.warn-button');
-    warn.addEventListener('click', (e) => {
-        socket.emit('warn', {
-            warnMessage: 'warning',
-            userid: userid
-        })
-    })
+// function addCameraContainerEvent(videoContainer, userid) {
+//     console.log(userid);
+//     const warn = videoContainer.querySelector('.warn-button');
+//     warn.addEventListener('click', (e) => {
+//         socket.emit('warn', {
+//             warnMessage: 'warning',
+//             userid: userid
+//         })
+//     })
 
-}
+// }
 
 function newUserAlert(message) {
     const msg = document.createElement('div');

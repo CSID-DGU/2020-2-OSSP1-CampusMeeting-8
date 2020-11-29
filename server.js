@@ -84,12 +84,22 @@ io.on('connection', socket => {
                 });
                 break;
             case 'question':
-                console.log('question recieved');
+                {
+                    let host = io.sockets.adapter.rooms[message.roomid].host;
+                    io.to(host).emit('message', {
+                        event: 'question',
+                        studentid: socket.id
+                    })
+                }
+                break;
+            case 'leave': {
+                console.log('leave!!');
                 let host = io.sockets.adapter.rooms[message.roomid].host;
                 io.to(host).emit('message', {
-                    event: 'question',
+                    event: 'leave',
                     studentid: socket.id
                 })
+            }
                 break;
         }
     });

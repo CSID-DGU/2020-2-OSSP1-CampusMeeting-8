@@ -15,10 +15,18 @@ cameraBtn.addEventListener('click', () => {
 
 const questionBtn = document.querySelector('#question');
 questionBtn.addEventListener('click', () => {
-    console.log('question clicked');
     socket.emit('message', {
         event: 'question',
         roomid: ROOM_ID
     })
 
+})
+
+const leaveBtn = document.querySelector('#leave');
+leaveBtn.addEventListener('click', () => {
+    console.log('leave clicked');
+    socket.emit('message', {
+        event: 'leave',
+        roomid: ROOM_ID
+    })
 }) 

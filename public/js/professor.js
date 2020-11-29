@@ -47,12 +47,6 @@ function receiveVideo(userid, username) {
     const videoContainer = makeVideoContainer(userid);
     videoGrid.appendChild(videoContainer);
     const video = videoContainer.querySelector('video');
-    addCameraContainerEvent(videoContainer, userid);
-
-    // const video = document.createElement('video');
-    // video.id = userid;
-    // video.autoplay = true;
-    // videoGrid.appendChild(video);
 
     // 인자로 받아온 user정보를 가지고 user 생성
     const user = {
@@ -179,30 +173,6 @@ function sendMessage(message) {
 }
 
 
-function addCameraContainerEvent(videoContainer, userid) {
-    console.log(userid);
-    const warn = videoContainer.querySelector('.warn-button');
-    warn.addEventListener('click', (e) => {
-        socket.emit('message', {
-            event: 'warn',
-            warnMessage: 'warning',
-            userid: userid
-        })
-    })
-
-    const kick = videoContainer.querySelector('.kick-button');
-    kick.addEventListener('click', (e) => {
-        socket.emit('message', {
-            event: 'kick',
-            userid: userid
-        })
-    })
-}
-
-function recieveQuestion(studentid) {
-    const stVideo = document.querySelector('#' + studentid);
-    console.log(stVideo);
-}
 
 
 function newUserAlert(message) {

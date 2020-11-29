@@ -21,8 +21,10 @@ socket.on('message', message => {
             userDisconnected(message.userid);
             break;
         case 'question':
-            console.log(message.studentid);
             recieveQuestion(message.studentid);
+            break;
+        case 'leave':
+            recieveLeave(message.studentid);
             break;
         case 'error':
             console.log(message.message);
