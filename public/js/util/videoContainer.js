@@ -56,22 +56,27 @@ function makeVideoContainer(userid) {
     let user = participants[userid];
     console.log(participants, userid);
     user.VCstate = {
-        videoContainer: container,
+        container: container,
         nowOverMode: overMode.default,
         isWaiting: false,
-        setfunc: null
+        timefunction: null
     };
-    console.log(user);
-    let nowOverMode = user.VCstate.nowOverMode;
     container.addEventListener('click', (e) => {
-        if (nowOverMode == overMode.default) {
-            changeOverMode(container, overMode.control);
-        } else if (nowOverMode == overMode.wait) {
-        } else if (nowOverMode == overMode.control && isWaiting) {
-            changeOverMode(container, overMode.wait);
+        // if(e.target)
+        console.log(e.target.tagName);
+        if (e.target.tagName == 'BUTTON') {
+            return;
+        }
+        const id = container.getElementsByTagName('video')[0].id;
+        const state = getVCstate(id);
+        let nowOverMode = state.nowOverMode;
+        if (nowOverMode == overMode.default || nowOverMode == overMode.wait) {
+            changeOverMode(id, overMode.control);
+        } else if (nowOverMode == overMode.control && state.isWaiting) {
+            changeOverMode(id, overMode.wait);
         }
         else {
-            changeOverMode(container, overMode.default);
+            changeOverMode(id, overMode.default);
         }
     })
 
@@ -113,29 +118,19 @@ function makeVideoContainer(userid) {
             event: 'leave-accept',
             userid: userid
         })
-        startWaiting(container);
+        startWaiting(userid);
     })
     return container;
 }
 
-function recieveQuestion(studentid) {
-    const stVideo = document.getElementById(studentid);
-    const container = stVideo.parentElement;
-    changeOverMode(container, overMode.question);
-}
-function recieveLeave(studentid) {
-    const stVideo = document.getElementById(studentid);
-    const container = stVideo.parentElement;
-    changeOverMode(container, overMode.leave);
-}
+function startWaiting(userid) {
+    let state = getVCstate(userid);
+    state.isWaiting = true;
+    changeOverMode(userid, overMode.wait);
 
-function startWaiting(container) {
-    isWaiting = true;
-    changeOverMode(container, overMode.wait);
-
-    const timeBox = container.getElementsByClassName('time-box')[0];
+    const timeBox = state.container.getElementsByClassName('time-box')[0];
     let time = 600, min, sec;
-    setfunc = setInterval(() => {
+    state.timefunction = setInterval(() => {
         min = parseInt(time / 60);
         sec = time % 60;
         if (min < 10) {
@@ -144,31 +139,33 @@ function startWaiting(container) {
         timeBox.innerHTML = min + ':' + sec;
         time--;
         if (time < 0) {
-            clearInterval(setfunc);
-            isWaiting = false;
-            changeOverMode(container, overMode.default);
+            clearInterval(state.timefunction);
+            state.isWaiting = false;
+            changeOverMode(userid, overMode.default);
         }
     }, 1000)
 
 };
+
 function recieveLeaveReturn(studentid) {
-    const stVideo = document.getElementById(studentid);
-    const container = stVideo.parentElement;
-    clearInterval(setfunc);
-    changeOverMode(container, overMode.default);
+    const state = getVCstate(studentid);
+    clearInterval(state.timefunction);
+    state.isWaiting = false;
+    changeOverMode(studentid, overMode.default);
 }
 
 
-function changeOverMode(container, mode) {
-    nowOverMode = mode;
-    const nowOver = container.querySelector('.over')
+function changeOverMode(id, mode) {
+    let state = getVCstate(id);
+    state.nowOverMode = mode;
+    const nowOver = state.container.querySelector('.over')
     if (nowOver) {
         nowOver.classList.replace('over', 'under');
     }
     if (mode == overMode.default) {
         return;
     }
-    let newOver = container.getElementsByClassName(mode);
+    let newOver = state.container.getElementsByClassName(mode);
     newOver[0].classList.replace('under', 'over');
 }
 

@@ -21,10 +21,10 @@ socket.on('message', message => {
             userDisconnected(message.userid);
             break;
         case 'question':
-            recieveQuestion(message.studentid);
+            changeOverMode(message.studentid, overMode.question);
             break;
         case 'leave':
-            recieveLeave(message.studentid);
+            changeOverMode(message.studentid, overMode.leave);
             break;
         case 'leave-return':
             recieveLeaveReturn(message.studentid);

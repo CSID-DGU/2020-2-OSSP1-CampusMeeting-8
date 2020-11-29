@@ -43,21 +43,28 @@ function userDisconnected(userid) {
 // 원격 연결로부터 비디오 수신
 function receiveVideo(userid, username) {
     // 페이지에 비디오 생성
-
-    const videoContainer = makeVideoContainer(userid);
-    videoGrid.appendChild(videoContainer);
-    const video = videoContainer.querySelector('video');
-
-    // 인자로 받아온 user정보를 가지고 user 생성
     const user = {
         id: userid,
         username: username,
-        video: video,
         rtcPeer: null
     }
-
-    // 참여자 리스트에 유저 추가
     participants[user.id] = user;
+    const videoContainer = makeVideoContainer(userid);
+    videoGrid.appendChild(videoContainer);
+    const video = videoContainer.querySelector('video');
+    participants[user.id].video = video;
+    // 인자로 받아온 user정보를 가지고 user 생성
+    // const user = {
+    //     id: userid,
+    //     username: username,
+    //     video: video,
+    //     rtcPeer: null
+    // }
+
+    // // 참여자 리스트에 유저 추가
+    // participants[user.id] = user;
+
+
 
     const options = {
         remoteVideo: video,
