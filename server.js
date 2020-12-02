@@ -1,11 +1,12 @@
 const express = require('express');
 const app = require(__dirname + '/app.js');
-const http = require('http').Server(app);
-const io = require('socket.io')(http);
+//const http = require('http').Server(app);
+const https = require('https');
+//const io = require('socket.io')(http);
 const kurento = require('kurento-client');
 const minimist = require('minimist');
-const { prototype } = require('stream');
-const PORT = process.env.PORT || 8843;
+const fs = require('fs');
+const PORT = process.env.PORT || 8443;
 const router = require(__dirname + '/routes/index.js');
 
 let kurentoClient = null;
@@ -14,7 +15,7 @@ let socketRoom = {};
 
 const argv = minimist(process.argv.slice(2), {
     default: {
-        as_uri: 'http://localhost:8843/',
+        as_uri: 'http://localhost:8443/',
         ws_uri: 'ws://localhost:8888/kurento'
     }
 });
@@ -25,6 +26,14 @@ const argv = minimist(process.argv.slice(2), {
         ws_uri: 'ws://13.125.109.60:8888/kurento'
     }
 }); */
+
+const option = {
+    key: fs.readFileSync('ssl/localhost_private.key'),
+    cert: fs.readFileSync('ssl/localhost.crt')
+}
+
+const server = https.createServer(option, app);
+const io = require('socket.io')(server);
 
 // static 설정
 app.use(express.static(__dirname + '/public'));
@@ -380,6 +389,6 @@ function handleDisconnect(socket, roomid) {
     }
 }
 
-http.listen(PORT, () => {
+server.listen(PORT, () => {
     console.log('Application start');
 });
