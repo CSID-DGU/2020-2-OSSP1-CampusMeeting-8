@@ -19,35 +19,7 @@ socket.emit('message', {
     roomid: ROOM_ID,
 });
 
-// 서버로부터의 메시지 처리
-socket.on('message', message => {
-    console.log('Message received: ' + message.event);
 
-    switch (message.event) {
-        case 'newUserJoined':
-            newUserAlert(message);
-            receiveVideo(message.userid, message.username);
-            break;
-        case 'connected':
-            connect(message.userid, message.existingUsers);
-            break;
-        case 'sdpAnswer':
-            addSdpAnswer(message.senderid, message.sdpAnswer);
-            break;
-        case 'candidate':
-            addIceCandidate(message.userid, message.candidate);
-            break;
-        case 'userDisconnected':
-            console.log(message.event, message.userid);
-            userDisconnected(message.userid);
-            break;
-        case 'error':
-            console.log(message.message);
-            alert(message.message);
-            location.href = '/';
-            break;
-    }
-});
 
 // socket.on('warn', (message) => {
 //     console.log('got warn from server');
@@ -71,27 +43,28 @@ function userDisconnected(userid) {
 // 원격 연결로부터 비디오 수신
 function receiveVideo(userid, username) {
     // 페이지에 비디오 생성
-
-    const videoContainer = makeVideoContainer(userid);
-    videoGrid.appendChild(videoContainer);
-    const video = videoContainer.querySelector('video');
-    addCameraContainerEvent(videoContainer, userid);
-
-    // const video = document.createElement('video');
-    // video.id = userid;
-    // video.autoplay = true;
-    // videoGrid.appendChild(video);
-
-    // 인자로 받아온 user정보를 가지고 user 생성
     const user = {
         id: userid,
         username: username,
-        video: video,
         rtcPeer: null
     }
-
-    // 참여자 리스트에 유저 추가
     participants[user.id] = user;
+    const videoContainer = makeVideoContainer(userid);
+    videoGrid.appendChild(videoContainer);
+    const video = videoContainer.querySelector('video');
+    participants[user.id].video = video;
+    // 인자로 받아온 user정보를 가지고 user 생성
+    // const user = {
+    //     id: userid,
+    //     username: username,
+    //     video: video,
+    //     rtcPeer: null
+    // }
+
+    // // 참여자 리스트에 유저 추가
+    // participants[user.id] = user;
+
+
 
     const options = {
         remoteVideo: video,
@@ -207,25 +180,7 @@ function sendMessage(message) {
 }
 
 
-function addCameraContainerEvent(videoContainer, userid) {
-    console.log(userid);
-    const warn = videoContainer.querySelector('.warn-button');
-    warn.addEventListener('click', (e) => {
-        socket.emit('message', {
-            event: 'warn',
-            warnMessage: 'warning',
-            userid: userid
-        })
-    })
 
-    const kick = videoContainer.querySelector('.kick-button');
-    kick.addEventListener('click', (e) => {
-        socket.emit('message', {
-            event: 'kick',
-            userid: userid
-        })
-    })
-}
 
 function newUserAlert(message) {
     const msg = document.createElement('div');
