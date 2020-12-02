@@ -1,10 +1,10 @@
-var Cryptr = require('cryptr');
+const Cryptr = require('cryptr');
 cryptr = new Cryptr('myTotalySecretKey');
-var connection = require('./../config');
+const connection = require('./../config');
 module.exports.auth=function(req,res){
-    var id=req.body.id;
-    var pw=req.body.pw;
-
+    const id = req.body.id;
+    const pw = req.body.pw;
+    const name = req.body.name;
 
     connection.query('SELECT * FROM users WHERE id = ?',[id], function (error, results, fields) {
       if (error) {
@@ -21,6 +21,7 @@ module.exports.auth=function(req,res){
               req.session.user={
                 id: id,
                 pw: pw,
+                name: name,
                 authorized: true
               };
               console.log(req.session.user.id);
