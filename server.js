@@ -1,11 +1,12 @@
 const express = require('express');
-const app = express();
-const http = require('http').Server(app);
-const io = require('socket.io')(http);
+const app = require(__dirname + '/app.js');
+//const http = require('http').Server(app);
+const https = require('https');
+//const io = require('socket.io')(http);
 const kurento = require('kurento-client');
 const minimist = require('minimist');
-const { prototype } = require('stream');
-const PORT = process.env.PORT || 8843;
+const fs = require('fs');
+const PORT = process.env.PORT || 8443;
 const router = require(__dirname + '/routes/index.js');
 
 let kurentoClient = null;
@@ -14,7 +15,7 @@ let socketRoom = {};
 
 const argv = minimist(process.argv.slice(2), {
     default: {
-        as_uri: 'http://localhost:8843/',
+        as_uri: 'http://localhost:8443/',
         ws_uri: 'ws://localhost:8888/kurento'
     }
 });
@@ -25,6 +26,14 @@ const argv = minimist(process.argv.slice(2), {
         ws_uri: 'ws://13.125.109.60:8888/kurento'
     }
 }); */
+
+const option = {
+    key: fs.readFileSync('ssl/localhost_private.key'),
+    cert: fs.readFileSync('ssl/localhost.crt')
+}
+
+const server = https.createServer(option, app);
+const io = require('socket.io')(server);
 
 // static 설정
 app.use(express.static(__dirname + '/public'));
@@ -70,20 +79,66 @@ io.on('connection', socket => {
                 break;
 
             case 'warn':
-                console.log('warn recieved');
-                io.to(message.userid).emit('message', {
+                sendToUser(message.userid, {
                     event: 'warn',
                     warnMessage: message.warnMessage
-                });
+                })
                 break;
 
             case 'kick':
-                console.log('kick recieved');
-                io.to(message.userid).emit('message', {
+                sendToUser(message.userid, {
                     event: 'kicked'
-                });
+                })
                 break;
+            case 'question':
+                sendToHost(message.roomid, {
+                    event: 'question',
+                    studentid: socket.id
+                })
+                break;
+            case 'leave':
+                sendToHost(message.roomid, {
+                    event: 'leave',
+                    studentid: socket.id
+                })
+                break;
+
+            case 'question-refuse':
+                sendToUser(message.userid, {
+                    event: 'question-refuse'
+                })
+                break;
+            case 'question-accept':
+                sendToUser(message.userid, {
+                    event: 'question-accept'
+                })
+                break;
+            case 'leave-refuse':
+                sendToUser(message.userid, {
+                    event: 'leave-refuse'
+                })
+                break;
+            case 'leave-accept':
+                sendToUser(message.userid, {
+                    event: 'leave-accept'
+                })
+                break;
+            case 'leave-return':
+                sendToHost(message.roomid, {
+                    event: 'leave-return',
+                    studentid: socket.id
+                })
         }
+
+        function sendToUser(userid, message) {
+            io.to(userid).emit('message', message);
+        }
+        function sendToHost(roomid, message) {
+            let host = io.sockets.adapter.rooms[roomid].host;
+            io.to(host).emit('message', message);
+        }
+
+
     });
 
     // socket 연결이 끊어졌을 때 (브라우저가 종료됐을 때)
@@ -380,6 +435,6 @@ function handleDisconnect(socket, roomid) {
     }
 }
 
-http.listen(PORT, () => {
+server.listen(PORT, () => {
     console.log('Application start');
 });
