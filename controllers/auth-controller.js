@@ -4,7 +4,6 @@ const connection = require('./../config');
 module.exports.auth=function(req,res){
     const id = req.body.id;
     const pw = req.body.pw;
-    const name = req.body.name;
 
     connection.query('SELECT * FROM users WHERE id = ?',[id], function (error, results, fields) {
       if (error) {
@@ -20,11 +19,10 @@ module.exports.auth=function(req,res){
               console.log("login");
               req.session.user={
                 id: id,
-                pw: pw,
-                name: name,
+                name: results[0].name,
                 authorized: true
               };
-              console.log(req.session.user.id);
+              console.log(req.session.user);
                 res.redirect("/main");
             }else{
 

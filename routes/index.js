@@ -20,14 +20,18 @@ router.get('/register', function (req, res) {
     //res.sendFile(__dirname + "/" + "register.html");
     res.render('register.html');
 });
-router.get('/login.css', function (req, res) {
+/* router.get('/login.css', function (req, res) {
     res.sendFile(__dirname + "/" + "login.css");
-});
+}); */
 router.get('/main', function (req, res) {
     if (!req.session.user) res.redirect('/login');
     else {
-        console.log(req.session.user.id);
-        res.sendFile(__dirname + "/" + "main.html");
+        console.log(req.session);
+        console.log('userid:', req.session.user.id);
+        res.render('index1', {
+            userid: req.session.user.id,
+            username: req.session.user.name
+        });
     }
 });
 

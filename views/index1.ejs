@@ -6,7 +6,10 @@
     <title>Welcome!</title>
     <script defer src="/js/index.js"></script>
     <script defer src="/socket.io/socket.io.js"></script>
-    <link rel="stylesheet" href="/css/mainpage.css">
+    <script>
+        const USER_ID = '<%= userid %>'
+        const USER_NAME = '<%= username %>'
+    </script>
 </head>
 <body>
     <h1>Welcome!</h1>
