@@ -21,15 +21,4 @@ joinBtn.addEventListener('click', () => {
 function joinRoom() {
     const roomID = roomIDInput.value;
     location.href = `/room/${roomID}`;
-    // 여기 수정
-    /* const socket = io();
-    socket.emit('roomID', roomID);
-    socket.on('roomID', (result, roomID) => {
-        if (result > 0) {
-            alert(roomID);
-            location.href = `/room/${roomID}`;
-        } else {
-            alert('There is no room with that roomID!');
-        }
-    }) */
 }
