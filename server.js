@@ -22,8 +22,8 @@ const argv = minimist(process.argv.slice(2), {
 
 /* const argv = minimist(process.argv.slice(2), {
     default: {
-        as_uri: 'http://localhost:8443/',
-        ws_uri: 'ws://13.125.109.60:8888/kurento'
+        as_uri: 'http://localhost:8843/',
+        ws_uri: 'ws://3.34.96.18:8888/kurento'
     }
 }); */
 

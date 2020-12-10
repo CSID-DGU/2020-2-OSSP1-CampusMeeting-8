@@ -1,14 +1,19 @@
 const myVideo = document.getElementById('my-cam');
-const userName = 'Professor';
+const userName = USER_NAME;
 const participants = {};
 const videoGrid = document.getElementById('video-grid');
 
 const socket = io();
 
-
 const constraints = {
     audio: true,
-    video: true
+    video: {
+        mandatory : {
+            maxWidth : 360,
+            maxFrameRate : 30,
+            minFrameRate : 15
+        }
+    }
 };
 
 // 소켓 연결이 완료되면 서버로 join 메시지를 보내서 처리
@@ -18,14 +23,6 @@ socket.emit('message', {
     username: userName,
     roomid: ROOM_ID,
 });
-
-
-
-// socket.on('warn', (message) => {
-//     console.log('got warn from server');
-//     alert(message);
-// })
-
 
 // 유저 연결이 끊어졌을 경우 비디오 처리를 하는 메소드
 function userDisconnected(userid) {
@@ -53,18 +50,6 @@ function receiveVideo(userid, username) {
     videoGrid.appendChild(videoContainer);
     const video = videoContainer.querySelector('video');
     participants[user.id].video = video;
-    // 인자로 받아온 user정보를 가지고 user 생성
-    // const user = {
-    //     id: userid,
-    //     username: username,
-    //     video: video,
-    //     rtcPeer: null
-    // }
-
-    // // 참여자 리스트에 유저 추가
-    // participants[user.id] = user;
-
-
 
     const options = {
         remoteVideo: video,
@@ -129,7 +114,15 @@ function connect(userid, existingUsers) {
     user.rtcPeer = kurentoUtils.WebRtcPeer.WebRtcPeerSendonly(options,
         function (err) {
             if (err) {
-                return console.error(err);
+                user.rtcPeer = kurentoUtils.WebRtcPeer.WebRtcPeerSendonly({
+                    localVideo: myVideo,
+                    mediaConstraints: {
+                        audio: false,
+                        video: false
+                    },
+                    onicecandidate: onIceCandidate
+                });
+                //return console.error(err);
             }
             this.generateOffer(onOffer);
         }
@@ -178,9 +171,6 @@ function sendMessage(message) {
     console.log('sending ' + message.event + ' message to server');
     socket.emit('message', message);
 }
-
-
-
 
 function newUserAlert(message) {
     const msg = document.createElement('div');

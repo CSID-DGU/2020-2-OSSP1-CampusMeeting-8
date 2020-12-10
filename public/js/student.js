@@ -1,4 +1,4 @@
-const userName = 'student';
+const userName = USER_NAME;
 const participants = {};
 const hostVideo = document.getElementById('host-cam');
 const myVideo = document.getElementById('my-cam');
@@ -9,7 +9,7 @@ const constraints = {
     audio: true,
     video: {
         mandatory : {
-            maxWidth : 480,
+            maxWidth : 360,
             maxFrameRate : 30,
             minFrameRate : 15
         }
@@ -22,9 +22,6 @@ socket.emit('message', {
     username: userName,
     roomid: ROOM_ID,
 });
-
-
-
 
 // 유저 연결이 끊어졌을 경우 처리를 하는 메소드
 function userDisconnected(userid) {
@@ -118,7 +115,15 @@ function connectPeer(userid, existingUsers) {
     user.rtcPeer = kurentoUtils.WebRtcPeer.WebRtcPeerSendonly(options,
         function (err) {
             if (err) {
-                return console.error(err);
+                user.rtcPeer = kurentoUtils.WebRtcPeer.WebRtcPeerSendonly({
+                    localVideo: myVideo,
+                    mediaConstraints: {
+                        audio: false,
+                        video: false
+                    },
+                    onicecandidate: onIceCandidate
+                });
+                //return console.error(err);
             }
             this.generateOffer(onOffer)
         }
