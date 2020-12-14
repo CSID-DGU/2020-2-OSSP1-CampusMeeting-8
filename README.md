@@ -43,5 +43,5 @@ nodemon을 통한 실행도 가능합니다.
   
 > localhost 접속
 ```
-https://localhost:8443/으로 접속
+https://localhost:3000/으로 접속
 ```

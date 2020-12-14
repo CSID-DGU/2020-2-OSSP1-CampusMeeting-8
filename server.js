@@ -6,7 +6,7 @@ const https = require('https');
 const kurento = require('kurento-client');
 const minimist = require('minimist');
 const fs = require('fs');
-const PORT = process.env.PORT || 8443;
+const PORT = process.env.PORT || 3000;
 const router = require(__dirname + '/routes/index.js');
 
 let kurentoClient = null;
@@ -15,7 +15,7 @@ let socketRoom = {};
 
 const argv = minimist(process.argv.slice(2), {
     default: {
-        as_uri: 'http://localhost:8443/',
+        as_uri: 'http://localhost:3000/',
         ws_uri: 'ws://localhost:8888/kurento'
     }
 });
