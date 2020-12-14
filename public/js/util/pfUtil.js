@@ -97,3 +97,29 @@ function changeTrack(track, localStream, senders) {
     sender.replaceTrack(track);
 }
 
+//audio controll
+
+const mikeBtn = document.querySelector('#mike');
+const stMikeBtn = document.querySelector('#student-mike');
+
+const audioMode = {
+    audioOn: 'audioOn',
+    audioOff: 'audioOff',
+}
+let nowAudioMode = audioMode.audioOn;
+
+mikeBtn.addEventListener('click', () => {
+    let localStream = participants[socket.id].rtcPeer.getLocalStream();
+    if (nowAudioMode == audioMode.audioOn) {
+        nowAudioMode = audioMode.audioOff;
+        localStream.getAudioTracks()[0].enabled = false;
+        console.log(localStream.getAudioTracks()[0].enabled);
+
+    } else {
+        nowAudioMode = audioMode.audioOn;
+        localStream.getAudioTracks()[0].enabled = true;
+        console.log(localStream.getAudioTracks()[0].enabled);
+
+
+    }
+})
