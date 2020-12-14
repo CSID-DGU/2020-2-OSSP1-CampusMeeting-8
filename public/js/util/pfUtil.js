@@ -100,7 +100,7 @@ function changeTrack(track, localStream, senders) {
 //audio controll
 
 const mikeBtn = document.querySelector('#mike');
-const stMikeBtn = document.querySelector('#student-mike');
+const silence = document.querySelector('#silence');
 
 const audioMode = {
     audioOn: 'audioOn',
@@ -113,13 +113,19 @@ mikeBtn.addEventListener('click', () => {
     if (nowAudioMode == audioMode.audioOn) {
         nowAudioMode = audioMode.audioOff;
         localStream.getAudioTracks()[0].enabled = false;
-        console.log(localStream.getAudioTracks()[0].enabled);
-
     } else {
         nowAudioMode = audioMode.audioOn;
         localStream.getAudioTracks()[0].enabled = true;
-        console.log(localStream.getAudioTracks()[0].enabled);
-
-
     }
+})
+
+silence.addEventListener('click',()=>{
+    Object.keys(participants).forEach((id)=>{
+        if(id!=socket.id){
+            socket.emit('message', {
+                event: 'silence',
+                userid: id
+            })
+        }
+    })
 })
