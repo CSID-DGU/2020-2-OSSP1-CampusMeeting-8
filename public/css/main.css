@@ -6,11 +6,6 @@
     grid-template-rows: 56px 3fr 4fr 1fr;
 }
 
-    .wrapper div {
-    }
-
-
-
 .main {
     grid-area: main;
 }

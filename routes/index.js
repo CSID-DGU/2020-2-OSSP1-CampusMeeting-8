@@ -42,7 +42,6 @@ router.get("/logout", function (req, res) {
         console.log("no session");
         res.redirect('/login');
     }
-
 });
 
 router.get('/room/create', (req, res) => {
@@ -68,6 +67,15 @@ router.get('/room/:room', (req, res) => {
         res.redirect('/login');
     } else {
         res.render('student', { roomID: req.params.room, username: user.name });
+    }
+});
+
+router.get('/room/:room/mobile', (req,res) => {
+    const user = req.session.user;;
+    if (!user) {
+        res.redirect('/login');
+    } else {
+        res.render('Mobile_Speaker', { roomID: req.params.room, username: user.name });
     }
 });
 

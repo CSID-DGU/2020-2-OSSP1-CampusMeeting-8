@@ -128,8 +128,15 @@ io.on('connection', socket => {
                     event: 'leave-return',
                     studentid: socket.id
                 })
+                /*
+            case 'joinSpeakerSelectPage':
+                sendRoomInfo(message.roomid, message.userid);
+                break;
+            case 'selectSpeaker':
+                designateSpeaker(message.roomid, message.userid);
+                break;
+                */
         }
-
         function sendToUser(userid, message) {
             io.to(userid).emit('message', message);
         }
@@ -137,8 +144,24 @@ io.on('connection', socket => {
             let host = io.sockets.adapter.rooms[roomid].host;
             io.to(host).emit('message', message);
         }
-
-
+        function sendRoomInfo(roomid, userid) {
+            const room = io.sockets.adapter.rooms[roomid];
+            const participants = room.participants;
+            const message = {
+                event: 'roomInfo',
+                participants: participants,
+            }
+            io.to(userid).emit('message', message);
+        }
+        function designateSpeaker(roomid, speakerid) {
+            const room = io.sockets.adapter.rooms[roomid];
+            const participants = room.participants;
+            const message = {
+                event: 'designateSpeaker',
+                speakerid: speakerid,
+            }
+            io.to(roomid).emit('message', message);
+        }
     });
 
     // socket 연결이 끊어졌을 때 (브라우저가 종료됐을 때)
