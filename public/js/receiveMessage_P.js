@@ -31,7 +31,7 @@ socket.on('message', message => {
             break;
         case 'error':
             console.log(message.message);
-            alert(message.message);
+            swal(message.message);
             location.href = '/';
             break;
 

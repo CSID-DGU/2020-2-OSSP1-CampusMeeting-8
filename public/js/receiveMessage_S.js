@@ -25,7 +25,7 @@ socket.on('message', message => {
             userDisconnected(message.userid);
             break;
         case 'warn':
-            alert(message.warnMessage);
+            swal(message.warnMessage, 'warning', 'warning');
             break;
         case 'kicked':
             window.location.replace("http://www.w3schools.com");//밴페이지로 변경
