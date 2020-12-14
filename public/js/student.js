@@ -168,14 +168,17 @@ function addIceCandidate(userid, candidate) {
     participants[userid].rtcPeer.addIceCandidate(candidate);
 }
 
+// 메시지를 보내는 메서드
 function sendMessage(message) {
     console.log('sending ' + message.event + ' message to server');
     socket.emit('message', message);
 }
 
+// 새 참가자가 입장하면 채팅으로 알림
 function newUserAlert(message) {
     const msg = document.createElement('div');
     const node = document.createTextNode(`${message.username}님이 입장하셨습니다.`);
+    console.log(message);
     msg.append(node);
     chatView.append(msg);
 }

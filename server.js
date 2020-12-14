@@ -1,8 +1,6 @@
 const express = require('express');
 const app = require(__dirname + '/app.js');
-//const http = require('http').Server(app);
 const https = require('https');
-//const io = require('socket.io')(http);
 const kurento = require('kurento-client');
 const minimist = require('minimist');
 const fs = require('fs');
@@ -75,66 +73,80 @@ io.on('connection', socket => {
                 sendToUser(message.userid, {
                     event: 'warn',
                     warnMessage: message.warnMessage
-                })
+                });
                 break;
 
             case 'kick':
                 sendToUser(message.userid, {
                     event: 'kicked'
-                })
+                });
                 break;
+
             case 'question':
                 sendToHost(message.roomid, {
                     event: 'question',
                     studentid: socket.id
-                })
+                });
                 break;
+
             case 'leave':
                 sendToHost(message.roomid, {
                     event: 'leave',
                     studentid: socket.id
-                })
+                });
                 break;
 
             case 'question-refuse':
                 sendToUser(message.userid, {
                     event: 'question-refuse'
-                })
+                });
                 break;
+
             case 'question-accept':
                 sendToUser(message.userid, {
                     event: 'question-accept'
-                })
+                });
                 break;
+
             case 'leave-refuse':
                 sendToUser(message.userid, {
                     event: 'leave-refuse'
-                })
+                });
                 break;
+
             case 'leave-accept':
                 sendToUser(message.userid, {
                     event: 'leave-accept'
-                })
+                });
                 break;
+
             case 'leave-return':
                 sendToHost(message.roomid, {
                     event: 'leave-return',
                     studentid: socket.id
-                })
+                });
+
             case 'joinSpeakerSelectPage':
                 sendRoomInfo(socket, message.roomid);
                 break;
+
             case 'selectSpeaker':
-                designateSpeaker(message.roomid, message.userid);
+                micON(message.roomid, message.userid);
                 break;
         }
+
+        // host가 아닌 user에게 이벤트를 전달
         function sendToUser(userid, message) {
             io.to(userid).emit('message', message);
         }
+
+        // host에게 이벤트를 전달
         function sendToHost(roomid, message) {
             let host = io.sockets.adapter.rooms[roomid].host;
             io.to(host).emit('message', message);
         }
+
+        // 화자지정 요청이 들어오면 해당 방의 참가자 정보를 전달
         function sendRoomInfo(socket, roomid) {
             let room = io.sockets.adapter.rooms[roomid] || {length: 0};
             if (!room.speakerPage) {
@@ -149,9 +161,11 @@ io.on('connection', socket => {
                 });
             }
         }
-        function designateSpeaker(roomid, speakerid) {
+
+        // 특정 화자를 지정하면 마이크를 키도록 메시지를 전달
+        function micON(roomid, speakerid) {
             const message = {
-                event: 'designateSpeaker',
+                event: 'micON',
                 speakerid: speakerid,
             }
             io.to(roomid).emit('message', message);
@@ -165,6 +179,7 @@ io.on('connection', socket => {
         handleDisconnect(socket, roomid);
     });
 
+    // 채팅 메시지를 받으면 룸으로 전달
     socket.on('newChat', message => {
         message.name = socket.name;
         socket.to(message.roomid).emit('newChat', message);
@@ -179,6 +194,7 @@ function join(socket, username, roomid, isHost, callback) {
             return callback(err);
         }
 
+        // join 요청을 한 유저가 host일 경우 이미 호스트가 있는 방인지 검사
         if (isHost) {
             if (myRoom.host) {
                 socket.emit('message', {
@@ -187,9 +203,10 @@ function join(socket, username, roomid, isHost, callback) {
                 });
                 return;
             }
+            // host가 없는 방이면 해당 방의 host로 요청한 유저를 지정
             myRoom.host = socket.id;
+            console.log(`host: ${myRoom.host}`);
         }
-        console.log(`host: ${myRoom.host}`);
 
         // myRoom의 pipeline에 WebRtcEndpoint를 추가
         myRoom.pipeline.create('WebRtcEndpoint', (err, outgoingMedia) => {
@@ -235,7 +252,7 @@ function join(socket, username, roomid, isHost, callback) {
 
             let existingUsers = [];
             if (isHost) {
-                // existingUsers에 pariticipants들을 추가
+                // host는 모든 비디오를 수신해야 하므로 existingUsers에 pariticipants들을 추가
                 for (let i in myRoom.participants) {
                     if (myRoom.participants[i].id != user.id) {
                         existingUsers.push({
@@ -245,6 +262,7 @@ function join(socket, username, roomid, isHost, callback) {
                     }
                 }
             } else {
+                // host가 아닌 경우 host의 비디오만 받아오면 되므로 existingUsers에 host만 추가
                 const hostid = myRoom.host;
                 if (hostid) {
                     existingUsers.push({

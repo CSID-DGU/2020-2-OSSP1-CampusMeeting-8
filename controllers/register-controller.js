@@ -1,8 +1,8 @@
-var connection = require('./../config');
+const connection = require('./../config');
 
 module.exports.register = function (req, res) {
-  var encryptedString = cryptr.encrypt(req.body.pw);
-  var users = {
+  const encryptedString = cryptr.encrypt(req.body.pw);
+  const users = {
     "id": req.body.id,
     "pw": encryptedString,
     "name": req.body.name,
@@ -10,7 +10,7 @@ module.exports.register = function (req, res) {
     "phone": req.body.phone,
     "bdate": req.body.bdate
   }
-  var sql = 'INSERT INTO users SET ?';
+  const sql = 'INSERT INTO users SET ?';
   connection.query(sql, users, function (error, results, fields) {
     console.log(error);
     if (error) {
