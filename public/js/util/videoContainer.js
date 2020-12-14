@@ -6,12 +6,12 @@ const overMode = {
     wait: "over-wait"
 }
 
-function makeVideoContainer(userid) {
+function makeVideoContainer(userid, username) {
 
     const template =
         `
     <div class="over-control camera-over under">
-        <div class='over-userName'>${userid}</div>
+        <div class='over-userName'>${username}</div>
         <div class='over-button-box'>
             <button class="warn-button">경고</button>
             <button class="kick-button">강퇴</button>
@@ -20,7 +20,7 @@ function makeVideoContainer(userid) {
     </div>
 
     <div class="over-question camera-over under">
-        <div class='over-userName'>${userid}</div>
+        <div class='over-userName'>${username}</div>
         <div >질문 요청</div>
         <div class='over-button-box'>
             <button class="question-refuse">거절</button>
@@ -29,7 +29,7 @@ function makeVideoContainer(userid) {
     </div>
 
     <div class="over-leave camera-over under">
-        <div class='over-userName'>${userid}</div>
+        <div class='over-userName'>${username}</div>
         <div >자리비움 요청</div>
         <div class='over-button-box'>
             <button class="leave-refuse">거절</button>

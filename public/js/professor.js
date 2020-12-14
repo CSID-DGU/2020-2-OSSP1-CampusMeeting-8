@@ -46,7 +46,7 @@ function receiveVideo(userid, username) {
         rtcPeer: null
     }
     participants[user.id] = user;
-    const videoContainer = makeVideoContainer(userid);
+    const videoContainer = makeVideoContainer(user.id, user.username);
     videoGrid.appendChild(videoContainer);
     const video = videoContainer.querySelector('video');
     participants[user.id].video = video;

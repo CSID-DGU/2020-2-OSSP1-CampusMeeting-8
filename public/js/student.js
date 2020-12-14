@@ -173,7 +173,6 @@ function sendMessage(message) {
     socket.emit('message', message);
 }
 
-
 function newUserAlert(message) {
     const msg = document.createElement('div');
     const node = document.createTextNode(`${message.username}님이 입장하셨습니다.`);

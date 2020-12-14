@@ -9,12 +9,6 @@ createRoomBtn.addEventListener('click', () => {
     location.href = "/room/create";
 });
 
-joinRoomBtn.addEventListener('click', () => {
-    createRoomBtn.classList.add('invisible');
-    joinRoomBtn.classList.add('invisible');
-    input.classList.remove('invisible');
-});
-
 speakerBtn.addEventListener('click', () => {
     const roomID = roomIDInput.value;
     location.href = `/room/${roomID}/mobile`;
