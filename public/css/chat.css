@@ -1,15 +1,25 @@
 /* 채팅 */
 #chat-container{
+    background: white;
+    border-bottom: 1px solid black;
     width: 100%;
-    height: 70%;
+    height: 65%;
 }
 
 #chatView {
+    background: white;
+    border-bottom: 1px solid black;
     height: 90%;
     overflow-y: scroll;
 }
 
+#msg {
+    background: white;
+    border: 1px solid black;
+}
+
 #chatForm {
+    background: white;
     height: 10%;
     border-top: 1px solid black;
     text-align: center;

@@ -1,8 +1,9 @@
 .camera-container{
-    width: 20%;
-    height: 20%;
+    width: 240px;
+    height: 180px;
     background-color: gray;
     position: relative;
+    border: 1px solid black;
 }
 
 .camera-over{
@@ -27,6 +28,7 @@
     background-color: white;
     border-radius: 12px;
 }
+
 .camera-video{
     width: 100%;
     height: 100%;
