@@ -1,15 +1,38 @@
+//카메라 컨트롤
 const cameraBtn = document.querySelector('#camera');
 let cameraOn = true;
-console.log(cameraBtn);
 cameraBtn.addEventListener('click', () => {
     let localStream = participants[socket.id].rtcPeer.getLocalStream();
-    console.log(cameraOn);
     if (cameraOn) {
         cameraOn = false;
         localStream.getVideoTracks()[0].enabled = false;
     } else {
         cameraOn = true;
         localStream.getVideoTracks()[0].enabled = true;
+    }
+})
+
+//마이크 컨트롤
+const mikeBtn = document.querySelector('#mike');
+const audioMode = {
+    audioOn: 'audioOn',
+    audioOff: 'audioOff',
+}
+let nowAudioMode = audioMode.audioOn;
+mikeBtn.addEventListener('click', () => {
+    let localStream = participants[socket.id].rtcPeer.getLocalStream();
+    if (nowAudioMode == audioMode.audioOn) {
+        nowAudioMode = audioMode.audioOff;
+        localStream.getAudioTracks()[0].enabled = false;
+        console.log(localStream.getAudioTracks()[0].enabled);
+
+
+    } else {
+        nowAudioMode = audioMode.audioOn;
+        localStream.getAudioTracks()[0].enabled = true;
+        console.log(localStream.getAudioTracks()[0].enabled);
+
+
     }
 })
 
@@ -24,7 +47,6 @@ questionBtn.addEventListener('click', () => {
 
 const leaveBtn = document.querySelector('#leave');
 leaveBtn.addEventListener('click', () => {
-    console.log('leave clicked');
     socket.emit('message', {
         event: 'leave',
         roomid: ROOM_ID
