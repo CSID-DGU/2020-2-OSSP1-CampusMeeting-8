@@ -4,6 +4,7 @@ const https = require('https');
 const kurento = require('kurento-client');
 const minimist = require('minimist');
 const fs = require('fs');
+const { send } = require('process');
 const PORT = process.env.PORT || 3000;
 const router = require(__dirname + '/routes/index.js');
 
@@ -127,7 +128,8 @@ io.on('connection', socket => {
                 });
 
             case 'joinSpeakerSelectPage':
-                sendRoomInfo(socket, message.roomid);
+                console.log('joinSpeakerSelectPage');
+                joinSpeakerSelectPage(socket, message.roomid);
                 break;
 
             case 'selectSpeaker':
@@ -146,18 +148,19 @@ io.on('connection', socket => {
             io.to(host).emit('message', message);
         }
 
-        // 화자지정 요청이 들어오면 해당 방의 참가자 정보를 전달
-        function sendRoomInfo(socket, roomid) {
-            let room = io.sockets.adapter.rooms[roomid] || {length: 0};
-            if (!room.speakerPage) {
-                room.speakerPage = socket.id;
-                socket.join(roomid, () => {
-                    const participants = room.participants;
-                    const message = {
-                        event: 'roomInfo',
-                        participants: participants,
-                    }
-                    socket.emit('message', message);
+        // 화자지정 페이지에 접속하면 socket room에 입장
+        function joinSpeakerSelectPage(socket, roomid) {
+            let room = io.sockets.adapter.rooms[roomid];
+            if (room) {
+                socket.join(roomid);
+                socket.emit('message', {
+                    event: 'roomInfo',
+                    participants: room.participants,
+                });
+            } else {
+                socket.emit('message', {
+                    event: 'error',
+                    message: '없는 방입니다',
                 });
             }
         }
@@ -168,7 +171,7 @@ io.on('connection', socket => {
                 event: 'micON',
                 speakerid: speakerid,
             }
-            io.to(roomid).emit('message', message);
+            socket.to(roomid).emit('message', message);
         }
     });
 
@@ -247,7 +250,7 @@ function join(socket, username, roomid, isHost, callback) {
                 event: 'newUserJoined',
                 username: user.name,
                 userid: user.id,
-                hostid: myRoom.host
+                hostid: myRoom.host,
             });
 
             let existingUsers = [];
@@ -455,11 +458,12 @@ function getKurentoClient(callback) {
 // disconnect 이벤트가 발생했을 때 해당 소켓의 정보를 받아서 클라이언트에 전송하고 room의 참여자 명단에서 제거
 function handleDisconnect(socket, roomid) {
     let myRoom = io.sockets.adapter.rooms[roomid] || { length: 0 };
+    console.log(myRoom);
     if (myRoom.length === 0) return;
-    if (myRoom.speakerPage === socket.id) {
-        delete myRoom.speakerPage;
+    /* if (myRoom.speakerPage === socket.id) {
+        myRoom.speakerPage = null;
         return;
-    }
+    } */
     delete myRoom.participants[socket.id];
     delete socketRoom[socket.id];
     if (socket.id === myRoom.host) {
