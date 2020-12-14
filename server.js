@@ -20,13 +20,6 @@ const argv = minimist(process.argv.slice(2), {
     }
 });
 
-/* const argv = minimist(process.argv.slice(2), {
-    default: {
-        as_uri: 'http://localhost:8843/',
-        ws_uri: 'ws://3.34.96.18:8888/kurento'
-    }
-}); */
-
 const option = {
     key: fs.readFileSync('ssl/localhost_private.key'),
     cert: fs.readFileSync('ssl/localhost.crt')
@@ -128,14 +121,12 @@ io.on('connection', socket => {
                     event: 'leave-return',
                     studentid: socket.id
                 })
-                /*
             case 'joinSpeakerSelectPage':
-                sendRoomInfo(message.roomid, message.userid);
+                sendRoomInfo(socket, message.roomid);
                 break;
             case 'selectSpeaker':
                 designateSpeaker(message.roomid, message.userid);
                 break;
-                */
         }
         function sendToUser(userid, message) {
             io.to(userid).emit('message', message);
@@ -144,18 +135,21 @@ io.on('connection', socket => {
             let host = io.sockets.adapter.rooms[roomid].host;
             io.to(host).emit('message', message);
         }
-        function sendRoomInfo(roomid, userid) {
-            const room = io.sockets.adapter.rooms[roomid];
-            const participants = room.participants;
-            const message = {
-                event: 'roomInfo',
-                participants: participants,
+        function sendRoomInfo(socket, roomid) {
+            let room = io.sockets.adapter.rooms[roomid] || {length: 0};
+            if (!room.speakerPage) {
+                room.speakerPage = socket.id;
+                socket.join(roomid, () => {
+                    const participants = room.participants;
+                    const message = {
+                        event: 'roomInfo',
+                        participants: participants,
+                    }
+                    socket.emit('message', message);
+                });
             }
-            io.to(userid).emit('message', message);
         }
         function designateSpeaker(roomid, speakerid) {
-            const room = io.sockets.adapter.rooms[roomid];
-            const participants = room.participants;
             const message = {
                 event: 'designateSpeaker',
                 speakerid: speakerid,
@@ -442,12 +436,12 @@ function getKurentoClient(callback) {
 
 // disconnect 이벤트가 발생했을 때 해당 소켓의 정보를 받아서 클라이언트에 전송하고 room의 참여자 명단에서 제거
 function handleDisconnect(socket, roomid) {
-    socket.to(roomid).emit('message', {
-        event: 'userDisconnected',
-        userid: socket.id
-    });
-    const myRoom = io.sockets.adapter.rooms[roomid] || { length: 0 };
+    let myRoom = io.sockets.adapter.rooms[roomid] || { length: 0 };
     if (myRoom.length === 0) return;
+    if (myRoom.speakerPage === socket.id) {
+        delete myRoom.speakerPage;
+        return;
+    }
     delete myRoom.participants[socket.id];
     delete socketRoom[socket.id];
     if (socket.id === myRoom.host) {
@@ -456,6 +450,10 @@ function handleDisconnect(socket, roomid) {
     } else {
         console.log(`${socket.id} has disconnected`);
     }
+    socket.to(roomid).emit('message', {
+        event: 'userDisconnected',
+        userid: socket.id
+    });
 }
 
 server.listen(PORT, () => {

@@ -1,7 +1,5 @@
 const socket = io();
 
-socket.join(ROOM_ID);
-
 socket.emit('message', {
     event: 'joinSpeakerSelectPage',
     roomid: ROOM_ID,
@@ -10,6 +8,7 @@ socket.emit('message', {
 socket.on('message', message => {
     switch(message.event) {
         case 'roomInfo':
+            console.log(message.participants);
             showList(message.participants);
             break;
         case 'userDisconnected':
@@ -26,7 +25,7 @@ function showList(participants) {
         if (participants[i].id != socket.id) {
             const option = document.createElement('option');
             option.id = participants[i].id;
-            option.value = participants[i].name;
+            option.innerText = participants[i].name;
             const list = document.getElementById('student-list');
             list.appendChild(option);
         }
