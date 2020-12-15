@@ -28,8 +28,12 @@ html,body{
 #nav-left{
     width: 20%;
 }
-#nav-center{
-    width: 60%;
+#nav-center1{
+    width: 30%;
+    justify-content: center;
+}
+#nav-center2{
+    width: 30%;
     justify-content: center;
 }
 #nav-right{
@@ -82,4 +86,14 @@ html,body{
 }
 .under{
     z-index: -1;
+}
+
+.active-red svg{
+    color: tomato;
+}
+.active-green svg{
+    color: rgb(158, 235, 143);
+}
+.hide{
+    display: none;
 }
