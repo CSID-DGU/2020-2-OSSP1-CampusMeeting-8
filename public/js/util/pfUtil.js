@@ -120,9 +120,8 @@ function changeTrack(track, localStream, senders) {
 
 //audio controll
 
-const mikeBtn = document.querySelector('#mike');
-const silence = document.querySelector('#silence');
-
+const micBtn = document.querySelector('#mic');
+const stMicBtn = document.querySelector('#student-mic');
 const audioMode = {
     audioOn: 'audioOn',
     audioOff: 'audioOff',
@@ -130,7 +129,7 @@ const audioMode = {
 let nowAudioMode = audioMode.audioOn;
 addGreen(mikeBtn);
 
-mikeBtn.addEventListener('click', () => {
+micBtn.addEventListener('click', () => {
     let localStream = participants[socket.id].rtcPeer.getLocalStream();
     if (nowAudioMode == audioMode.audioOn) {
         nowAudioMode = audioMode.audioOff;
@@ -142,6 +141,17 @@ mikeBtn.addEventListener('click', () => {
         addGreen(mikeBtn);
     }
 })
+
+function micON(speakerid) {
+    if (speakerid === socket.id) {
+        console.log('mic on');
+        if (nowAudioMode === audioMode.audioOff) {
+            nowAudioMode = audioMode.audioOn;
+            let localStream = participants[socket.id].rtcPeer.getLocalStream();
+            localStream.getAudioTracks()[0].enabled = true;
+        }
+    }
+}
 
 silence.addEventListener('click',()=>{
     Object.keys(participants).forEach((id)=>{

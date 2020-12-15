@@ -3,7 +3,8 @@ const router = express.Router();
 const { v4: uuidV4 } = require('uuid');
 
 router.get('/', function (req, res) {
-    res.render('index.html');
+    if(req.session.user) res.redirect('/main');
+    else res.render('index.html');
 });
 
 router.get('/login', function (req, res) {

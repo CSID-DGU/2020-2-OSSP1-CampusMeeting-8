@@ -134,12 +134,15 @@ io.on('connection', socket => {
                 break;
 
             case 'joinSpeakerSelectPage':
-                console.log('joinSpeakerSelectPage');
                 joinSpeakerSelectPage(socket, message.roomid);
                 break;
 
             case 'selectSpeaker':
                 micON(message.roomid, message.userid);
+                socket.to(message.roomid).emit('systemMessage', {
+                    name: 'system',
+                    message: `${message.username}의 발언 차례입니다.`,
+                });
                 break;
         }
 
@@ -190,7 +193,6 @@ io.on('connection', socket => {
 
     // 채팅 메시지를 받으면 룸으로 전달
     socket.on('newChat', message => {
-        message.name = socket.name;
         socket.to(message.roomid).emit('newChat', message);
     });
 
@@ -464,12 +466,7 @@ function getKurentoClient(callback) {
 // disconnect 이벤트가 발생했을 때 해당 소켓의 정보를 받아서 클라이언트에 전송하고 room의 참여자 명단에서 제거
 function handleDisconnect(socket, roomid) {
     let myRoom = io.sockets.adapter.rooms[roomid] || { length: 0 };
-    console.log(myRoom);
     if (myRoom.length === 0) return;
-    /* if (myRoom.speakerPage === socket.id) {
-        myRoom.speakerPage = null;
-        return;
-    } */
     delete myRoom.participants[socket.id];
     delete socketRoom[socket.id];
     if (socket.id === myRoom.host) {
