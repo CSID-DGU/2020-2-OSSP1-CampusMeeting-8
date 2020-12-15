@@ -1,3 +1,16 @@
+function addGreen(ele){
+    ele.classList.add('active-green');
+}
+function removeGreen(ele){
+    ele.classList.remove('active-green');
+}
+function addRed(ele){
+    ele.classList.add('active-red');
+}
+function removeRed(ele){
+    ele.classList.remove('active-red');
+}
+
 //camera button
 let cameraBtn = document.querySelector('#camera');
 let screenBtn = document.querySelector('#screen');
@@ -21,7 +34,7 @@ let screenConstraint = {
     audio: false
 };
 
-
+addGreen(cameraBtn);
 cameraBtn.addEventListener('click', () => {
     let localStream = participants[socket.id].rtcPeer.getLocalStream();
     let senders = participants[socket.id].rtcPeer.peerConnection.getSenders();
@@ -30,15 +43,18 @@ cameraBtn.addEventListener('click', () => {
         case videoMode.cameraOn:
             nowVideoMode = videoMode.cameraOff;
             localStream.getVideoTracks()[0].enabled = false;
-            //localStream.getTracks().forEach((f) => f.stop());
+            removeGreen(cameraBtn);
             break;
         case videoMode.cameraOff:
             nowVideoMode = videoMode.cameraOn;
             localStream.getVideoTracks()[0].enabled = true;
+            addGreen(cameraBtn);
             break;
         case videoMode.screenOff: case videoMode.screenOn:
             nowVideoMode = videoMode.cameraOn;
             getCameraTrack(cameraConstraint).then(track => changeTrack(track, localStream, senders));
+            addGreen(cameraBtn);
+            removeGreen(screenBtn);
             break;
     }
 
@@ -53,14 +69,18 @@ screenBtn.addEventListener('click', () => {
         case videoMode.screenOff:
             nowVideoMode = videoMode.screenOn;
             localStream.getVideoTracks()[0].enabled = true;
+            addGreen(screenBtn);
             break;
         case videoMode.screenOn:
             nowVideoMode = videoMode.screenOff;
             localStream.getVideoTracks()[0].enabled = false;
+            removeGreen(screenBtn);
             break;
         case videoMode.cameraOff: case videoMode.cameraOn:
             nowVideoMode = videoMode.screenOn;
             getScreenTrack(screenConstraint).then(track => changeTrack(track, localStream, senders));
+            addGreen(screenBtn);
+            removeGreen(cameraBtn);
             break;
     }
 
@@ -88,8 +108,9 @@ function changeTrack(track, localStream, senders) {
     let oldTrack = localStream.getVideoTracks()[0];
     oldTrack.stop();
     console.log(oldTrack);
-    localStream.removeTrack(oldTrack);
     localStream.addTrack(track);
+
+    localStream.removeTrack(oldTrack);
 
     let sender = senders.find((s) => {
         return s.track == null;
@@ -106,15 +127,18 @@ const audioMode = {
     audioOff: 'audioOff',
 }
 let nowAudioMode = audioMode.audioOn;
+addGreen(mikeBtn);
 
 micBtn.addEventListener('click', () => {
     let localStream = participants[socket.id].rtcPeer.getLocalStream();
     if (nowAudioMode == audioMode.audioOn) {
         nowAudioMode = audioMode.audioOff;
         localStream.getAudioTracks()[0].enabled = false;
+        removeGreen(mikeBtn);
     } else {
         nowAudioMode = audioMode.audioOn;
         localStream.getAudioTracks()[0].enabled = true;
+        addGreen(mikeBtn);
     }
 })
 
