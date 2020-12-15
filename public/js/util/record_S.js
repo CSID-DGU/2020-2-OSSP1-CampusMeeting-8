@@ -35,8 +35,7 @@ recordStart.addEventListener('click',()=>{
         nowRecordState=recordState.recording;
         const videoToRecord=document.getElementById('host-cam');
         let recordStream=videoToRecord.captureStream();
-
-        //let recordStream = participants[socket.id].rtcPeer.getLocalStream();//학생 교수 구분 필요
+        console.log(recordStream)
         recorder=new MediaRecorder(recordStream);
         recorder.ondataavailable=e=>{
             recordList=[]
