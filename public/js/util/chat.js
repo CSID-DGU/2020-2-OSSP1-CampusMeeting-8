@@ -26,14 +26,22 @@ function chatSend() {
 }
 
 socket.on('newChat', (message) => {
-    console.log('got message ', message.message);
+    console.log('got message:', message.message);
     const msg = document.createElement('div');
-    const node = document.createTextNode(message.message);
-    msg.append(node);   
+    const node = document.createTextNode(`${message.name}: ${message.message}`);
+    msg.append(node);
     msg.style.borderRadius = "10px";
     msg.style.margin = "10px";
     msg.style.background = "white";
     msg.style.color = "black";
     msg.style.marginRight = "250px";
+    chatView.append(msg);
+});
+
+socket.on('systemMessage', message => {
+    console.log('system message:', message.message);
+    const msg = document.createElement('div');
+    const node = document.createTextNode(`${message.name}: ${message.message}`);
+    msg.append(node);
     chatView.append(msg);
 })

@@ -36,6 +36,16 @@ micBtn.addEventListener('click', () => {
     }
 })
 
+function micON(speakerid) {
+    if (speakerid === socket.id) {
+        console.log('mic on');
+        if (nowAudioMode === audioMode.audioOff) {
+            let localStream = participants[socket.id].rtcPeer.getLocalStream();
+            localStream.getAudioTracks()[0].enabled = true;
+        }
+    }
+}
+
 const questionBtn = document.querySelector('#question');
 questionBtn.addEventListener('click', () => {
     socket.emit('message', {

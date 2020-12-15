@@ -128,12 +128,16 @@ io.on('connection', socket => {
                 });
 
             case 'joinSpeakerSelectPage':
-                console.log('joinSpeakerSelectPage');
                 joinSpeakerSelectPage(socket, message.roomid);
                 break;
 
             case 'selectSpeaker':
+                console.log(message.roomid, message.userid);
                 micON(message.roomid, message.userid);
+                socket.to(message.roomid).emit('systemMessage', {
+                    name: 'system',
+                    message: `${message.username}의 발언 차례입니다.`,
+                });
                 break;
         }
 
@@ -184,7 +188,6 @@ io.on('connection', socket => {
 
     // 채팅 메시지를 받으면 룸으로 전달
     socket.on('newChat', message => {
-        message.name = socket.name;
         socket.to(message.roomid).emit('newChat', message);
     });
 
