@@ -4,12 +4,6 @@ function addGreen(ele){
 function removeGreen(ele){
     ele.classList.remove('active-green');
 }
-function addRed(ele){
-    ele.classList.add('active-red');
-}
-function removeRed(ele){
-    ele.classList.remove('active-red');
-}
 
 //camera button
 let cameraBtn = document.querySelector('#camera');
@@ -121,24 +115,24 @@ function changeTrack(track, localStream, senders) {
 //audio controll
 
 const micBtn = document.querySelector('#mic');
-const stMicBtn = document.querySelector('#student-mic');
+const silence = document.querySelector('#silence');
 const audioMode = {
     audioOn: 'audioOn',
     audioOff: 'audioOff',
 }
 let nowAudioMode = audioMode.audioOn;
-addGreen(mikeBtn);
+addGreen(micBtn);
 
 micBtn.addEventListener('click', () => {
     let localStream = participants[socket.id].rtcPeer.getLocalStream();
     if (nowAudioMode == audioMode.audioOn) {
         nowAudioMode = audioMode.audioOff;
         localStream.getAudioTracks()[0].enabled = false;
-        removeGreen(mikeBtn);
+        removeGreen(micBtn);
     } else {
         nowAudioMode = audioMode.audioOn;
         localStream.getAudioTracks()[0].enabled = true;
-        addGreen(mikeBtn);
+        addGreen(micBtn);
     }
 })
 
