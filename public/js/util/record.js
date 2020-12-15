@@ -9,7 +9,6 @@ function removeRed(ele){
 const recordStart=document.getElementById('record-start');
 const recordPause=document.getElementById('record-pause');
 const recordStop=document.getElementById('record-stop');
-const recordTest=document.getElementById('record-test');
 const recordDownload=document.getElementById('record-download');
 
 const recordState={
@@ -78,8 +77,6 @@ recordStop.addEventListener('click',()=>{
 function makeLink(){
     let blob = new Blob(recordList, {type: recordOption.type });
     let url = URL.createObjectURL(blob);
-    recordTest.controls=true;
-    recordTest.src=url;
     recordDownload.href=url;
     recordDownload.download="record-test."+recordOption.ext;
   }
