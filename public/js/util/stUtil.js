@@ -121,3 +121,12 @@ function leaveAccept() {
         })
     })
 }
+
+function questionAccept(){
+    if (nowAudioMode === audioMode.audioOff) {
+        nowAudioMode = audioMode.audioOn;
+        let localStream = participants[socket.id].rtcPeer.getLocalStream();
+        localStream.getAudioTracks()[0].enabled = true;
+        addGreen(micBtn);
+    }
+}

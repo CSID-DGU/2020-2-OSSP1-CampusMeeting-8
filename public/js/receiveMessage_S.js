@@ -33,6 +33,9 @@ socket.on('message', message => {
         case 'leave-accept':
             leaveAccept();
             break;
+        case 'question-accept':
+            questionAccept();
+            break;
         case 'micON':
             micON(message.speakerid);
             break;

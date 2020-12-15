@@ -22,6 +22,7 @@
     width: 60%;
     height: 20%;
     color: white;
+    text-align: center;
 }
 
 .over-button-box button{
@@ -34,4 +35,14 @@
     height: 100%;
    position: absolute;
    top:0;
+}
+
+.over-leave div{
+    color: white;
+}
+.over-wait div{
+    color: white;
+}
+.over-question div{
+    color: white;
 }

@@ -81,5 +81,5 @@ function makeLink(){
     let blob = new Blob(recordList, {type: recordOption.type });
     let url = URL.createObjectURL(blob);
     recordDownload.href=url;
-    recordDownload.download="record."+recordOption.ext;
+    recordDownload.download="record"+recordOption.ext;
   }

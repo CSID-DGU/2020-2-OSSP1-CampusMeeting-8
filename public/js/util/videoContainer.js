@@ -38,7 +38,7 @@ function makeVideoContainer(userid, username) {
     </div>
 
     <div class="over-wait camera-over under">
-        <div class='over-userName'>${userid}</div>
+        <div class='over-userName'>${username}</div>
         <div class='time-box'></div>
     </div>
     <video id=${userid} class="camera-video" autoplay></video>`;
