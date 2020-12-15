@@ -25,7 +25,7 @@ socket.on('message', message => {
             userDisconnected(message.userid);
             break;
         case 'warn':
-            swal(message.warnMessage, 'warning', 'warning');
+            swal(message.warnMessage, '학생! 경고입니다!', 'warning');
             break;
         case 'kicked':
             window.location.replace("http://www.w3schools.com");//밴페이지로 변경
@@ -35,6 +35,8 @@ socket.on('message', message => {
             break;
         case 'micON':
             micON(message.speakerid);
+        case 'silence':
+            handleSilence();
             break;
     }
 });

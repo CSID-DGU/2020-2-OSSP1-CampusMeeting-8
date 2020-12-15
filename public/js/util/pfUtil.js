@@ -101,7 +101,6 @@ function changeTrack(track, localStream, senders) {
 
 const micBtn = document.querySelector('#mic');
 const stMicBtn = document.querySelector('#student-mic');
-
 const audioMode = {
     audioOn: 'audioOn',
     audioOff: 'audioOff',
@@ -113,13 +112,19 @@ micBtn.addEventListener('click', () => {
     if (nowAudioMode == audioMode.audioOn) {
         nowAudioMode = audioMode.audioOff;
         localStream.getAudioTracks()[0].enabled = false;
-        console.log(localStream.getAudioTracks()[0].enabled);
-
     } else {
         nowAudioMode = audioMode.audioOn;
         localStream.getAudioTracks()[0].enabled = true;
-        console.log(localStream.getAudioTracks()[0].enabled);
-
-
     }
+})
+
+silence.addEventListener('click',()=>{
+    Object.keys(participants).forEach((id)=>{
+        if(id!=socket.id){
+            socket.emit('message', {
+                event: 'silence',
+                userid: id
+            })
+        }
+    })
 })

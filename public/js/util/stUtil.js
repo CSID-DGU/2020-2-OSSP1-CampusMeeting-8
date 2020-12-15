@@ -24,17 +24,22 @@ micBtn.addEventListener('click', () => {
     if (nowAudioMode == audioMode.audioOn) {
         nowAudioMode = audioMode.audioOff;
         localStream.getAudioTracks()[0].enabled = false;
-        console.log(localStream.getAudioTracks()[0].enabled);
-
-
     } else {
         nowAudioMode = audioMode.audioOn;
         localStream.getAudioTracks()[0].enabled = true;
-        console.log(localStream.getAudioTracks()[0].enabled);
-
-
     }
 })
+//전체 음소거
+function handleSilence(){
+    let localStream = participants[socket.id].rtcPeer.getLocalStream();
+
+    if (nowAudioMode == audioMode.audioOn) {
+        nowAudioMode = audioMode.audioOff;
+        localStream.getAudioTracks()[0].enabled = false;
+    }
+}
+
+
 
 function micON(speakerid) {
     if (speakerid === socket.id) {

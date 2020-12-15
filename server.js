@@ -96,7 +96,6 @@ io.on('connection', socket => {
                     studentid: socket.id
                 });
                 break;
-
             case 'question-refuse':
                 sendToUser(message.userid, {
                     event: 'question-refuse'
@@ -125,7 +124,14 @@ io.on('connection', socket => {
                 sendToHost(message.roomid, {
                     event: 'leave-return',
                     studentid: socket.id
-                });
+                })
+                break;
+
+            case 'silence':
+                sendToUser(message.userid, {
+                    event: 'silence'
+                })
+                break;
 
             case 'joinSpeakerSelectPage':
                 joinSpeakerSelectPage(socket, message.roomid);

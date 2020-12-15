@@ -8,11 +8,13 @@
     <link rel="stylesheet" type="text/css" media="screen" href="/css/professor.css">
     <link rel="stylesheet" type="text/css" media="screen" href="/css/chat.css">
     <link rel="stylesheet" href="/css/videoContainer.css">
+    <link rel="stylesheet" href="/css/board.css">
     <script src="https://use.fontawesome.com/releases/v5.2.0/js/all.js"></script>
     <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
     <script defer src="/js/adapter.js"></script>
     <script defer src="/js/kurento-utils.js"></script>
     <script defer src="/socket.io/socket.io.js"></script>
+    <script defer src="/js/util/board.js"></script>
     <script defer src="/js/professor.js"></script>
     <script defer src="/js/util/pfUtil.js"></script>
     <script defer src="/js/util/videoContainer.js"></script>
@@ -35,6 +37,7 @@
             </div>
             <div id="nav-center" class="flex-row">
                 <button id="student-mic" class="nav-button"><i class="fas fa-volume-up fa-2x nav-icon"></i></button>
+                <button id="silence" class="nav-button"><i class="fas fa-volume-up fa-2x nav-icon"></i></button>
                 <button id="mic" class="nav-button"><i class="fas fa-microphone fa-2x nav-icon"
                         title="마이크"></i></button>
                 <button id="camera" class="nav-button"><i class="fas fa-camera fa-2x nav-icon"></i></button>
@@ -42,11 +45,17 @@
             </div>
 
             <div id="nav-right" class="flex-row">
-                <button id="screen" class="nav-button"><i class="fas fa-chalkboard fa-2x nav-icon"></i></button>
+                <button id="boardBtn" class="nav-button"><i class="fas fa-chalkboard fa-2x nav-icon"></i></button>
+                <button id="screen" class="nav-button"><i class="fas fa-desktop fa-2x nav-icon"></i></button>
             </div>
 
         </nav>
-        <div id="video-grid"></div>
+        <div id="video-grid">
+          
+
+
+
+        </div>
     </div>
 
     <div id="main-container-right">
@@ -63,6 +72,19 @@
         </div>
 
 
+    </div>
+    <div id="board-container">
+        <canvas id="board"></canvas>
+        <div id="board-buttons">
+            <button id="pen"><i class="fas fa-pen"></i></button>
+            <button id="eraser"><i class="fas fa-eraser"></i></button>
+            <button id="rect"><i class="far fa-square"></i></button>
+            <button id="circle"><i class="far fa-circle"></i></button>
+            <button id="undo"><i class="fas fa-undo"></i></button>
+            <button id="redo"><i class="fas fa-redo"></i></button>
+            <button id="clear"><i class="fas fa-trash-alt"></i></button>
+            <button id="exit"><i class="fas fa-sign-in-alt"></i></button>
+        </div>
     </div>
 
 </body>
