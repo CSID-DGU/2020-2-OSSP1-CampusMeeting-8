@@ -35,6 +35,7 @@ socket.on('message', message => {
             break;
         case 'micON':
             micON(message.speakerid);
+            break;
         case 'silence':
             handleSilence();
             break;

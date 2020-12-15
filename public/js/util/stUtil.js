@@ -32,19 +32,17 @@ micBtn.addEventListener('click', () => {
 //전체 음소거
 function handleSilence(){
     let localStream = participants[socket.id].rtcPeer.getLocalStream();
-
     if (nowAudioMode == audioMode.audioOn) {
         nowAudioMode = audioMode.audioOff;
         localStream.getAudioTracks()[0].enabled = false;
     }
 }
 
-
-
 function micON(speakerid) {
     if (speakerid === socket.id) {
         console.log('mic on');
         if (nowAudioMode === audioMode.audioOff) {
+            nowAudioMode = audioMode.audioOn;
             let localStream = participants[socket.id].rtcPeer.getLocalStream();
             localStream.getAudioTracks()[0].enabled = true;
         }

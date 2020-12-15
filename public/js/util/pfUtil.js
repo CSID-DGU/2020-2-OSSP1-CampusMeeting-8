@@ -118,6 +118,17 @@ micBtn.addEventListener('click', () => {
     }
 })
 
+function micON(speakerid) {
+    if (speakerid === socket.id) {
+        console.log('mic on');
+        if (nowAudioMode === audioMode.audioOff) {
+            nowAudioMode = audioMode.audioOn;
+            let localStream = participants[socket.id].rtcPeer.getLocalStream();
+            localStream.getAudioTracks()[0].enabled = true;
+        }
+    }
+}
+
 silence.addEventListener('click',()=>{
     Object.keys(participants).forEach((id)=>{
         if(id!=socket.id){

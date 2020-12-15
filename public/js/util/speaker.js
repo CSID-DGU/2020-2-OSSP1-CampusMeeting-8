@@ -73,7 +73,7 @@ function deleteOption(userid) {
 selectBtn.addEventListener('click', () => {
     const index = studentList.selectedIndex;
     const id = studentList.options[index].id;
-    const name = studentList.options[index].name;
+    const name = studentList.options[index].value;
     if(!id) return;
     socket.emit('message', {
         event: 'selectSpeaker',

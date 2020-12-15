@@ -29,6 +29,9 @@ socket.on('message', message => {
         case 'leave-return':
             recieveLeaveReturn(message.studentid);
             break;
+        case 'micON':
+            micON(message.speakerid);
+            break;
         case 'error':
             console.log(message.message);
             swal(message.message);
