@@ -40,11 +40,17 @@ html,body{
     width: 20%;
     justify-content: flex-start;
 }
-#footer-center{
-    width: 60%;
+#footer-center1{
+    width: 30%;
     justify-content: center;
 }
-#footer-center button{
+
+
+#footer-center2{
+    width: 30%;
+    justify-content: center;
+}
+#footer-center2 button{
      width: 100px;
     height: 40px;
     background:white;
@@ -52,7 +58,7 @@ html,body{
     margin: 0 20px;
     outline: 0;
 }
-#footer-center button:hover{
+#footer-center2 button:hover{
     cursor: pointer;
 }
 
@@ -102,4 +108,11 @@ html,body{
     flex-direction: column;
     align-items: center;
     justify-content: center;
+}
+
+.active-red svg{
+    color: tomato;
+}
+.active-green svg{
+    color: rgb(158, 235, 143);
 }

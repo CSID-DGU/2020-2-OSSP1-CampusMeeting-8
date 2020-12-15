@@ -1,19 +1,33 @@
+function addGreen(ele){
+    ele.classList.add('active-green');
+}
+function removeGreen(ele){
+    ele.classList.remove('active-green');
+}
+
+
 //카메라 컨트롤
 const cameraBtn = document.querySelector('#camera');
 let cameraOn = true;
+addGreen(cameraBtn);
+
 cameraBtn.addEventListener('click', () => {
     let localStream = participants[socket.id].rtcPeer.getLocalStream();
     if (cameraOn) {
         cameraOn = false;
         localStream.getVideoTracks()[0].enabled = false;
+        removeGreen(cameraBtn);
     } else {
         cameraOn = true;
         localStream.getVideoTracks()[0].enabled = true;
+        addGreen(cameraBtn);
     }
 })
 
 //마이크 컨트롤
 const micBtn = document.querySelector('#mic');
+addGreen(micBtn);
+
 const audioMode = {
     audioOn: 'audioOn',
     audioOff: 'audioOff',
@@ -24,9 +38,12 @@ micBtn.addEventListener('click', () => {
     if (nowAudioMode == audioMode.audioOn) {
         nowAudioMode = audioMode.audioOff;
         localStream.getAudioTracks()[0].enabled = false;
+        removeGreen(micBtn);
+
     } else {
         nowAudioMode = audioMode.audioOn;
         localStream.getAudioTracks()[0].enabled = true;
+        addGreen(micBtn);
     }
 })
 //전체 음소거
@@ -35,6 +52,7 @@ function handleSilence(){
     if (nowAudioMode == audioMode.audioOn) {
         nowAudioMode = audioMode.audioOff;
         localStream.getAudioTracks()[0].enabled = false;
+        removeGreen(micBtn);
     }
 }
 
@@ -45,6 +63,7 @@ function micON(speakerid) {
             nowAudioMode = audioMode.audioOn;
             let localStream = participants[socket.id].rtcPeer.getLocalStream();
             localStream.getAudioTracks()[0].enabled = true;
+            addGreen(micBtn);
         }
     }
 }

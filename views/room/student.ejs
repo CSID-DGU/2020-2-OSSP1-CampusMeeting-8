@@ -17,6 +17,7 @@
     <script defer src="/js/student.js"></script>
     <script defer src="/js/util/stUtil.js"></script>
     <script defer src="/js/util/chat.js"></script>
+    <script defer src="/js/util/record_S.js"></script>
     <script defer src="/js/receiveMessage_S.js"></script>
     <script>
         const ROOM_ID = '<%= roomID %>';
@@ -33,7 +34,13 @@
                 <button id="out" class="foot-button"><i class="fas fa-arrow-left fa-2x foot-icon"
                         title="퇴장"></i></i></button>
             </div>
-            <div id="footer-center" class="flex-row">
+            <div id="footer-center1" class="flex-row">
+                <button id="record-start" class="foot-button"><i class="fas fa-dot-circle fa-2x foot-icon"></i></button>
+                <button id="record-pause" class="foot-button"><i class="fas fa-pause fa-2x foot-icon"></i></button>
+                <button id="record-stop" class="foot-button"><i class="fas fa-stop fa-2x foot-icon"></i></button>
+                <a id="record-download" class="foot-button"><i class="fas fa-download fa-2x foot-icon"></i></a>
+            </div>
+            <div id="footer-center2" class="flex-row">
                 <button id='question'>음성 질문 요청</button>
                 <button id='leave'>자리 비움 요청</button>
             </div>
