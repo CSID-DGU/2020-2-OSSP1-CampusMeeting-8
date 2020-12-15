@@ -99,8 +99,8 @@ function changeTrack(track, localStream, senders) {
 
 //audio controll
 
-const mikeBtn = document.querySelector('#mike');
-const stMikeBtn = document.querySelector('#student-mike');
+const micBtn = document.querySelector('#mic');
+const stMicBtn = document.querySelector('#student-mic');
 
 const audioMode = {
     audioOn: 'audioOn',
@@ -108,7 +108,7 @@ const audioMode = {
 }
 let nowAudioMode = audioMode.audioOn;
 
-mikeBtn.addEventListener('click', () => {
+micBtn.addEventListener('click', () => {
     let localStream = participants[socket.id].rtcPeer.getLocalStream();
     if (nowAudioMode == audioMode.audioOn) {
         nowAudioMode = audioMode.audioOff;

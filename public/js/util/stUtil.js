@@ -13,13 +13,13 @@ cameraBtn.addEventListener('click', () => {
 })
 
 //마이크 컨트롤
-const mikeBtn = document.querySelector('#mike');
+const micBtn = document.querySelector('#mic');
 const audioMode = {
     audioOn: 'audioOn',
     audioOff: 'audioOff',
 }
 let nowAudioMode = audioMode.audioOn;
-mikeBtn.addEventListener('click', () => {
+micBtn.addEventListener('click', () => {
     let localStream = participants[socket.id].rtcPeer.getLocalStream();
     if (nowAudioMode == audioMode.audioOn) {
         nowAudioMode = audioMode.audioOff;
