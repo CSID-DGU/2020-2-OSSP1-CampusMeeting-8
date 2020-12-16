@@ -1,0 +1,312 @@
+﻿.wrapper {
+    display: grid;
+    height: 100vh;
+    grid-template-areas: 'header header ' 'main sub ' 'main chat1 ' 'button chat1 ';
+    grid-template-columns: 2fr 1fr;
+    grid-template-rows: 56px 3fr 4fr 1fr;
+}
+
+.main {
+    grid-area: main;
+}
+
+.sub {
+    grid-area: sub;
+}
+
+.chat1 {
+    grid-area: chat1;
+}
+
+.button {
+    grid-area: button;
+}
+
+
+#main-cam2 {
+    position: relative;
+    width: 100%;
+    height: 100%;
+}
+
+#sub-cam1 {
+    position: relative;
+    height: 100%;
+    width: 100%;
+    right: 0.5%;
+}
+
+#container {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    border: 1px solid black;
+    background: ivory;
+    right: 0.5%;
+}
+
+#chatView {
+    height: 90%;
+    overflow-y: scroll;
+}
+
+#chatForm {
+    height: 10%;
+    border-top: 1px solid black;
+    text-align: center;
+}
+
+#msg {
+    width: 80%;
+    height: 32px;
+    border-radius: 8px;
+}
+
+#send {
+    width: 16%;
+    height: 34px;
+    border-radius: 50px;
+    background: black;
+    color: white;
+}
+
+
+
+#mic_by_student {
+    position: relative;
+    top: 30%;
+    left: 35%;
+}
+
+#absent {
+    position: relative;
+    top: 30%;
+    left: 40%;
+}
+
+#cam_by_student {
+    position: relative;
+    top: 30%;
+    left: 45%;
+}
+
+
+
+#mic_student {
+    position: relative;
+    left: 25%;
+    top: 30%;
+}
+
+#mic_professor {
+    position: relative;
+    left: 30%;
+    top: 30%;
+}
+
+#cam_professor {
+    position: relative;
+    left: 35%;
+    top: 30%;
+}
+
+#rec {
+    position: relative;
+    left: 40%;
+    top: 30%;
+}
+
+#whiteboard {
+    position: relative;
+    left: 45%;
+    top: 30%;
+}
+
+#nochat {
+    position: relative;
+    left: 50%;
+    top: 30%;
+}
+
+#fullscreen {
+    position: relative;
+    left: 55%;
+    top: 30%;
+}
+
+#smallscreen {
+    position: relative;
+    left: 55%;
+    top: 30%;
+}
+
+
+.wrapper1 {
+    display: grid;
+    height: 100vh;
+    grid-template-areas: 'header header header header header header' 'cam1 cam2 cam3 cam4 cam5 maincam1 ' 'cam6 cam7 cam8 cam9 cam10 maincam1 ' 'cam11 cam12 cam13 cam14 cam15 chat1  ' 'cam16 cam17 cam18 cam19 cam20 chat1 ' 'cam21 cam22 cam23 cam24 cam25 chat1  ' 'cam26 cam27 cam28 cam29 cam30 chat1  ' ' btn1 btn1 btn1 btn1 btn1 chat1  ';
+    grid-template-columns: 1fr 1fr 1fr 1fr 1fr 2.5fr;
+    grid-template-rows: 56px 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
+}
+
+    .wrapper1 div {
+    }
+
+.wrapper2 {
+    display: grid;
+    grid-gap: 1px;
+    height: 100vh;
+    grid-template-areas: 'btn1 btn1 btn1 btn1 btn1' 'cam1 came2 came3 cam4 cam5 ' 'cam6 cam7 cam8 cam9 cam10' 'cam11 cam12 cam13 cam14 cam15 ' 'cam16 cam17 cam18 cam19 cam20 ' 'cam21 cam22 cam23 cam24 cam25 ' 'cam26 cam27 cam28 cam29 cam30 ';
+    grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
+    grid-template-rows: 56px 1fr 1fr 1fr 1fr 1fr 1fr;
+}
+
+    .wrapper2 div {
+    }
+
+
+
+.header {
+    grid-area: header;
+    width: 100%;
+    height: 100%;
+}
+
+.maincam1 {
+    grid-area: maincam1;
+}
+
+.btn1 {
+    grid-area: btn1;
+}
+
+.chat2 {
+    grid-area: chat2;
+}
+
+.container1 {
+    width: 100%;
+    height: 100%;
+    position: relative;
+}
+
+.cam1 {
+    grid-area: cam1;
+    position: relative;
+}
+
+.cam2 {
+    grid-area: cam2;
+}
+
+.cam3 {
+    grid-area: cam3;
+}
+
+.cam4 {
+    grid-area: cam4;
+}
+
+.cam5 {
+    grid-area: cam5;
+}
+
+.cam6 {
+    grid-area: cam6;
+}
+
+.cam7 {
+    grid-area: cam7;
+}
+
+.cam8 {
+    grid-area: cam8;
+}
+
+.cam9 {
+    grid-area: cam9;
+}
+
+.cam10 {
+    grid-area: cam10;
+}
+
+.cam11 {
+    grid-area: cam11;
+}
+
+.cam12 {
+    grid-area: cam12;
+}
+
+.cam13 {
+    grid-area: cam13;
+}
+
+.cam14 {
+    grid-area: cam14;
+}
+
+.cam15 {
+    grid-area: cam15;
+}
+
+.cam16 {
+    grid-area: cam16;
+}
+
+.cam17 {
+    grid-area: cam17;
+}
+
+.cam18 {
+    grid-area: cam18;
+}
+
+.cam19 {
+    grid-area: cam19;
+}
+
+.cam20 {
+    grid-area: cam20;
+}
+
+.cam21 {
+    grid-area: cam21;
+}
+
+.cam22 {
+    grid-area: cam22;
+}
+
+.cam23 {
+    grid-area: cam23;
+}
+
+.cam24 {
+    grid-area: cam24;
+}
+
+.cam25 {
+    grid-area: cam25;
+}
+
+.cam26 {
+    grid-area: cam26;
+}
+ 
+.cam27 {
+    grid-area: cam27;
+}
+
+.cam28 {
+    grid-area: cam28;
+}
+
+.cam29 {
+    grid-area: cam29;
+}
+
+.cam30 {
+    grid-area: cam30;
+}

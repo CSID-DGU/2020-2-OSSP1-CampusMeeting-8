@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>htmlpage_professor</title>
+    <link rel="stylesheet" type="text/css" media="screen" href="/css/professor.css">
+    <link rel="stylesheet" type="text/css" media="screen" href="/css/chat.css">
+    <link rel="stylesheet" href="/css/videoContainer.css">
+    <link rel="stylesheet" href="/css/board.css">
+    <script src="https://use.fontawesome.com/releases/v5.2.0/js/all.js"></script>
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+    <script defer src="/js/adapter.js"></script>
+    <script defer src="/js/kurento-utils.js"></script>
+    <script defer src="/socket.io/socket.io.js"></script>
+    <script defer src="/js/util/board.js"></script>
+
+    <script defer src="/js/professor.js"></script>
+    <script defer src="/js/util/pfUtil.js"></script>
+    <script defer src="/js/util/videoContainer.js"></script>
+    <script defer src="/js/util/chat.js"></script>
+    <script defer src="/js/util/record.js"></script>
+    <script defer src="/js/receiveMessage_P.js"></script>
+    <script>
+        const ROOM_ID = '<%= roomID %>';
+        const USER_NAME = '<%= username %>';
+    </script>
+</head>
+
+<body>
+    <div id="main-container-left">
+        <nav id="navbar" class="flex-row">
+            <div id="nav-left" class="flex-row">
+                <button id="out" class="nav-button"><i class="fas fa-arrow-left fa-2x nav-icon"
+                        title="퇴장"></i></i></button>
+                <button id="full-screen" class="nav-button"><i class="fas fa-expand fa-2x nav-icon"
+                        title="전체화면"></i></button>
+            </div>
+
+            <div id="nav-center1" class="flex-row">
+                <button id="silence" class="nav-button"><i class="fas fa-volume-off fa-2x nav-icon"></i></button>
+                <button id="mic" class="nav-button"><i class="fas fa-microphone fa-2x nav-icon" title="마이크"></i></button>
+                <button id="camera" class="nav-button"><i class="fas fa-camera fa-2x nav-icon"></i></button>
+            </div>
+            <div id="nav-center2" class="flex-row">
+                <button id="record-start" class="nav-button"><i class="fas fa-dot-circle fa-2x nav-icon"></i></button>
+                <button id="record-pause" class="nav-button"><i class="fas fa-pause fa-2x nav-icon"></i></button>
+                <button id="record-stop" class="nav-button"><i class="fas fa-stop fa-2x nav-icon"></i></button>
+                <a id="record-download" class="nav-button"><i class="fas fa-download fa-2x nav-icon"></i></a>
+            </div>
+            <div id="nav-right" class="flex-row">
+                <button id="boardBtn" class="nav-button"><i class="fas fa-chalkboard fa-2x nav-icon"></i></button>
+                <button id="screen" class="nav-button"><i class="fas fa-desktop fa-2x nav-icon"></i></button>
+            </div>
+
+        </nav>
+        <div id="video-grid"></div>
+    </div>
+
+    <div id="main-container-right">
+        <div id="my-cam-container">
+            <video id="my-cam" preload="metadata" autoplay muted></video>
+        </div>
+
+        <div id="chat-container">
+            <div id="chatView"></div>
+            <form id="chatForm" onsubmit="return false">
+                <input type="text" id="msg" autofocus="true" autocomplete="false">
+                <input type="submit" id="send" value="전송">
+            </form>
+        </div>
+
+
+    </div>
+    <div id="board-container">
+        <canvas id="board"></canvas>
+        <div id="board-buttons">
+            <button id="pen"><i class="fas fa-pen"></i></button>
+            <button id="eraser"><i class="fas fa-eraser"></i></button>
+            <button id="rect"><i class="far fa-square"></i></button>
+            <button id="circle"><i class="far fa-circle"></i></button>
+            <button id="undo"><i class="fas fa-undo"></i></button>
+            <button id="redo"><i class="fas fa-redo"></i></button>
+            <button id="clear"><i class="fas fa-trash-alt"></i></button>
+            <button id="exit"><i class="fas fa-sign-in-alt"></i></button>
+        </div>
+    </div>
+
+</body>
+
+</html>

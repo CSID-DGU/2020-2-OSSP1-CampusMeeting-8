@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <link rel="stylesheet" type="text/css" href="/css/login.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>Welcome!</title>
+    <script defer src="/js/index.js"></script>
+</head>
+<body>
+    <div id="input" class="mainForm">
+      <h3><%= username %>님<h2>
+        <h4>환영합니다!</h3>
+      <div class="rnForm">
+        <input type="text" class="id" id="roomID" placeholder="방 번호를 입력하세요">
+      </div>
+        <button class="btn2" id="createRoom">강의실 생성</button>
+        <button class="btn2" id="join">강의실 참여</button>
+        <button class="btn2" id="speaker">화자지정(교수용)</button>
+        <form action="/logout" method="get">
+          <input class="btn" type="submit" value="로그아웃">
+        </form>
+    </div>
+
+</body>
+</html>

@@ -1,4 +1,3 @@
-const userName = 'student';
 const participants = {};
 const hostVideo = document.getElementById('host-cam');
 const myVideo = document.getElementById('my-cam');
@@ -9,8 +8,8 @@ const constraints = {
     audio: true,
     video: {
         mandatory : {
-            maxWidth : 480,
-            maxFrameRate : 30,
+            maxWidth : 360,
+            maxFrameRate : 20,
             minFrameRate : 15
         }
     }
@@ -19,69 +18,23 @@ const constraints = {
 // 소켓 연결이 완료되면 서버로 join 메시지를 보내서 처리
 socket.emit('message', {
     event: 'join',
-    username: userName,
+    username: USER_NAME,
     roomid: ROOM_ID,
 });
-
-// 서버로부터의 메시지 처리
-socket.on('message', message => {
-    console.log('Message received: ' + message.event);
-
-    switch (message.event) {
-        case 'newUserJoined':
-            newUserAlert(message);
-            if (message.hostid === message.userid) {
-                host = message.hostid;
-                receiveVideo(message.userid, message.username);
-            }
-            break;
-        case 'connected':
-            host = message.hostid;
-            connectPeer(message.userid, message.existingUsers);
-            break;
-        case 'sdpAnswer':
-            addSdpAnswer(message.senderid, message.sdpAnswer);
-            break;
-        case 'candidate':
-            addIceCandidate(message.userid, message.candidate);
-            break;
-        case 'userDisconnected':
-            console.log(message.event, message.userid);
-            userDisconnected(message.userid);
-            break;
-        case 'warn':
-            console.log('got warn from server');
-            alert(message.warnMessage);
-            break;
-        case 'kicked':
-            window.location.replace("http://www.w3schools.com");//밴페이지로 변경
-            break;
-    }
-});
-
-/* socket.on('warn', (message) => {
-    console.log('got warn from server');
-    alert(message);
-})
-
-socket.on('kicked', () => {
-    window.location.replace("http://www.w3schools.com");//밴페이지로 변경
-}) */
-
 
 // 유저 연결이 끊어졌을 경우 처리를 하는 메소드
 function userDisconnected(userid) {
     // 접속 끊어진 유저가 host면 hostvideo 출력 삭제
-    if (host === userid) {
-        hostVideo.src = null;
-    }
     if (participants[userid]) {
-         delete participants[userid];
+        if (host === userid) {
+            hostVideo.src = null;
+        }
+        const msg = document.createElement('div');
+        msg.classLists.add('system');
+        msg.innerText = `${participants[userid].username}님이 퇴장하셨습니다.`;
+        chatView.append(msg);
+        delete participants[userid];
     }
-    const msg = document.createElement('div');
-    const node = document.createTextNode(`${userid}님이 퇴장하셨습니다.`);
-    msg.append(node);
-    chatView.append(msg);
 }
 
 // 원격 연결로부터 비디오 수신
@@ -144,7 +97,7 @@ function connectPeer(userid, existingUsers) {
 
     const user = {
         id: userid,
-        username: userName,
+        username: USER_NAME,
         video: myVideo,
         rtcPeer: null
     }
@@ -161,7 +114,15 @@ function connectPeer(userid, existingUsers) {
     user.rtcPeer = kurentoUtils.WebRtcPeer.WebRtcPeerSendonly(options,
         function (err) {
             if (err) {
-                return console.error(err);
+                user.rtcPeer = kurentoUtils.WebRtcPeer.WebRtcPeerSendonly({
+                    localVideo: myVideo,
+                    mediaConstraints: {
+                        audio: false,
+                        video: false
+                    },
+                    onicecandidate: onIceCandidate
+                });
+                //return console.error(err);
             }
             this.generateOffer(onOffer)
         }
@@ -206,27 +167,16 @@ function addIceCandidate(userid, candidate) {
     participants[userid].rtcPeer.addIceCandidate(candidate);
 }
 
+// 메시지를 보내는 메서드
 function sendMessage(message) {
     console.log('sending ' + message.event + ' message to server');
     socket.emit('message', message);
 }
 
-
-function addCameraContainerEvent(videoContainer, userid) {
-    console.log(userid);
-    const warn = videoContainer.querySelector('.warn-button');
-    warn.addEventListener('click', (e) => {
-        socket.emit('warn', {
-            warnMessage: 'warning',
-            userid: userid
-        })
-    })
-
-}
-
+// 새 참가자가 입장하면 채팅으로 알림
 function newUserAlert(message) {
     const msg = document.createElement('div');
-    const node = document.createTextNode(`${message.username}님이 입장하셨습니다.`);
-    msg.append(node);
+    msg.innerText = `${message.username}님이 입장하셨습니다.`;
+    msg.classList.add('system');
     chatView.append(msg);
 }

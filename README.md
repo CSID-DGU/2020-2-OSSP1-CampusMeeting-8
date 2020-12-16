@@ -43,5 +43,24 @@ nodemon을 통한 실행도 가능합니다.
   
 > localhost 접속
 ```
-http://localhost:8843/으로 접속
+https://localhost:3000/으로 접속
+```
+
+> DB 설치
+```
+mysql 설치 후 config.js 파일에 계정 정보 입력
+
+create database userinfo;
+use userinfo;
+create table Users (
+	userid int primary key auto_increment,
+    id varchar(50) unique not null,
+    pw varchar(255) not null,
+    name varchar(50) not null,
+    email varchar(100) unique not null,
+    phone varchar(11) not null,
+	bdate varchar(6) not null
+);
+
+쿼리 작성해서 유저 정보를 저장하는 데이터베이스 생성
 ```

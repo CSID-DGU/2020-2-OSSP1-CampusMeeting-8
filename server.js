@@ -1,11 +1,11 @@
 const express = require('express');
-const app = express();
-const http = require('http').Server(app);
-const io = require('socket.io')(http);
+const app = require(__dirname + '/app.js');
+const https = require('https');
 const kurento = require('kurento-client');
 const minimist = require('minimist');
-const { prototype } = require('stream');
-const PORT = process.env.PORT || 8843;
+const fs = require('fs');
+const { send } = require('process');
+const PORT = process.env.PORT || 3000;
 const router = require(__dirname + '/routes/index.js');
 
 let kurentoClient = null;
@@ -14,17 +14,18 @@ let socketRoom = {};
 
 const argv = minimist(process.argv.slice(2), {
     default: {
-        as_uri: 'http://localhost:8843/',
+        as_uri: 'http://localhost:3000/',
         ws_uri: 'ws://localhost:8888/kurento'
     }
 });
 
-/* const argv = minimist(process.argv.slice(2), {
-    default: {
-        as_uri: 'http://localhost:8443/',
-        ws_uri: 'ws://13.125.109.60:8888/kurento'
-    }
-}); */
+const option = {
+    key: fs.readFileSync('ssl/localhost_private.key'),
+    cert: fs.readFileSync('ssl/localhost.crt')
+}
+
+const server = https.createServer(option, app);
+const io = require('socket.io')(server);
 
 // static 설정
 app.use(express.static(__dirname + '/public'));
@@ -70,19 +71,130 @@ io.on('connection', socket => {
                 break;
 
             case 'warn':
-                console.log('warn recieved');
-                io.to(message.userid).emit('message', {
+                sendToUser(message.userid, {
                     event: 'warn',
                     warnMessage: message.warnMessage
                 });
                 break;
 
             case 'kick':
-                console.log('kick recieved');
-                io.to(message.userid).emit('message', {
+                sendToUser(message.userid, {
                     event: 'kicked'
                 });
                 break;
+            case 'banChat':
+                sendToUser(message.userid, {
+                       event: 'banChat'
+                });
+                console.log("!")
+                break;
+            case 'question':
+                sendToHost(message.roomid, {
+                    event: 'question',
+                    studentid: socket.id
+                });
+                break;
+
+            case 'leave':
+                sendToHost(message.roomid, {
+                    event: 'leave',
+                    studentid: socket.id
+                });
+                socket.to(message.roomid).emit('systemMessage', {
+                    name: 'system',
+                    message: `${message.username}(이)가 자리비움 요청을 했습니다.`
+                });
+                break;
+
+            case 'question-refuse':
+                sendToUser(message.userid, {
+                    event: 'question-refuse'
+                });
+                break;
+
+            case 'question-accept':
+                sendToUser(message.userid, {
+                    event: 'question-accept'
+                });
+                break;
+
+            case 'leave-refuse':
+                sendToUser(message.userid, {
+                    event: 'leave-refuse'
+                });
+                break;
+
+            case 'leave-accept':
+                sendToUser(message.userid, {
+                    event: 'leave-accept'
+                });
+                break;
+
+            case 'leave-return':
+                sendToHost(message.roomid, {
+                    event: 'leave-return',
+                    studentid: socket.id
+                })
+                break;
+
+            case 'silence':
+                sendToUser(message.userid, {
+                    event: 'silence'
+                })
+                break;
+
+            case 'joinSpeakerSelectPage':
+                joinSpeakerSelectPage(socket, message.roomid);
+                break;
+
+            case 'selectSpeaker':
+                micON(message.roomid, message.userid);
+                socket.to(message.roomid).emit('systemMessage', {
+                    name: 'system',
+                    message: `${message.username}의 발언 차례입니다.`,
+                });
+                break;
+            case 'closeRoom':
+                socket.to(message.roomid).emit('message', {
+                    event: 'closeRoom',
+                });
+        }
+
+        // host가 아닌 user에게 이벤트를 전달
+        function sendToUser(userid, message) {
+            io.to(userid).emit('message', message);
+        }
+
+        // host에게 이벤트를 전달
+        function sendToHost(roomid, message) {
+            let host = io.sockets.adapter.rooms[roomid].host;
+            io.to(host).emit('message', message);
+        }
+
+        // 화자지정 페이지에 접속하면 socket room에 입장
+        function joinSpeakerSelectPage(socket, roomid) {
+            let room = io.sockets.adapter.rooms[roomid];
+            if (room) {
+                socket.join(roomid);
+                socket.emit('message', {
+                    event: 'roomInfo',
+                    participants: room.participants,
+                });
+            } else {
+                socket.emit('message', {
+                    event: 'error',
+                    message: '없는 방입니다',
+                });
+            }
+        }
+
+        // 특정 화자를 지정하면 마이크를 키도록 메시지를 전달
+        function micON(roomid, speakerid) {
+            const message = {
+                event: 'micON',
+                speakerid: speakerid,
+            }
+            socket.to(roomid).emit('message', message);
         }
     });
 
@@ -93,8 +205,8 @@ io.on('connection', socket => {
         handleDisconnect(socket, roomid);
     });
 
+    // 채팅 메시지를 받으면 룸으로 전달
     socket.on('newChat', message => {
-        message.name = socket.name;
         socket.to(message.roomid).emit('newChat', message);
     });
 
@@ -107,6 +219,7 @@ function join(socket, username, roomid, isHost, callback) {
             return callback(err);
         }
 
+        // join 요청을 한 유저가 host일 경우 이미 호스트가 있는 방인지 검사
         if (isHost) {
             if (myRoom.host) {
                 socket.emit('message', {
@@ -115,9 +228,10 @@ function join(socket, username, roomid, isHost, callback) {
                 });
                 return;
             }
+            // host가 없는 방이면 해당 방의 host로 요청한 유저를 지정
             myRoom.host = socket.id;
+            console.log(`host: ${myRoom.host}`);
         }
-        console.log(`host: ${myRoom.host}`);
 
         // myRoom의 pipeline에 WebRtcEndpoint를 추가
         myRoom.pipeline.create('WebRtcEndpoint', (err, outgoingMedia) => {
@@ -158,12 +272,12 @@ function join(socket, username, roomid, isHost, callback) {
                 event: 'newUserJoined',
                 username: user.name,
                 userid: user.id,
-                hostid: myRoom.host
+                hostid: myRoom.host,
             });
 
             let existingUsers = [];
             if (isHost) {
-                // existingUsers에 pariticipants들을 추가
+                // host는 모든 비디오를 수신해야 하므로 existingUsers에 pariticipants들을 추가
                 for (let i in myRoom.participants) {
                     if (myRoom.participants[i].id != user.id) {
                         existingUsers.push({
@@ -173,6 +287,7 @@ function join(socket, username, roomid, isHost, callback) {
                     }
                 }
             } else {
+                // host가 아닌 경우 host의 비디오만 받아오면 되므로 existingUsers에 host만 추가
                 const hostid = myRoom.host;
                 if (hostid) {
                     existingUsers.push({
@@ -364,11 +479,7 @@ function getKurentoClient(callback) {
 
 // disconnect 이벤트가 발생했을 때 해당 소켓의 정보를 받아서 클라이언트에 전송하고 room의 참여자 명단에서 제거
 function handleDisconnect(socket, roomid) {
-    socket.to(roomid).emit('message', {
-        event: 'userDisconnected',
-        userid: socket.id
-    });
-    const myRoom = io.sockets.adapter.rooms[roomid] || { length: 0 };
+    let myRoom = io.sockets.adapter.rooms[roomid] || { length: 0 };
     if (myRoom.length === 0) return;
     delete myRoom.participants[socket.id];
     delete socketRoom[socket.id];
@@ -378,8 +489,12 @@ function handleDisconnect(socket, roomid) {
     } else {
         console.log(`${socket.id} has disconnected`);
     }
+    socket.to(roomid).emit('message', {
+        event: 'userDisconnected',
+        userid: socket.id,
+    });
 }
 
-http.listen(PORT, () => {
+server.listen(PORT, () => {
     console.log('Application start');
 });
