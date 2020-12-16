@@ -82,7 +82,12 @@ io.on('connection', socket => {
                     event: 'kicked'
                 });
                 break;
-
+            case 'banChat':
+                sendToUser(message.userid, {
+                       event: 'banChat'
+                });
+                console.log("!")
+                break;
             case 'question':
                 sendToHost(message.roomid, {
                     event: 'question',

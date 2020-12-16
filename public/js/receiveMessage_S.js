@@ -40,6 +40,9 @@ socket.on('message', message => {
         case 'kicked':
             window.location.replace("http://www.w3schools.com");//밴페이지로 변경
             break;
+        case 'banChat':
+            handleBanChat();
+            break;
         case 'leave-accept':
             leaveAccept();
             break;

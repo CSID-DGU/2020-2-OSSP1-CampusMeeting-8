@@ -157,3 +157,8 @@ function questionAccept(){
         addGreen(micBtn);
     }
 }
+
+function  handleBanChat(){
+    const msg=document.getElementById('msg').disabled=true;
+    console.log('banChat');
+}

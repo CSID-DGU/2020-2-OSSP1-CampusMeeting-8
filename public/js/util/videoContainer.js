@@ -15,7 +15,7 @@ function makeVideoContainer(userid, username) {
         <div class='over-button-box'>
             <button class="warn-button">경고</button>
             <button class="kick-button">강퇴</button>
-            <button class="over-button">채팅금지</button>
+            <button class="banChat-button">채팅금지</button>
         </div>
     </div>
 
@@ -48,6 +48,7 @@ function makeVideoContainer(userid, username) {
     container.innerHTML = template;
     const warn = container.querySelector('.warn-button');
     const kick = container.querySelector('.kick-button');
+    const banChat = container.querySelector('.banChat-button');
     const questionRef = container.querySelector('.question-refuse');
     const questionAcc = container.querySelector('.question-accept');
     const leaveRef = container.querySelector('.leave-refuse');
@@ -63,7 +64,6 @@ function makeVideoContainer(userid, username) {
     };
     container.addEventListener('click', (e) => {
         // if(e.target)
-        console.log(e.target.tagName);
         if (e.target.tagName == 'BUTTON') {
             return;
         }
@@ -91,6 +91,13 @@ function makeVideoContainer(userid, username) {
     kick.addEventListener('click', () => {
         socket.emit('message', {
             event: 'kick',
+            userid: userid
+        })
+    })
+    banChat.addEventListener('click',()=>{
+        console.log('s')
+        socket.emit('message', {
+            event: 'banChat',
             userid: userid
         })
     })
