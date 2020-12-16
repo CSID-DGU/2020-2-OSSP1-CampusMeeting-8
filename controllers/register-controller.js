@@ -14,16 +14,14 @@ module.exports.register = function (req, res) {
   connection.query(sql, users, function (error, results, fields) {
     console.log(error);
     if (error) {
-      res.json({
-        status: false,
-        message: 'there are some error with query'
-      })
+      if(error.errno==1062){
+        res.send("<script type='text/javascript'>alert('중복된 아이디입니다. 새로고침(F5) 후 다시 해주세요')</script>");
+      }
+      else {
+        res.send("<script type='text/javascript'>alert('에러가 발생했습니다. 새로고침(F5) 후 다시 해주세요')</script>");
+      }
     } else {
-      res.json({
-        status: true,
-        data: results,
-        message: 'user registered sucessfully'
-      })
+      res.redirect("/login");
     }
   });
   connection.end();

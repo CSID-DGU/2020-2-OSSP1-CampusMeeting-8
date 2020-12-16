@@ -1,21 +1,26 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+  <link rel="stylesheet" type="text/css" href="/css/login.css">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <title>Welcome!</title>
     <script defer src="/js/index.js"></script>
 </head>
 <body>
-    <h1>Welcome! <%= userid %></h1>
-    <div id="input">
-        <input type="text" id="roomID" placeholder="Enter room number!">
-        <button id="createRoom">Create Room</button>
-        <button id="join">Join</button>
-        <button id="speaker">Select Speaker</button>
+    <div id="input" class="mainForm">
+      <h3>Welcome!</h3>
+      <h2><%= userid %><h2>
+      <div class="rnForm">
+        <input type="text" class="id" id="roomID" placeholder="Enter room number!">
+      </div>
+        <button class="btn2" id="createRoom">Create Room</button>
+        <button class="btn2" id="join">Join</button>
+        <button class="btn2" id="speaker">Select Speaker</button>
+        <form action="/logout" method="get">
+          <input class="btn" type="submit" value="logout">
+        </form>
     </div>
-    <form action="/logout" method="get">
-      <input type="submit" value="logout">
-    </form>
+
 </body>
 </html>
