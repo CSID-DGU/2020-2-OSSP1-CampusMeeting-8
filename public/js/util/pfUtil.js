@@ -194,6 +194,7 @@ function micON(speakerid) {
             nowAudioMode = audioMode.audioOn;
             let localStream = participants[socket.id].rtcPeer.getLocalStream();
             localStream.getAudioTracks()[0].enabled = true;
+            addGreen(micBtn);
         }
     }
 }

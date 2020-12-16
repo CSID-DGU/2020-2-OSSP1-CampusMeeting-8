@@ -54,7 +54,7 @@ socket.on('systemMessage', message => {
     console.log('system message:', message.message);
     const msg = document.createElement('div');
     const node = document.createTextNode(message.message);
-    msg.classLists.add('system');
+    msg.classList.add('system');
     msg.append(node);
     chatView.append(msg);
 })
