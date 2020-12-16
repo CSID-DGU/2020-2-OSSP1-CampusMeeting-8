@@ -23,11 +23,17 @@
     height: 20%;
     color: white;
     text-align: center;
+    font-size: 25px;
+    margin: 10px;
 }
+.over-button-box{
+    margin: 5px;
 
+}
 .over-button-box button{
     background-color: white;
     border-radius: 12px;
+    padding: 3px;
 }
 
 .camera-video{
