@@ -36,6 +36,26 @@ function closeRoom() {
     });
 }
 
+const fullscrBtn=document.getElementById('full-screen');
+
+let screenMode=false;
+fullscrBtn.addEventListener('click',()=>{
+    const mainLeft=document.getElementById('main-container-left');
+    const mainRight=document.getElementById('main-container-right');
+    if(screenMode){
+        screenMode=false;
+        mainLeft.style="width:80%";
+        mainRight.style="width:20% display:flex";
+    }else{
+        screenMode=true;
+
+        mainLeft.style="width:100%";
+        mainRight.style="display:none";
+
+    }
+})
+
+
 //camera button
 let cameraBtn = document.querySelector('#camera');
 let screenBtn = document.querySelector('#screen');
