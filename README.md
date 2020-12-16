@@ -55,7 +55,7 @@ use userinfo;
 create table Users (
 	userid int primary key auto_increment,
     id varchar(50) unique not null,
-    pw varchar(50) not null,
+    pw varchar(255) not null,
     name varchar(50) not null,
     email varchar(100) unique not null,
     phone varchar(11) not null,
