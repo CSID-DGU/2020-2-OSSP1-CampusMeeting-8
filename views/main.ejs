@@ -9,16 +9,16 @@
 </head>
 <body>
     <div id="input" class="mainForm">
-      <h3>Welcome!</h3>
-      <h2><%= userid %><h2>
+      <h3><%= username %>님<h2>
+        <h4>환영합니다!</h3>
       <div class="rnForm">
-        <input type="text" class="id" id="roomID" placeholder="Enter room number!">
+        <input type="text" class="id" id="roomID" placeholder="방 번호를 입력하세요">
       </div>
-        <button class="btn2" id="createRoom">Create Room</button>
-        <button class="btn2" id="join">Join</button>
-        <button class="btn2" id="speaker">Select Speaker</button>
+        <button class="btn2" id="createRoom">강의실 생성</button>
+        <button class="btn2" id="join">강의실 참여</button>
+        <button class="btn2" id="speaker">화자지정(교수용)</button>
         <form action="/logout" method="get">
-          <input class="btn" type="submit" value="logout">
+          <input class="btn" type="submit" value="로그아웃">
         </form>
     </div>
 
