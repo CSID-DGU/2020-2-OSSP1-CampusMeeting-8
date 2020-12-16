@@ -13,9 +13,46 @@
     overflow-y: scroll;
 }
 
-#msg {
-    background: white;
-    border: 1px solid black;
+.chat {
+    display: flex;
+    flex-direction: column;
+    margin: 3%;
+    margin-right: 40%;
+}
+
+.name {
+    font-size: 12px;
+}
+
+.msg {
+    border-radius: 10px;
+    background-color: gray;
+    color: white;
+    padding: 5%;
+}
+
+.my-chat {
+    display: flex;
+    flex-direction: column;
+    margin: 3%;
+    margin-left: 40%;
+}
+
+.my-name {
+    font-size: 12px;
+    text-align: end;
+}
+
+.my-msg {
+    border-radius: 10px;
+    background-color: #43AAFF;
+    color: white;
+    padding: 5%;
+}
+
+.system {
+    margin: 3%;
+    font-size: 14px;
 }
 
 #chatForm {
@@ -24,6 +61,8 @@
     border-top: 1px solid black;
     text-align: center;
 }
+
+
 
 /* #msg {
     width: 400px;

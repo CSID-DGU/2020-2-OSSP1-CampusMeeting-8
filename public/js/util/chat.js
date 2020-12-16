@@ -7,41 +7,54 @@ chatSendBtn.addEventListener('click', chatSend);
 chatView.scrollTop = chatView.scrollHeight;
 function chatSend() {
     const message = msgInput.value;
+    if (!message) return;
+
+    const today = new Date();
+    const hours = today.getHours();
+    const minutes = today.getMinutes();
 
     msgInput.value = '';
+    const chat = document.createElement('div');
+    chat.classList.add('my-chat');
     const msg = document.createElement('div');
+    msg.classList.add('my-msg');
     const node = document.createTextNode(message);
-    msg.append(node);   
-    msg.style.borderRadius = "10px";
-    msg.style.margin = "10px";
-    msg.style.backgroundColor = "#43AAFF";
-    msg.style.marginLeft = "250px";
-    msg.style.color = "white"
-    chatView.append(msg);
+    const nameNode = document.createElement('div');
+    const nameText = `${USER_NAME} ${hours}:${minutes}`;
+    nameNode.innerText = nameText;
+    nameNode.classList.add('my-name');
+    msg.append(node);
+    chat.append(msg);
+    chat.append(nameNode);
+    chatView.append(chat);
     socket.emit('newChat', {
         message: message,
-        name: USER_NAME,
-        roomid: ROOM_ID
+        username: nameText,
+        roomid: ROOM_ID,
     });
 }
 
 socket.on('newChat', (message) => {
     console.log('got message:', message.message);
+    const chat = document.createElement('div');
+    chat.classList.add('chat');
     const msg = document.createElement('div');
-    const node = document.createTextNode(`${message.name}: ${message.message}`);
+    msg.classList.add('msg');
+    const node = document.createTextNode(message.message);
+    const nameNode = document.createElement('div');
+    nameNode.innerText = message.username;
+    nameNode.classList.add('name');
     msg.append(node);
-    msg.style.borderRadius = "10px";
-    msg.style.margin = "10px";
-    msg.style.background = "white";
-    msg.style.color = "black";
-    msg.style.marginRight = "250px";
-    chatView.append(msg);
+    chat.append(msg);
+    chat.append(nameNode);
+    chatView.append(chat);
 });
 
 socket.on('systemMessage', message => {
     console.log('system message:', message.message);
     const msg = document.createElement('div');
-    const node = document.createTextNode(`${message.name}: ${message.message}`);
+    const node = document.createTextNode(message.message);
+    msg.classLists.add('system');
     msg.append(node);
     chatView.append(msg);
 })

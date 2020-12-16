@@ -30,8 +30,8 @@ function userDisconnected(userid) {
             hostVideo.src = null;
         }
         const msg = document.createElement('div');
-        const node = document.createTextNode(`${participants[userid].username}님이 퇴장하셨습니다.`);
-        msg.append(node);
+        msg.classLists.add('system');
+        msg.innerText = `${participants[userid].username}님이 퇴장하셨습니다.`;
         chatView.append(msg);
         delete participants[userid];
     }
@@ -176,8 +176,7 @@ function sendMessage(message) {
 // 새 참가자가 입장하면 채팅으로 알림
 function newUserAlert(message) {
     const msg = document.createElement('div');
-    const node = document.createTextNode(`${message.username}님이 입장하셨습니다.`);
-    console.log(message);
-    msg.append(node);
+    msg.innerText = `${message.username}님이 입장하셨습니다.`;
+    msg.classList.add('system');
     chatView.append(msg);
 }

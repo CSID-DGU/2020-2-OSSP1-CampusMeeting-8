@@ -3,6 +3,11 @@
     padding: 0;
     border: none;
 }
+
+body {
+    min-width: 1000px;
+}
+
 .flex-row{
     display: flex;
     flex-direction: row;

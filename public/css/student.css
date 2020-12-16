@@ -9,6 +9,10 @@
     align-items: center;
 }
 
+body {
+    min-width: 1000px;
+}
+
 html,body{
     width: 100%;
     height: 100%;
