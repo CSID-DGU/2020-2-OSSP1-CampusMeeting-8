@@ -11,7 +11,9 @@ createRoomBtn.addEventListener('click', () => {
 
 speakerBtn.addEventListener('click', () => {
     const roomID = roomIDInput.value;
-    location.href = `/room/${roomID}/mobile`;
+    if (roomID) {
+        location.href = `/room/${roomID}/mobile`;
+    }
 })
 
 joinBtn.addEventListener('click', () => {
@@ -20,5 +22,7 @@ joinBtn.addEventListener('click', () => {
 
 function joinRoom() {
     const roomID = roomIDInput.value;
-    location.href = `/room/${roomID}`;
+    if (roomID) {
+        location.href = `/room/${roomID}`;
+    }
 }
