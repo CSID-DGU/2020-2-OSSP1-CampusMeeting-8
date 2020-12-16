@@ -116,3 +116,6 @@ html,body{
 .active-green svg{
     color: rgb(158, 235, 143);
 }
+.swal-footer {
+    text-align: center;
+}

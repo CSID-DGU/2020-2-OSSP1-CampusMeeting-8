@@ -16,7 +16,7 @@ const circleBtn = document.getElementById("circle");
 const undoBtn = document.getElementById("undo");
 const redoBtn = document.getElementById("redo");
 const clearBtn = document.getElementById("clear");
-const exitBtn = document.getElementById("exit");
+const exitBoardBtn = document.getElementById("exit");
 
 
 
@@ -181,7 +181,7 @@ clearBtn.addEventListener('click', () => {
   capture();
 })
 
-exitBtn.addEventListener('click',()=>{
+exitBoardBtn.addEventListener('click',()=>{
   boardContainer.style="display:none";
 })
 

@@ -37,6 +37,8 @@ socket.on('message', message => {
             swal(message.message);
             location.href = '/';
             break;
-
+        case 'closeRoom':
+            closeRoom();
+            break;
     }
 });

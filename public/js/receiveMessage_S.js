@@ -25,7 +25,12 @@ socket.on('message', message => {
             userDisconnected(message.userid);
             break;
         case 'warn':
-            swal(message.warnMessage, '학생! 경고입니다!', 'warning');
+            swal({
+                title: "경고",
+                text: "학생! 경고입니다!",
+                icon: "warning",
+                button: "확인",
+            });
             break;
         case 'kicked':
             window.location.replace("http://www.w3schools.com");//밴페이지로 변경
@@ -41,6 +46,9 @@ socket.on('message', message => {
             break;
         case 'silence':
             handleSilence();
+            break;
+        case 'closeRoom':
+            closeRoom();
             break;
     }
 });

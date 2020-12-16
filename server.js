@@ -95,7 +95,12 @@ io.on('connection', socket => {
                     event: 'leave',
                     studentid: socket.id
                 });
+                socket.to(message.roomid).emit('systemMessage', {
+                    name: 'system',
+                    message: `${message.username}(이)가 자리비움 요청을 했습니다.`
+                });
                 break;
+
             case 'question-refuse':
                 sendToUser(message.userid, {
                     event: 'question-refuse'
@@ -144,6 +149,10 @@ io.on('connection', socket => {
                     message: `${message.username}의 발언 차례입니다.`,
                 });
                 break;
+            case 'closeRoom':
+                socket.to(message.roomid).emit('message', {
+                    event: 'closeRoom',
+                });
         }
 
         // host가 아닌 user에게 이벤트를 전달

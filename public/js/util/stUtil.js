@@ -5,6 +5,32 @@ function removeGreen(ele){
     ele.classList.remove('active-green');
 }
 
+const exitRoomBtn = document.getElementById('out');
+exitRoomBtn.addEventListener('click', () => {
+    swal({
+        title: "수업을 종료하시겠습니까?",
+        text: "메인 화면으로 돌아갑니다.",
+        icon: "warning",
+        buttons: true,
+        dangerMode: true,
+    })
+    .then((value) => {
+        if (value) {
+            location.href = '/main';
+        }
+    });
+});
+
+function closeRoom() {
+    swal({
+        title: "수업이 종료되었습니다.",
+        text: "메인 화면으로 돌아갑니다.",
+        button: "확인",
+    })
+    .then(() => {
+        location.href = '/main';
+    });
+}
 
 //카메라 컨트롤
 const cameraBtn = document.querySelector('#camera');
@@ -81,7 +107,8 @@ const leaveBtn = document.querySelector('#leave');
 leaveBtn.addEventListener('click', () => {
     socket.emit('message', {
         event: 'leave',
-        roomid: ROOM_ID
+        roomid: ROOM_ID,
+        username: USER_NAME,
     })
 })
 

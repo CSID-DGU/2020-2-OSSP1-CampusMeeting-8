@@ -1,8 +1,39 @@
-function addGreen(ele){
+function addGreen(ele) {
     ele.classList.add('active-green');
 }
-function removeGreen(ele){
+function removeGreen(ele) {
     ele.classList.remove('active-green');
+}
+
+const exitRoomBtn = document.getElementById('out');
+exitRoomBtn.addEventListener('click', () => {
+    swal({
+        title: "수업을 종료하시겠습니까?",
+        text: "학생이 남아있는 경우,\n모두 퇴장됩니다.",
+        icon: "warning",
+        buttons: ['아니오', '예'],
+        dangerMode: true,
+    })
+    .then((value) => {
+        if (value) {
+            socket.emit('message', {
+                event: 'closeRoom',
+                roomid: ROOM_ID,
+            });
+            closeRoom();
+        }
+    });
+});
+
+function closeRoom() {
+    swal({
+        title: "수업이 종료되었습니다.",
+        text: "메인 화면으로 돌아갑니다.",
+        button: "확인",
+    })
+    .then(() => {
+        location.href = '/main';
+    });
 }
 
 //camera button
@@ -147,9 +178,9 @@ function micON(speakerid) {
     }
 }
 
-silence.addEventListener('click',()=>{
-    Object.keys(participants).forEach((id)=>{
-        if(id!=socket.id){
+silence.addEventListener('click', () => {
+    Object.keys(participants).forEach((id) => {
+        if (id != socket.id) {
             socket.emit('message', {
                 event: 'silence',
                 userid: id
