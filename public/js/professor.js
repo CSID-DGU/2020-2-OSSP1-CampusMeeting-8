@@ -9,7 +9,7 @@ const constraints = {
     audio: true,
     video: {
         mandatory : {
-            maxWidth : 360,
+            maxWidth : 720,
             maxFrameRate : 30,
             minFrameRate : 15
         }

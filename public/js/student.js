@@ -9,7 +9,7 @@ const constraints = {
     video: {
         mandatory : {
             maxWidth : 360,
-            maxFrameRate : 30,
+            maxFrameRate : 20,
             minFrameRate : 15
         }
     }
@@ -30,7 +30,7 @@ function userDisconnected(userid) {
             hostVideo.src = null;
         }
         const msg = document.createElement('div');
-        const node = document.createTextNode(`${participants[userid]}님이 퇴장하셨습니다.`);
+        const node = document.createTextNode(`${participants[userid].username}님이 퇴장하셨습니다.`);
         msg.append(node);
         chatView.append(msg);
         delete participants[userid];

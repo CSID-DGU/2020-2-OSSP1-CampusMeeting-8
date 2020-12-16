@@ -486,7 +486,7 @@ function handleDisconnect(socket, roomid) {
     }
     socket.to(roomid).emit('message', {
         event: 'userDisconnected',
-        userid: socket.id
+        userid: socket.id,
     });
 }
 

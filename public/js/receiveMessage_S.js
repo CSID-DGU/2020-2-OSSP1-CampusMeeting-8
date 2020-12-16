@@ -8,6 +8,12 @@ socket.on('message', message => {
             if (message.hostid === message.userid) {
                 host = message.hostid;
                 receiveVideo(message.userid, message.username);
+            } else {
+                const user = {
+                    userid: message.userid,
+                    username: message.username,
+                }
+                participants[message.userid] = user; 
             }
             break;
         case 'connected':
@@ -21,7 +27,6 @@ socket.on('message', message => {
             addIceCandidate(message.userid, message.candidate);
             break;
         case 'userDisconnected':
-            console.log(message.event, message.userid);
             userDisconnected(message.userid);
             break;
         case 'warn':
