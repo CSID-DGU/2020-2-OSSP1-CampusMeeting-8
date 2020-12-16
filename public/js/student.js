@@ -25,16 +25,16 @@ socket.emit('message', {
 // 유저 연결이 끊어졌을 경우 처리를 하는 메소드
 function userDisconnected(userid) {
     // 접속 끊어진 유저가 host면 hostvideo 출력 삭제
-    if (host === userid) {
-        hostVideo.src = null;
-    }
     if (participants[userid]) {
-         delete participants[userid];
+        if (host === userid) {
+            hostVideo.src = null;
+        }
+        const msg = document.createElement('div');
+        const node = document.createTextNode(`${participants[userid]}님이 퇴장하셨습니다.`);
+        msg.append(node);
+        chatView.append(msg);
+        delete participants[userid];
     }
-    const msg = document.createElement('div');
-    const node = document.createTextNode(`${userid}님이 퇴장하셨습니다.`);
-    msg.append(node);
-    chatView.append(msg);
 }
 
 // 원격 연결로부터 비디오 수신

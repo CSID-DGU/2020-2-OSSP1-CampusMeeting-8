@@ -29,12 +29,12 @@ function userDisconnected(userid) {
     if (participants[userid]) {
         const video = document.getElementById(userid);
         video.parentElement.remove();
+        const msg = document.createElement('div');
+        const node = document.createTextNode(`${participants[userid].username}님이 퇴장하셨습니다.`);
+        msg.append(node);
+        chatView.append(msg);
         delete participants[userid];
     }
-    const msg = document.createElement('div');
-    const node = document.createTextNode(`${userid}님이 퇴장하셨습니다.`);
-    msg.append(node);
-    chatView.append(msg);
 }
 
 // 원격 연결로부터 비디오 수신

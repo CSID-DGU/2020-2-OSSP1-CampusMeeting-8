@@ -17,7 +17,6 @@ socket.on('message', message => {
             addIceCandidate(message.userid, message.candidate);
             break;
         case 'userDisconnected':
-            console.log(message.event, message.userid);
             userDisconnected(message.userid);
             break;
         case 'question':

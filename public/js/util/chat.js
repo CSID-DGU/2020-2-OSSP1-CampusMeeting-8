@@ -20,7 +20,7 @@ function chatSend() {
     chatView.append(msg);
     socket.emit('newChat', {
         message: message,
-        name: userName,
+        name: USER_NAME,
         roomid: ROOM_ID
     });
 }
