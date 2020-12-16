@@ -31,7 +31,16 @@ function closeRoom() {
         location.href = '/main';
     });
 }
-
+function handelKicked() {
+    swal({
+        title: "당제 퇴장 당했습니다.",
+        text: "메인 화면으로 돌아갑니다.",
+        button: "확인",
+    })
+    .then(() => {
+        location.href = '/main';
+    });
+}
 //카메라 컨트롤
 const cameraBtn = document.querySelector('#camera');
 let cameraOn = true;

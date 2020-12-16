@@ -38,7 +38,7 @@ socket.on('message', message => {
             });
             break;
         case 'kicked':
-            window.location.replace("http://www.w3schools.com");//밴페이지로 변경
+            handelKicked();
             break;
         case 'banChat':
             handleBanChat();
