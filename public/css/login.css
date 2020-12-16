@@ -29,9 +29,28 @@ body {
   margin: 30px;
 }
 
+.mainForm {
+  position:absolute;
+  width:450px;
+  height:400px;
+  padding: 30px, 20px;
+  background-color:#FFFFFF;
+  text-align:center;
+  top:30%;
+  left:50%;
+  transform: translate(-50%,-50%);
+  border-radius: 15px;
+  font-size:40px;
+}
 .idForm{
   border-bottom: 2px solid #adadad;
   margin: 30px;
+  padding: 10px 10px;
+}
+
+.rnForm{
+  border-bottom: 2px solid #adadad;
+  margin: 10px;
   padding: 10px 10px;
 }
 
@@ -78,10 +97,31 @@ body {
   transition: 0.4s;
   display:inline;
 }
-
 .btn:hover {
   background-position: right;
 }
+
+.btn2 {
+  position:relative;
+  left:15%;
+  transform: translateX(-50%);
+  margin-bottom: 10px;
+  width:30%;
+  height:40px;
+  background-color: navy;
+  background-position: left;
+  background-size: 200%;
+  color:white;
+  font-weight: bold;
+  border:none;
+  cursor:pointer;
+  transition: 0.4s;
+  display:inline;
+}
+.btn2:hover {
+  background-position: right;
+}
+
 
 .bottomText {
   text-align: center;
