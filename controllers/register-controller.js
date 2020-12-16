@@ -15,14 +15,13 @@ module.exports.register = function (req, res) {
     console.log(error);
     if (error) {
       if(error.errno==1062){
-        res.send("<script type='text/javascript'>alert('중복된 아이디입니다. 새로고침(F5) 후 다시 해주세요')</script>");
+        res.send("<script type='text/javascript'>alert('중복된 아이디 혹은 이메일입니다.'); document.location.href='/register';</script>");
       }
       else {
-        res.send("<script type='text/javascript'>alert('에러가 발생했습니다. 새로고침(F5) 후 다시 해주세요')</script>");
+        res.send("<script type='text/javascript'>alert('알 수없는 에러가 발생했습니다.'); document.location.href='/register';</script>");
       }
     } else {
-      res.redirect("/login");
+      res.send("<script type='text/javascript'>alert('회원가입이 완료되었습니다. 로그인해주세요.'); document.location.href='/login';</script>");
     }
   });
-  connection.end();
 }
