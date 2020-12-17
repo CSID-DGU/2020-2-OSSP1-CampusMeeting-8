@@ -36,17 +36,6 @@ $ npm install
 $ docker pull kurento/kurento-media-server:latest  
 $ docker run -d -p 8888:8888 kurento/kurento-media-server:latest  
 ```
-  
-> 서버 실행
-```
-$ node server.js
-nodemon을 통한 실행도 가능합니다.
-```
-  
-> localhost 접속
-```
-https://localhost:3000/으로 접속
-```
 
 > DB 설치
 ```
@@ -70,4 +59,15 @@ create table Users (
     phone varchar(11) not null,
 	bdate varchar(6) not null
 );
+```
+
+> 서버 실행
+```
+$ node server.js
+nodemon을 통한 실행도 가능합니다.
+```
+  
+> localhost 접속
+```
+https://localhost:3000/으로 접속
 ```
