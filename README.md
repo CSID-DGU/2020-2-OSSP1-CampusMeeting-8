@@ -6,6 +6,8 @@ webRTC 기술을 활용한 원격 수업 플랫폼 '캠퍼스미팅'
 ## 프로젝트 소개  
 - 코로나 19로 인해 비대면 온라인 수업이 요구되는 현 상황에서 학교 수업을 진행하기 위한 수업 플랫폼  
 - 온라인 수업 용으로 개발되지 않아 수업에 애로사항이 있는 화상회의 프로그램들을 대체하기 위한 webRTC 기반 플랫폼  
+> AWS 호스팅 주소
+https://ec2-3-34-96-18.ap-northeast-2.compute.amazonaws.com
   
 ## 팀원  
 ```
@@ -48,8 +50,15 @@ https://localhost:3000/으로 접속
 
 > DB 설치
 ```
-mysql 설치 후 config.js 파일에 계정 정보 입력
+MySQL 설치 후 config.js 파일의 다음 부분의 user와 password를 계정 정보로 수정  
+const connection = mysql.createConnection({
+  host     : 'localhost',
+  user     : 'root',
+  password : '1234',
+  database : 'userinfo',
+});
 
+MySQL 접속 후 다음 쿼리를 작성
 create database userinfo;
 use userinfo;
 create table Users (
@@ -61,6 +70,4 @@ create table Users (
     phone varchar(11) not null,
 	bdate varchar(6) not null
 );
-
-쿼리 작성해서 유저 정보를 저장하는 데이터베이스 생성
 ```
