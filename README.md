@@ -23,8 +23,9 @@ https://ec2-3-34-96-18.ap-northeast-2.compute.amazonaws.com
 - ![node.js](https://img.shields.io/badge/backend-node.js-blue)
 - ![mediaserver](https://img.shields.io/badge/media_server-kurento-yellow)
   
-## 실행 방법
-> 우선적으로 Node.js를 설치해 주세요  
+## 실행 방법 (Local 환경에서)
+* 우선적으로 node.js, npm, docekr, MySQL을 설치해 주세요  
+> 프로젝트 클론
 ```
 $ git clone https://github.com/CSID-DGU/2020-2-OSSP1-CampusMeeting-8.git  
 $ cd 2020-2-OSSP1-CampusMeeting-8  
@@ -51,13 +52,13 @@ MySQL 접속 후 다음 쿼리를 작성
 create database userinfo;
 use userinfo;
 create table Users (
-	userid int primary key auto_increment,
+    userid int primary key auto_increment,
     id varchar(50) unique not null,
     pw varchar(255) not null,
     name varchar(50) not null,
     email varchar(100) unique not null,
     phone varchar(11) not null,
-	bdate varchar(6) not null
+    bdate varchar(6) not null
 );
 ```
 
