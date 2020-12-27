@@ -10,13 +10,12 @@ webRTC 기술을 활용한 원격 수업 플랫폼 '캠퍼스미팅'
 https://ec2-3-34-96-18.ap-northeast-2.compute.amazonaws.com
   
 ## 팀원  
-```
-2016110426 오지훈: 팀장, 서버구축, 영상 송출 기능  
-2016112161 강건우: 텍스트 채팅 및 파일 업/다운로드 기능  
-2016110441 김건오: 마이크 컨트롤, 화자지정, 책갈피 등 유틸리티  
-2014112614 송영창: 로그인 및 세션 관리, 채팅방 라우팅  
-2012112006 이동건: 프로젝트 전체 UI 구현  
-```
+> [2016110426 오지훈](https://github.com/Ohzzi) : 팀장, 서버구축, 영상 송출 기능  
+[2016112161 강건우](https://github.com/Kang-Geonu) : 텍스트 채팅 및 파일 업/다운로드 기능  
+[2016110441 김건오](https://github.com/guno-kim) : 마이크 컨트롤, 화자지정, 책갈피 등 유틸리티  
+[2014112614 송영창](https://github.com/ssong7389) : 로그인 및 세션 관리, 채팅방 라우팅  
+[2012112006 이동건](https://github.com/dkadh) : 프로젝트 전체 UI 구현  
+
   
 ## 사용 기술 스택  
 - ![html/css/javscript](https://img.shields.io/badge/frontend-html/css/javascript-red)
@@ -24,7 +23,7 @@ https://ec2-3-34-96-18.ap-northeast-2.compute.amazonaws.com
 - ![mediaserver](https://img.shields.io/badge/media_server-kurento-yellow)
   
 ## 실행 방법 (Local 환경에서)
-* 우선적으로 node.js, npm, docekr, MySQL을 설치해 주세요  
+* 우선적으로 node.js, npm, docker, MySQL을 설치해 주세요  
 > 프로젝트 클론
 ```
 $ git clone https://github.com/CSID-DGU/2020-2-OSSP1-CampusMeeting-8.git  
@@ -72,3 +71,6 @@ nodemon을 통한 실행도 가능합니다.
 ```
 https://localhost:3000/으로 접속
 ```
+
+## 참고 자료  
+> <https://github.com/agilityfeat/webrtc-video-conference-tutorial/tree/kurento>
